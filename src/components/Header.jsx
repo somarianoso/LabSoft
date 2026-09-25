@@ -53,7 +53,9 @@ export default function Header({ page, role, go, switchRole, menu, setMenu }) {
           )
         }
       >
-        <span>{role === "moderador" ? <CirclePlay size={16} /> : "◉"}</span>{" "}
+        <span>
+          <CirclePlay size={16} />
+        </span>
         WellFlix
       </button>
       <nav className={menu ? "nav open" : "nav"}>

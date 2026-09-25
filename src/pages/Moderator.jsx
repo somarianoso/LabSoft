@@ -140,7 +140,7 @@ export default function Moderator() {
           <span className="eyebrow">
             PAINEL MODERADOR <i>·</i> <b>APROVAÇÃO DE CONTEÚDOS</b>
           </span>
-          <h1>Aprovação de Vídeos</h1>
+          <h2>Aprovação de Vídeos</h2>
         </div>
         <span className="pending-count">
           <i />
