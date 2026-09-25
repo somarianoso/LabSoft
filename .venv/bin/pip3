@@ -1,4 +1,4 @@
-#!/home/gabriel/WellFlix/LabSoft/.venv/bin/python
+#!/mnt/c/Users/Sophia/Documents/LabSoft/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

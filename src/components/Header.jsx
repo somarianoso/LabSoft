@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { img } from "../data/content.js";
 
-export default function Header({ page, role, go, switchRole, menu, setMenu }) {
+export default function Header({ page, role, go, switchRole, menu, setMenu, user }) {
   const roleName =
     role === "moderador"
       ? "Moderador"
@@ -111,7 +111,15 @@ export default function Header({ page, role, go, switchRole, menu, setMenu }) {
             <input placeholder="Buscar treinos, atletas..." />
           </div>
         )}
-        {role !== "moderador" && <button className="login">Entrar</button>}
+        {role !== "moderador" && (
+          <button
+            className="login"
+            data-testid="header-login"
+            onClick={() => go("login")}
+          >
+            {user?.name || "Entrar"}
+          </button>
+        )}
         {role === "atleta" && (
           <button className="green small" onClick={() => go("cadastro")}>
             Começar grátis <ArrowUpRight size={13} />

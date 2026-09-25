@@ -47,7 +47,8 @@ export default function Plans({ go }) {
               ))}
             <button
               className={i === 1 ? "green" : "dark-button"}
-              onClick={() => go("cadastro")}
+              data-testid={`choose-plan-${name.toLowerCase()}`}
+              onClick={() => go("checkout", { name, price })}
             >
               {i === 1 ? "Assinar Pro" : "Escolher plano"}{" "}
               <ArrowUpRight size={13} />
