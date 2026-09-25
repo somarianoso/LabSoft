@@ -34,7 +34,7 @@ export default function App() {
         setMenu={setMenu}
       />
       <AppRoutes page={page} go={go} />
-      {page !== "cadastro" && <Footer />}
+      {page !== "cadastro" && <Footer role={role} />}
     </div>
   );
 }

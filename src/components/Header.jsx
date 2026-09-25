@@ -1,6 +1,7 @@
 import {
   ArrowUpRight,
   BriefcaseBusiness,
+  CirclePlay,
   ChevronDown,
   Menu,
   Search,
@@ -8,6 +9,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+import { img } from "../data/content.js";
 
 export default function Header({ page, role, go, switchRole, menu, setMenu }) {
   const roleName =
@@ -51,7 +53,8 @@ export default function Header({ page, role, go, switchRole, menu, setMenu }) {
           )
         }
       >
-        <span>◉</span> WellFlix
+        <span>{role === "moderador" ? <CirclePlay size={16} /> : "◉"}</span>{" "}
+        WellFlix
       </button>
       <nav className={menu ? "nav open" : "nav"}>
         {navItems.map(([target, label]) => (
@@ -67,10 +70,16 @@ export default function Header({ page, role, go, switchRole, menu, setMenu }) {
       <div className="header-actions">
         <div className="role-switcher">
           <button
-            className="role-trigger"
+            className={`role-trigger${role === "moderador" ? " moderator-trigger" : ""}`}
             aria-label="Selecionar tipo de usuário"
           >
-            <UserRound size={14} /> {roleName} <ChevronDown size={13} />
+            {role === "moderador" ? (
+              <img src={img.coach} alt="" />
+            ) : (
+              <UserRound size={14} />
+            )}
+            {role === "moderador" ? "Alexandre S." : roleName}
+            <ChevronDown size={13} />
           </button>
           <div className="role-menu">
             <span>Visualizar como</span>
