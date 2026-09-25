@@ -41,7 +41,7 @@ class ModeratorFlowTest(unittest.TestCase):
 
         self.wait.until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//h2[normalize-space()='Aprovação de Vídeos']")
+                (By.XPATH, "//h1[normalize-space()='Aprovação de Vídeos']")
             )
         )
 
