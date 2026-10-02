@@ -32,7 +32,7 @@ class TestHistoriaAtletaLoginBuscaVideo(SeleniumScenario):
         self.click(
             (
                 By.XPATH,
-                "//button[@aria-label='Assistir vídeo: Hipertrofia inteligente: peito e tríceps']",
+                "//*[@role='link' and @aria-label='Assistir vídeo: Hipertrofia inteligente: peito e tríceps']",
             )
         )
 
