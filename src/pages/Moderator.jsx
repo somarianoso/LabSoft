@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { img } from "../data/content.js";
 
-export default function Moderator() {
+export default function Moderator({ go }) {
   const [queue, setQueue] = useState([
     [
       "Agachamento Búlgaro Avançado: Técnica, Força e Execução Perfeita",
@@ -237,6 +237,9 @@ export default function Moderator() {
                           <button
                             className="preview"
                             aria-label={`Pré-visualizar ${item[0]}`}
+                            onClick={() =>
+                              go("detalhe", [item[0], item[2], item[4], item[5]])
+                            }
                           >
                             <CirclePlay size={16} />
                           </button>

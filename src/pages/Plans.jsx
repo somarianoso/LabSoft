@@ -15,36 +15,48 @@ export default function Plans({ go }) {
       </div>
       <div className="plan-grid">
         {[
-          ["Básico", "R$ 29 /mês"],
-          ["Pro", "R$ 59 /mês"],
-          ["Premium", "R$ 89 /mês"],
-        ].map(([name, price], i) => (
+          {
+            name: "Básico",
+            price: "R$ 29 /mês",
+            description: "Comece com o essencial",
+            benefits: [
+              "2 categorias de consumo",
+              "Engajamento na comunidade: avaliações e comentários",
+            ],
+          },
+          {
+            name: "Pro",
+            price: "R$ 59 /mês",
+            description: "Para quem treina sério",
+            benefits: [
+              "6 categorias de consumo",
+              "Engajamento na comunidade: avaliações e comentários",
+            ],
+          },
+          {
+            name: "Premium",
+            price: "R$ 89 /mês",
+            description: "Performance sem limites",
+            benefits: [
+              "Todas as categorias de consumo",
+              "Engajamento na comunidade: avaliações e comentários",
+              "Lembretes de novas postagens (WhatsApp)",
+            ],
+          },
+        ].map(({ name, price, description, benefits }, i) => (
           <article
             className={i === 1 ? "plan featured-plan" : "plan"}
             key={name}
           >
             {i === 1 && <span className="recommended">MAIS ESCOLHIDO</span>}
             <h2>{name}</h2>
-            <small>
-              {i === 0
-                ? "Comece com o essencial"
-                : i === 1
-                  ? "Para quem treina sério"
-                  : "Performance sem limites"}
-            </small>
+            <small>{description}</small>
             <strong>{price}</strong>
-            {[
-              "Todas as categorias",
-              "Vídeos em Full HD",
-              "Planos e favoritos",
-              "Acesso em dispositivos",
-            ]
-              .slice(0, i + 2)
-              .map((x) => (
-                <span className="check" key={x}>
-                  <Check size={13} /> {x}
-                </span>
-              ))}
+            {benefits.map((benefit) => (
+              <span className="check" key={benefit}>
+                <Check size={13} /> {benefit}
+              </span>
+            ))}
             <button
               className={i === 1 ? "green" : "dark-button"}
               data-testid={`choose-plan-${name.toLowerCase()}`}

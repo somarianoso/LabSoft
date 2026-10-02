@@ -27,6 +27,7 @@ const routesWithNavigation = new Set([
   "profissionais",
   "trilhas",
   "detalhe",
+  "moderador",
 ]);
 
 export default function AppRoutes({ page, go, login, selectedVideo, exploreCategory, selectedPlan }) {
