@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
+import { defaultPlan } from "./data/plans.js";
 
 export default function App() {
   const [page, setPage] = useState("home");
@@ -11,7 +12,7 @@ export default function App() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [exploreCategory, setExploreCategory] = useState("Todos");
   const [exploreType, setExploreType] = useState("videos");
-  const [selectedPlan, setSelectedPlan] = useState({ name: "Pro", price: "R$ 59 /mês" });
+  const [selectedPlan, setSelectedPlan] = useState(defaultPlan);
 
   const go = (next, payload) => {
     if (next === "detalhe" && payload) setSelectedVideo(payload);

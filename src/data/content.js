@@ -14,6 +14,7 @@ export const cats = [
   ["Recuperação", HeartPulse],
   ["Lesões", ShieldCheck],
 ];
+export const consumptionCategories = cats.map(([name]) => name);
 export const videos = [
   [
     "Hipertrofia inteligente: peito e tríceps",

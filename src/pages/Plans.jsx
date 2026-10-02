@@ -1,4 +1,6 @@
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import PlanBenefits from "../components/PlanBenefits.jsx";
+import { plans } from "../data/plans.js";
 
 export default function Plans({ go }) {
   return (
@@ -14,53 +16,20 @@ export default function Plans({ go }) {
         <button>Anual · -20%</button>
       </div>
       <div className="plan-grid">
-        {[
-          {
-            name: "Básico",
-            price: "R$ 29 /mês",
-            description: "Comece com o essencial",
-            benefits: [
-              "2 categorias de consumo",
-              "Engajamento na comunidade: avaliações e comentários",
-            ],
-          },
-          {
-            name: "Pro",
-            price: "R$ 59 /mês",
-            description: "Para quem treina sério",
-            benefits: [
-              "6 categorias de consumo",
-              "Engajamento na comunidade: avaliações e comentários",
-            ],
-          },
-          {
-            name: "Premium",
-            price: "R$ 89 /mês",
-            description: "Performance sem limites",
-            benefits: [
-              "Todas as categorias de consumo",
-              "Engajamento na comunidade: avaliações e comentários",
-              "Lembretes de novas postagens (WhatsApp)",
-            ],
-          },
-        ].map(({ name, price, description, benefits }, i) => (
+        {plans.map((plan, i) => (
           <article
             className={i === 1 ? "plan featured-plan" : "plan"}
-            key={name}
+            key={plan.id}
           >
             {i === 1 && <span className="recommended">MAIS ESCOLHIDO</span>}
-            <h2>{name}</h2>
-            <small>{description}</small>
-            <strong>{price}</strong>
-            {benefits.map((benefit) => (
-              <span className="check" key={benefit}>
-                <Check size={13} /> {benefit}
-              </span>
-            ))}
+            <h2>{plan.name}</h2>
+            <small>{plan.description}</small>
+            <strong>{plan.price}</strong>
+            <PlanBenefits benefits={plan.benefits} />
             <button
               className={i === 1 ? "green" : "dark-button"}
-              data-testid={`choose-plan-${name.toLowerCase()}`}
-              onClick={() => go("checkout", { name, price })}
+              data-testid={`choose-plan-${plan.id}`}
+              onClick={() => go("checkout", plan)}
             >
               {i === 1 ? "Assinar Pro" : "Escolher plano"}{" "}
               <ArrowUpRight size={13} />
