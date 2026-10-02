@@ -37,6 +37,7 @@ export default function AppRoutes({
   user,
   selectedVideo,
   exploreCategory,
+  exploreType,
   selectedPlan,
 }) {
   if (page === "login") {
@@ -55,7 +56,9 @@ export default function AppRoutes({
   return (
     <Page
       {...(routesWithNavigation.has(page) ? { go } : {})}
-      {...(page === "explorar" ? { initialCategory: exploreCategory } : {})}
+      {...(page === "explorar"
+        ? { initialCategory: exploreCategory, initialType: exploreType }
+        : {})}
     />
   );
 }

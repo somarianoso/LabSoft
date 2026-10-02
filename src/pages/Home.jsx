@@ -1,5 +1,5 @@
 import { ArrowUpRight, ChevronRight } from "lucide-react";
-import { cats, img, videos } from "../data/content.js";
+import { cats, img, professionals, videos } from "../data/content.js";
 import Expert from "../components/Expert.jsx";
 import SectionTitle from "../components/SectionTitle.jsx";
 import VideoCard from "../components/VideoCard.jsx";
@@ -108,26 +108,22 @@ export default function Home({ go }) {
             Cada especialista passa por uma análise rigorosa de formação e
             experiência antes de entrar na plataforma.
           </p>
-          <button className="green" onClick={() => go("profissionais")}>
+          <button
+            className="green"
+            onClick={() => go("explorar", { type: "professionals" })}
+          >
             Conheça os especialistas <ArrowUpRight size={14} />
           </button>
         </div>
         <div className="expert-row">
-          <Expert
-            name="Dra. Lara Nunes"
-            role="Especialista esportiva"
-            image={img.coach}
-          />
-          <Expert
-            name="Caio Mendes"
-            role="Força e condicionamento"
-            image={img.athlete}
-          />
-          <Expert
-            name="Marina Lopes"
-            role="Nutrição esportiva"
-            image={img.coach}
-          />
+          {professionals.map((professional) => (
+            <Expert
+              key={professional.name}
+              name={professional.name}
+              role={professional.specialty}
+              image={professional.image}
+            />
+          ))}
         </div>
       </section>
     </main>

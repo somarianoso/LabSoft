@@ -27,3 +27,23 @@ export const videos = [
   ["Proteína sem complicação", "Nutrição", "20 min", img.food],
   ["Prevenção de lesões no joelho", "Lesões", "27 min", img.coach],
 ];
+export const professionals = [
+  {
+    name: "Dra. Lara Nunes",
+    specialty: "Especialista esportiva",
+    image: img.coach,
+    categories: ["Basquete", "Lesões"],
+  },
+  {
+    name: "Caio Mendes",
+    specialty: "Força e condicionamento",
+    image: img.athlete,
+    categories: ["Musculação", "Yoga"],
+  },
+  {
+    name: "Marina Lopes",
+    specialty: "Nutrição esportiva",
+    image: img.coach,
+    categories: ["Nutrição", "Recuperação"],
+  },
+];

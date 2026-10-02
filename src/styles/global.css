@@ -989,6 +989,7 @@ textarea:focus-visible {
 .result-head {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: #8993a2;
   font-size: 11px;
   margin-bottom: 15px;
@@ -996,6 +997,100 @@ textarea:focus-visible {
 .results .video-grid {
   grid-template-columns: repeat(2, 1fr);
   max-width: 700px;
+}
+.result-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8993a2;
+  white-space: nowrap;
+}
+.result-type-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 116px;
+}
+.result-type-control select {
+  width: 100%;
+  appearance: none;
+  border: 1px solid #293343;
+  border-radius: 9px;
+  padding: 9px 29px 9px 11px;
+  background: #121822;
+  color: #d7dfe8;
+  font: inherit;
+}
+.result-type-control svg {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  color: #aeb7c4;
+}
+.professional-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+.professional-card {
+  overflow: hidden;
+  border: 1px solid #293343;
+  border-radius: 12px;
+  background: #121822;
+}
+.professional-card > img {
+  display: block;
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+}
+.professional-card-content {
+  padding: 14px;
+}
+.professional-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+}
+.professional-card h2 svg {
+  color: #579ff4;
+}
+.professional-card p {
+  margin: 5px 0 14px;
+  color: #8993a2;
+  font-size: 11px;
+}
+.professional-card-content > strong {
+  color: #d7dfe8;
+  font-size: 10px;
+}
+.professional-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}
+.professional-categories span {
+  padding: 4px 7px;
+  border-radius: 10px;
+  background: #133a24;
+  color: var(--green);
+  font-size: 9px;
+}
+.professional-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  color: var(--green);
+  font-size: 10px;
+}
+.professional-rating svg {
+  color: #f1c844;
 }
 .plans {
   text-align: center;
@@ -1807,6 +1902,9 @@ footer span {
     grid-template-columns: 1fr;
   }
   .results .video-grid {
+    grid-template-columns: 1fr;
+  }
+  .professional-grid {
     grid-template-columns: 1fr;
   }
   .explore-layout {
