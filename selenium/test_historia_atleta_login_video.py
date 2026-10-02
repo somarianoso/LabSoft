@@ -40,6 +40,17 @@ class TestHistoriaAtletaLoginBuscaVideo(SeleniumScenario):
             EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-testid="video-title"]'))
         )
         self.assertEqual(title.text, "Hipertrofia inteligente: peito e tríceps")
+        comment_box = self.wait.until(
+            EC.visibility_of_element_located((By.ID, "video-comment"))
+        )
+        comment_box.send_keys("Excelente explicação da técnica!")
+        self.click((By.CSS_SELECTOR, '[data-testid="submit-video-comment"]'))
+        self.wait.until(
+            EC.text_to_be_present_in_element(
+                (By.CSS_SELECTOR, ".comment:last-child"), "Excelente explicação da técnica!"
+            )
+        )
+
         self.click((By.CSS_SELECTOR, '[data-testid="player-toggle"]'))
         status = self.wait.until(
             EC.text_to_be_present_in_element(
