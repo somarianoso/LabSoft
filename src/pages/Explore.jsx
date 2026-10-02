@@ -3,9 +3,15 @@ import { ChevronDown, Search } from "lucide-react";
 import { videos } from "../data/content.js";
 import VideoCard from "../components/VideoCard.jsx";
 
-export default function Explore({ go }) {
+const categories = ["Todos", ...new Set(videos.map((video) => video[1]))];
+
+export default function Explore({ go, initialCategory = "Todos" }) {
   const [query, setQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState(() =>
+    initialCategory === "Todos" ? new Set() : new Set([initialCategory]),
+  );
   const results = videos.filter((video) =>
+    (selectedCategories.size === 0 || selectedCategories.has(video[1])) &&
     `${video[0]} ${video[1]}`.toLowerCase().includes(query.trim().toLowerCase()),
   );
 
@@ -30,15 +36,36 @@ export default function Explore({ go }) {
       <div className="explore-layout">
         <aside className="filters">
           <strong>Filtros</strong>
-          <button>Limpar</button>
+          <button
+            onClick={() => {
+              setSelectedCategories(new Set());
+              setQuery("");
+            }}
+          >
+            Limpar
+          </button>
           <h5>Categoria</h5>
-          {["Todos", "Musculação", "Yoga", "Basquete", "Nutrição", "Risco"].map(
-            (x) => (
-              <label key={x}>
-                <input type="checkbox" defaultChecked /> {x}
-              </label>
-            ),
-          )}
+          {categories.map((name) => (
+            <label key={name}>
+              <input
+                type="checkbox"
+                name="category"
+                checked={name === "Todos" ? selectedCategories.size === 0 : selectedCategories.has(name)}
+                onChange={() => {
+                  if (name === "Todos") {
+                    setSelectedCategories(new Set());
+                    return;
+                  }
+                  setSelectedCategories((current) => {
+                    const next = new Set(current);
+                    if (next.has(name)) next.delete(name);
+                    else next.add(name);
+                    return next;
+                  });
+                }}
+              /> {name}
+            </label>
+          ))}
           <h5>Avaliação</h5>
           {["★★★★★ 4,5+", "★★★★☆ 4,0+", "★★★☆☆ 3,0+"].map((x) => (
             <label key={x}>

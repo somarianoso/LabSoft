@@ -9,10 +9,12 @@ export default function App() {
   const [menu, setMenu] = useState(false);
   const [user, setUser] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [exploreCategory, setExploreCategory] = useState("Todos");
   const [selectedPlan, setSelectedPlan] = useState({ name: "Pro", price: "R$ 59 /mês" });
 
   const go = (next, payload) => {
     if (next === "detalhe" && payload) setSelectedVideo(payload);
+    if (next === "explorar") setExploreCategory(payload?.category || "Todos");
     if (next === "checkout" && payload) setSelectedPlan(payload);
     setPage(next);
     setMenu(false);
@@ -48,6 +50,7 @@ export default function App() {
         go={go}
         login={login}
         selectedVideo={selectedVideo}
+        exploreCategory={exploreCategory}
         selectedPlan={selectedPlan}
       />
       {!['cadastro', 'login', 'checkout'].includes(page) && <Footer role={role} />}

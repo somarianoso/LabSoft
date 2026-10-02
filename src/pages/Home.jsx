@@ -4,6 +4,13 @@ import Expert from "../components/Expert.jsx";
 import SectionTitle from "../components/SectionTitle.jsx";
 import VideoCard from "../components/VideoCard.jsx";
 
+const featuredVideo = [
+  "Explosão e velocidade para atletas",
+  "Basquete",
+  "18 min",
+  img.athlete,
+];
+
 export default function Home({ go }) {
   return (
     <main>
@@ -33,7 +40,19 @@ export default function Home({ go }) {
             <span>●●●</span> +18 mil atletas já estão evoluindo
           </div>
         </div>
-        <div className="hero-art">
+        <div
+          className="hero-art"
+          role="link"
+          tabIndex={0}
+          aria-label={`Assistir vídeo: ${featuredVideo[0]}`}
+          onClick={() => go("detalhe", featuredVideo)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              go("detalhe", featuredVideo);
+            }
+          }}
+        >
           <img src={img.athlete} alt="Atleta em movimento" />
           <div className="featured">
             <span>EM DESTAQUE · 18 MIN</span>
@@ -49,12 +68,14 @@ export default function Home({ go }) {
           eyebrow="ENCONTRE SEU FOCO"
           title="Treine do seu jeito"
           action="Ver todas as categorias →"
+          onAction={() => go("explorar")}
         />
         <div className="categories">
           {cats.map(([name, Icon], i) => (
             <button
               className={i === 0 ? "category selected" : "category"}
               key={name}
+              onClick={() => go("explorar", { category: name })}
             >
               <Icon size={18} />
               <strong>{name}</strong>
@@ -67,6 +88,7 @@ export default function Home({ go }) {
           eyebrow="EM ALTA"
           title="Conteúdos que movem atletas"
           action="Explorar conteúdos →"
+          onAction={() => go("explorar")}
         />
         <div className="video-grid">
           {videos.slice(0, 4).map((video) => (

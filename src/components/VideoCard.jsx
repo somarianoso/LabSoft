@@ -2,17 +2,24 @@ import { CirclePlay, ShieldCheck, Star } from "lucide-react";
 
 export default function VideoCard({ video, go }) {
   return (
-    <article className="video-card">
+    <article
+      className="video-card"
+      role="link"
+      tabIndex={0}
+      aria-label={`Assistir vídeo: ${video[0]}`}
+      onClick={() => go("detalhe", video)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          go("detalhe", video);
+        }
+      }}
+    >
       <div className="video-image">
         <img src={video[3]} alt="" />
-        <button
-          className="play"
-          type="button"
-          aria-label={`Assistir vídeo: ${video[0]}`}
-          onClick={() => go("detalhe", video)}
-        >
+        <span className="play" aria-hidden="true">
           <CirclePlay size={19} />
-        </button>
+        </span>
         <b>{video[2]}</b>
       </div>
       <span className="video-meta">

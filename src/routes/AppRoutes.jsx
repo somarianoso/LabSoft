@@ -29,7 +29,7 @@ const routesWithNavigation = new Set([
   "detalhe",
 ]);
 
-export default function AppRoutes({ page, go, login, selectedVideo, selectedPlan }) {
+export default function AppRoutes({ page, go, login, selectedVideo, exploreCategory, selectedPlan }) {
   if (page === "login") {
     return <Signup mode="login" go={go} onSuccess={login} />;
   }
@@ -43,5 +43,10 @@ export default function AppRoutes({ page, go, login, selectedVideo, selectedPlan
     return <Detail go={go} video={selectedVideo} />;
   }
   const Page = routes[page] || Home;
-  return <Page {...(routesWithNavigation.has(page) ? { go } : {})} />;
+  return (
+    <Page
+      {...(routesWithNavigation.has(page) ? { go } : {})}
+      {...(page === "explorar" ? { initialCategory: exploreCategory } : {})}
+    />
+  );
 }
