@@ -4,7 +4,6 @@ import {
   CirclePlay,
   ChevronDown,
   Menu,
-  Search,
   ShieldCheck,
   UserRound,
   X,
@@ -105,12 +104,6 @@ export default function Header({ page, role, go, switchRole, menu, setMenu, user
             </button>
           </div>
         </div>
-        {role !== "moderador" && (
-          <div className="header-search">
-            <Search size={14} />
-            <input placeholder="Buscar treinos, atletas..." />
-          </div>
-        )}
         {role !== "moderador" && (
           <button
             className="login"

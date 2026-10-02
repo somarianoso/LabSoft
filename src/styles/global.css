@@ -613,7 +613,6 @@ textarea:focus-visible {
   gap: 15px;
   margin-left: auto;
 }
-.header-search,
 .search-large {
   display: flex;
   align-items: center;
@@ -623,7 +622,6 @@ textarea:focus-visible {
   color: #7e8999;
   padding: 9px 14px;
 }
-.header-search input,
 .search-large input {
   background: none;
   border: 0;
@@ -1701,9 +1699,6 @@ footer span {
   }
   .nav.open {
     display: flex;
-  }
-  .header-search {
-    display: none;
   }
   .wrap {
     width: calc(100% - 40px);
