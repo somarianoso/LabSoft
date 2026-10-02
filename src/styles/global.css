@@ -1187,6 +1187,37 @@ textarea:focus-visible {
 .detail-main > h2 {
   font-size: 18px;
 }
+.comment-form {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  margin: 14px 0;
+  background: #121822;
+  border: 1px solid #293343;
+  border-radius: 12px;
+}
+.comment-form label {
+  color: #d7dfe8;
+  font-size: 12px;
+  font-weight: 600;
+}
+.comment-form textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #293343;
+  border-radius: 8px;
+  padding: 10px;
+  background: #080c12;
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+}
+.comment-form textarea::placeholder {
+  color: #7e8999;
+}
+.comment-form button {
+  justify-self: start;
+}
 .comment {
   display: flex;
   gap: 10px;

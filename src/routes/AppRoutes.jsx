@@ -30,7 +30,15 @@ const routesWithNavigation = new Set([
   "moderador",
 ]);
 
-export default function AppRoutes({ page, go, login, selectedVideo, exploreCategory, selectedPlan }) {
+export default function AppRoutes({
+  page,
+  go,
+  login,
+  user,
+  selectedVideo,
+  exploreCategory,
+  selectedPlan,
+}) {
   if (page === "login") {
     return <Signup mode="login" go={go} onSuccess={login} />;
   }
@@ -41,7 +49,7 @@ export default function AppRoutes({ page, go, login, selectedVideo, exploreCateg
     return <Checkout plan={selectedPlan} go={go} />;
   }
   if (page === "detalhe") {
-    return <Detail go={go} video={selectedVideo} />;
+    return <Detail go={go} video={selectedVideo} user={user} />;
   }
   const Page = routes[page] || Home;
   return (

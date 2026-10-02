@@ -49,6 +49,7 @@ export default function App() {
         page={page}
         go={go}
         login={login}
+        user={user}
         selectedVideo={selectedVideo}
         exploreCategory={exploreCategory}
         selectedPlan={selectedPlan}

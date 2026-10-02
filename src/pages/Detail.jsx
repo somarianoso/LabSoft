@@ -3,9 +3,43 @@ import { CirclePause, CirclePlay } from "lucide-react";
 import { img, videos } from "../data/content.js";
 import VideoCard from "../components/VideoCard.jsx";
 
-export default function Detail({ go, video }) {
+export default function Detail({ go, video, user }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [commentCount, setCommentCount] = useState(248);
+  const [comments, setComments] = useState([
+    {
+      initials: "JP",
+      name: "João Pedro",
+      text: "Treino excelente. A explicação da amplitude no agachamento mudou minha execução.",
+    },
+    {
+      initials: "ML",
+      name: "Mia Lima",
+      text: "Didática muito clara e progressão bem estruturada!",
+    },
+  ]);
   const selectedVideo = video || videos[0];
+
+  const submitComment = (event) => {
+    event.preventDefault();
+    const text = commentText.trim();
+    if (!text) return;
+
+    const name = user.name;
+    const initials =
+      name
+        .split(/[.\s_-]+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join("")
+        .toUpperCase() || "U";
+
+    setComments((current) => [...current, { initials, name, text }]);
+    setCommentCount((count) => count + 1);
+    setCommentText("");
+  };
 
   return (
     <main className="wrap page detail">
@@ -44,16 +78,34 @@ export default function Detail({ go, video }) {
           </div>
           <button className="dark-button">Ver perfil</button>
         </div>
-        <h2>Comentários 248</h2>
-        {[
-          "Treino excelente. A explicação da amplitude no agachamento mudou minha execução.",
-          "Didática muito clara e progressão bem estruturada!",
-        ].map((x, i) => (
-          <div className="comment" key={x}>
-            <b>{i ? "ML" : "JP"}</b>
+        <h2>Comentários {commentCount}</h2>
+        {user && (
+          <form className="comment-form" onSubmit={submitComment}>
+            <label htmlFor="video-comment">Deixe seu comentário</label>
+            <textarea
+              id="video-comment"
+              data-testid="video-comment"
+              value={commentText}
+              onChange={(event) => setCommentText(event.target.value)}
+              placeholder="O que achou deste vídeo?"
+              rows={3}
+              required
+            />
+            <button
+              className="green"
+              type="submit"
+              data-testid="submit-video-comment"
+            >
+              Enviar comentário
+            </button>
+          </form>
+        )}
+        {comments.map(({ initials, name, text }, index) => (
+          <div className="comment" key={`${name}-${index}`}>
+            <b>{initials}</b>
             <span>
-              <strong>{i ? "Mia Lima" : "João Pedro"}</strong>
-              {x}
+              <strong>{name}</strong>
+              {text}
             </span>
           </div>
         ))}
