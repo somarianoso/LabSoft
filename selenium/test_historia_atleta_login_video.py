@@ -1,10 +1,52 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 
 from selenium_support import SeleniumScenario
 
 
 class TestHistoriaAtletaLoginBuscaVideo(SeleniumScenario):
+    def test_busca_profissionais_por_categoria(self):
+        self.click(
+            (
+                By.XPATH,
+                "//button[contains(., 'Conheça os especialistas')]",
+            )
+        )
+
+        result_type = self.wait.until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, '[data-testid="explore-result-type"]')
+            )
+        )
+        self.assertEqual(Select(result_type).first_selected_option.text, "Profissionais")
+        self.assertEqual(
+            len(
+                self.driver.find_elements(
+                    By.CSS_SELECTOR, 'input[name="rating"]'
+                )
+            ),
+            3,
+        )
+        self.click(
+            (
+                By.CSS_SELECTOR,
+                'input[name="category"][value="Musculação"]',
+            )
+        )
+
+        self.wait.until(
+            EC.text_to_be_present_in_element(
+                (By.CSS_SELECTOR, '[data-testid="explore-result-count"]'),
+                "1 profissional encontrado",
+            )
+        )
+        results = self.driver.find_element(
+            By.CSS_SELECTOR, '[data-testid="professional-results"]'
+        )
+        self.assertIn("Caio Mendes", results.text)
+        self.assertNotIn("Marina Lopes", results.text)
+
     def test_login_pesquisa_e_assiste_video(self):
         self.click((By.CSS_SELECTOR, '[data-testid="header-login"]'))
         self.wait.until(EC.visibility_of_element_located((By.ID, "login-email")))
