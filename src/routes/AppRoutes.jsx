@@ -40,6 +40,11 @@ export default function AppRoutes({
   exploreCategory,
   exploreType,
   selectedPlan,
+  customTrails,
+  createCustomTrail,
+  addVideoToCustomTrail,
+  videoRatings,
+  rateVideo,
 }) {
   if (page === "login") {
     return <Signup mode="login" go={go} onSuccess={login} />;
@@ -51,12 +56,25 @@ export default function AppRoutes({
     return <Checkout plan={selectedPlan} go={go} />;
   }
   if (page === "detalhe") {
-    return <Detail go={go} video={selectedVideo} user={user} />;
+    return (
+      <Detail
+        go={go}
+        video={selectedVideo}
+        user={user}
+        role={role}
+        customTrails={customTrails}
+        createCustomTrail={createCustomTrail}
+        addVideoToCustomTrail={addVideoToCustomTrail}
+        videoRatings={videoRatings}
+        rateVideo={rateVideo}
+      />
+    );
   }
   const Page = routes[page] || Home;
   return (
     <Page
       {...(routesWithNavigation.has(page) ? { go } : {})}
+      {...(page === "trilhas" ? { customTrails } : {})}
       {...(page === "profissionais"
         ? { isOwnProfile: role === "profissional" }
         : {})}

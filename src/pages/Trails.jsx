@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { ArrowUpRight, ChevronRight, CirclePlay, Play } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronRight,
+  CirclePlay,
+  Play,
+  Share2,
+} from "lucide-react";
 import { videos } from "../data/content.js";
 
 const trails = [
@@ -50,12 +56,99 @@ const trails = [
   },
 ];
 
-export default function Trails({ go }) {
+function readSharedPlaylist() {
+  const serializedPlaylist = new URLSearchParams(window.location.search).get(
+    "playlist",
+  );
+  if (!serializedPlaylist) return null;
+
+  try {
+    const playlist = JSON.parse(serializedPlaylist);
+    if (
+      typeof playlist.name !== "string" ||
+      !playlist.name.trim() ||
+      !Array.isArray(playlist.videoIndices) ||
+      playlist.videoIndices.length === 0 ||
+      playlist.videoIndices.some(
+        (videoIndex) =>
+          !Number.isInteger(videoIndex) ||
+          videoIndex < 0 ||
+          videoIndex >= videos.length,
+      )
+    ) {
+      throw new Error("Formato da playlist compartilhada inválido.");
+    }
+    return {
+      id: "shared-playlist",
+      name: playlist.name,
+      videos: playlist.videoIndices.map((videoIndex) => videos[videoIndex]),
+    };
+  } catch (error) {
+    console.error("Não foi possível abrir a playlist compartilhada.", error);
+    return { id: "invalid-playlist", name: "", videos: [] };
+  }
+}
+
+export default function Trails({ go, customTrails = [] }) {
   const [category, setCategory] = useState("Todas as trilhas");
+  const [shareNotice, setShareNotice] = useState("");
+  const [shareLink, setShareLink] = useState("");
+  const [sharedPlaylist] = useState(readSharedPlaylist);
   const visibleTrails =
     category === "Todas as trilhas"
       ? trails
       : trails.filter((trail) => trail.category === category);
+
+  const shareTrail = async (trail) => {
+    const shareUrl = new URL("/trilhas", window.location.origin);
+    shareUrl.searchParams.set(
+      "playlist",
+      JSON.stringify({
+        name: trail.name,
+        videoIndices: trail.videos.map((video) =>
+          videos.findIndex((catalogVideo) => catalogVideo[0] === video[0]),
+        ),
+      }),
+    );
+    const shareData = {
+      title: trail.name,
+      text: `Confira minha trilha "${trail.name}" no WellFlix.`,
+      url: shareUrl.toString(),
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        setShareNotice(`Link de "${trail.name}" compartilhado.`);
+      } else {
+        setShareLink(shareData.url);
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(shareData.url);
+          setShareNotice(`Link de "${trail.name}" copiado.`);
+        } else {
+          setShareNotice(`Link de "${trail.name}" pronto para copiar.`);
+        }
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Não foi possível compartilhar a trilha.", error);
+        setShareLink(shareData.url);
+        setShareNotice(
+          "Não foi possível copiar automaticamente. Copie o link exibido.",
+        );
+      }
+    }
+  };
+
+  const copyShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setShareNotice("Link copiado.");
+    } catch (error) {
+      console.error("Não foi possível copiar o link da trilha.", error);
+      setShareNotice("Selecione e copie o link manualmente.");
+    }
+  };
 
   return (
     <main className="wrap page trails-page">
@@ -78,6 +171,128 @@ export default function Trails({ go }) {
           <span>Sua evolução acontece aula a aula</span>
         </div>
       </div>
+
+      {sharedPlaylist && (
+        <section
+          className="custom-trails-section"
+          aria-labelledby="shared-trail-title"
+        >
+          {sharedPlaylist.id === "invalid-playlist" ? (
+            <p role="alert">
+              Este link de trilha está inválido ou não pode ser aberto.
+            </p>
+          ) : (
+            <article className="custom-trail-card">
+              <div className="custom-trail-heading">
+                <div>
+                  <span className="eyebrow">PLAYLIST COMPARTILHADA</span>
+                  <h2 id="shared-trail-title">{sharedPlaylist.name}</h2>
+                  <p>
+                    {sharedPlaylist.videos.length}{" "}
+                    {sharedPlaylist.videos.length === 1 ? "vídeo" : "vídeos"}
+                  </p>
+                </div>
+              </div>
+              <div className="custom-trail-videos">
+                {sharedPlaylist.videos.map((video, index) => (
+                  <button
+                    className="trail-episode"
+                    key={`${video[0]}-${index}`}
+                    onClick={() => go("detalhe", video)}
+                  >
+                    <span className="trail-episode-image">
+                      <img src={video[3]} alt="" />
+                      <b>{video[2]}</b>
+                      <i>{index + 1}</i>
+                    </span>
+                    <strong>{video[0]}</strong>
+                  </button>
+                ))}
+              </div>
+            </article>
+          )}
+        </section>
+      )}
+
+      <section
+        className="custom-trails-section"
+        aria-labelledby="custom-trails-title"
+      >
+        <div className="custom-trails-heading">
+          <div>
+            <h2 id="custom-trails-title">Suas trilhas</h2>
+            <p>Playlists criadas por você para organizar e compartilhar vídeos.</p>
+          </div>
+          {shareNotice && <span role="status">{shareNotice}</span>}
+        </div>
+        {shareLink && (
+          <div className="custom-trail-share">
+            <label htmlFor="custom-trail-share-link">Link compartilhável</label>
+            <div>
+              <input
+                id="custom-trail-share-link"
+                value={shareLink}
+                readOnly
+                onFocus={(event) => event.target.select()}
+              />
+              <button
+                className="dark-button"
+                type="button"
+                onClick={copyShareLink}
+              >
+                Copiar link
+              </button>
+            </div>
+          </div>
+        )}
+        {customTrails.length > 0 ? (
+          <div className="custom-trail-list">
+            {customTrails.map((trail) => (
+              <article className="custom-trail-card" key={trail.id}>
+                <div className="custom-trail-heading">
+                  <div>
+                    <span className="eyebrow">PLAYLIST PESSOAL</span>
+                    <h3>{trail.name}</h3>
+                    <p>
+                      {trail.videos.length}{" "}
+                      {trail.videos.length === 1 ? "vídeo" : "vídeos"}
+                    </p>
+                  </div>
+                  <button
+                    className="dark-button"
+                    type="button"
+                    onClick={() => shareTrail(trail)}
+                  >
+                    <Share2 size={15} />
+                    Compartilhar
+                  </button>
+                </div>
+                <div className="custom-trail-videos">
+                  {trail.videos.map((video, index) => (
+                    <button
+                      className="trail-episode"
+                      key={`${video[0]}-${index}`}
+                      onClick={() => go("detalhe", video)}
+                    >
+                      <span className="trail-episode-image">
+                        <img src={video[3]} alt="" />
+                        <b>{video[2]}</b>
+                        <i>{index + 1}</i>
+                      </span>
+                      <strong>{video[0]}</strong>
+                    </button>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="custom-trails-empty">
+            Você ainda não criou uma trilha. Abra um vídeo e selecione{" "}
+            <strong>Adicionar à minha trilha</strong> para começar.
+          </p>
+        )}
+      </section>
 
       <section className="continue-watching" aria-labelledby="continue-title">
         <div className="continue-cover">

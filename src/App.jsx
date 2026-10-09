@@ -31,6 +31,38 @@ function roleForPage(page) {
   return "atleta";
 }
 
+function loadCustomTrails() {
+  try {
+    const savedTrails = window.localStorage.getItem("wellflix-custom-trails");
+    const parsedTrails = savedTrails ? JSON.parse(savedTrails) : [];
+    return Array.isArray(parsedTrails) ? parsedTrails : [];
+  } catch (error) {
+    console.error("Não foi possível carregar suas trilhas salvas.", error);
+    return [];
+  }
+}
+
+function loadVideoRatings() {
+  try {
+    const savedRatings = window.localStorage.getItem("wellflix-video-ratings");
+    const parsedRatings = savedRatings ? JSON.parse(savedRatings) : {};
+
+    if (!parsedRatings || typeof parsedRatings !== "object" || Array.isArray(parsedRatings)) {
+      throw new Error("Formato das avaliações salvas inválido.");
+    }
+
+    return Object.fromEntries(
+      Object.entries(parsedRatings).filter(
+        ([, rating]) =>
+          Number.isInteger(rating) && rating >= 1 && rating <= 5,
+      ),
+    );
+  } catch (error) {
+    console.error("Não foi possível carregar suas avaliações.", error);
+    return {};
+  }
+}
+
 export default function App() {
   const initialPage = pageFromLocation();
   const initialHistoryState = window.history.state || {};
@@ -52,6 +84,8 @@ export default function App() {
   const [selectedPlan, setSelectedPlan] = useState(
     initialHistoryState.selectedPlan || defaultPlan,
   );
+  const [customTrails, setCustomTrails] = useState(loadCustomTrails);
+  const [videoRatings, setVideoRatings] = useState(loadVideoRatings);
 
   useEffect(() => {
     const restoreNavigation = (navigationState) => {
@@ -68,7 +102,9 @@ export default function App() {
       window.scrollTo(0, 0);
     };
 
-    const path = pathsByPage[page] || pathsByPage.home;
+    const path = `${pathsByPage[page] || pathsByPage.home}${
+      page === "trilhas" ? window.location.search : ""
+    }`;
     window.history.replaceState(
       {
         ...initialHistoryState,
@@ -86,6 +122,28 @@ export default function App() {
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        "wellflix-custom-trails",
+        JSON.stringify(customTrails),
+      );
+    } catch (error) {
+      console.error("Não foi possível salvar suas trilhas.", error);
+    }
+  }, [customTrails]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        "wellflix-video-ratings",
+        JSON.stringify(videoRatings),
+      );
+    } catch (error) {
+      console.error("Não foi possível salvar suas avaliações.", error);
+    }
+  }, [videoRatings]);
 
   const go = (next, payload, nextRole = role) => {
     const navigationState = {
@@ -114,6 +172,28 @@ export default function App() {
     setPage(next);
     setMenu(false);
     window.scrollTo(0, 0);
+  };
+  const createCustomTrail = (name, video) => {
+    const newTrail = {
+      id: window.crypto.randomUUID(),
+      name,
+      videos: [video],
+    };
+    setCustomTrails((current) => [...current, newTrail]);
+    return newTrail;
+  };
+  const addVideoToCustomTrail = (trailId, video) => {
+    setCustomTrails((current) =>
+      current.map((trail) =>
+        trail.id === trailId &&
+        !trail.videos.some((savedVideo) => savedVideo[0] === video[0])
+          ? { ...trail, videos: [...trail.videos, video] }
+          : trail,
+      ),
+    );
+  };
+  const rateVideo = (videoTitle, rating) => {
+    setVideoRatings((current) => ({ ...current, [videoTitle]: rating }));
   };
   const login = (account) => {
     setUser(account);
@@ -147,6 +227,11 @@ export default function App() {
         go={go}
         login={login}
         user={user}
+        customTrails={customTrails}
+        createCustomTrail={createCustomTrail}
+        addVideoToCustomTrail={addVideoToCustomTrail}
+        videoRatings={videoRatings}
+        rateVideo={rateVideo}
         selectedVideo={selectedVideo}
         exploreCategory={exploreCategory}
         exploreType={exploreType}
