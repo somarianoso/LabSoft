@@ -4,7 +4,12 @@ import { img } from "../data/content.js";
 
 export default function Signup({ mode = "signup", go, onSuccess }) {
   const isLogin = mode === "login";
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    cpf: "",
+    email: "",
+    password: "",
+  });
   const [invalidFields, setInvalidFields] = useState([]);
   const [feedback, setFeedback] = useState(null);
 
@@ -104,6 +109,27 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
               required
               aria-invalid={invalidFields.includes("name")}
               aria-describedby={invalidFields.includes("name") ? "signup-feedback" : undefined}
+            />
+          </label>
+        )}
+        {!isLogin && (
+          <label htmlFor="signup-cpf">
+            CPF
+            <input
+              id="signup-cpf"
+              name="cpf"
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              placeholder="000.000.000-00"
+              maxLength={14}
+              value={formData.cpf}
+              onChange={handleChange}
+              required
+              aria-invalid={invalidFields.includes("cpf")}
+              aria-describedby={
+                invalidFields.includes("cpf") ? "signup-feedback" : undefined
+              }
             />
           </label>
         )}
