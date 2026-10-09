@@ -52,6 +52,7 @@ export default function App() {
       />
       <AppRoutes
         page={page}
+        role={role}
         go={go}
         login={login}
         user={user}

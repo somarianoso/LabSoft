@@ -4,7 +4,7 @@ import Metric from "../components/Metric.jsx";
 import SectionTitle from "../components/SectionTitle.jsx";
 import VideoCard from "../components/VideoCard.jsx";
 
-export default function Professional() {
+export default function Professional({ isOwnProfile = false }) {
   return (
     <main className="wrap page professional">
       <div className="cover" />
@@ -20,9 +20,11 @@ export default function Professional() {
             anos de experiência preparando atletas.
           </p>
         </div>
-        <button className="green">
-          Seguir profissional <ArrowUpRight size={13} />
-        </button>
+        {!isOwnProfile && (
+          <button className="green" type="button">
+            Seguir profissional <ArrowUpRight size={13} />
+          </button>
+        )}
       </div>
       <div className="stat-row">
         <Metric value="18,4 mil" label="alunos" />

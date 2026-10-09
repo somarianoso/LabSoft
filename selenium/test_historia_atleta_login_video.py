@@ -47,6 +47,26 @@ class TestHistoriaAtletaLoginBuscaVideo(SeleniumScenario):
         self.assertIn("Caio Mendes", results.text)
         self.assertNotIn("Marina Lopes", results.text)
 
+    def test_ver_perfil_do_profissional_no_video(self):
+        self.click(
+            (
+                By.XPATH,
+                "//*[@role='link' and @aria-label='Assistir vídeo: Explosão e velocidade para atletas']",
+            )
+        )
+        self.click((By.XPATH, "//button[normalize-space()='Ver perfil']"))
+
+        self.wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//h1[contains(., 'Caio Mendes')]")
+            )
+        )
+        self.assertTrue(
+            self.driver.find_elements(
+                By.XPATH, "//button[contains(., 'Seguir profissional')]"
+            )
+        )
+
     def test_login_pesquisa_e_assiste_video(self):
         self.click((By.CSS_SELECTOR, '[data-testid="header-login"]'))
         self.wait.until(EC.visibility_of_element_located((By.ID, "login-email")))

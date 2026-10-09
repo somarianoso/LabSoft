@@ -46,6 +46,18 @@ class TestHistoriaProfissionalUpload(SeleniumScenario):
             "Em análise",
         )
 
+        self.click((By.XPATH, "//nav//button[normalize-space()='Meu perfil']"))
+        self.wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//h1[contains(., 'Caio Mendes')]")
+            )
+        )
+        self.assertFalse(
+            self.driver.find_elements(
+                By.XPATH, "//button[contains(., 'Seguir profissional')]"
+            )
+        )
+
 
 if __name__ == "__main__":
     import unittest

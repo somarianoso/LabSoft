@@ -32,6 +32,7 @@ const routesWithNavigation = new Set([
 
 export default function AppRoutes({
   page,
+  role,
   go,
   login,
   user,
@@ -56,6 +57,9 @@ export default function AppRoutes({
   return (
     <Page
       {...(routesWithNavigation.has(page) ? { go } : {})}
+      {...(page === "profissionais"
+        ? { isOwnProfile: role === "profissional" }
+        : {})}
       {...(page === "explorar"
         ? { initialCategory: exploreCategory, initialType: exploreType }
         : {})}

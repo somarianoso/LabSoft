@@ -76,7 +76,13 @@ export default function Detail({ go, video, user }) {
             <strong>Caio Mendes</strong>
             <small>Preparador físico · CREF verificado</small>
           </div>
-          <button className="dark-button">Ver perfil</button>
+          <button
+            className="dark-button"
+            type="button"
+            onClick={() => go("profissionais")}
+          >
+            Ver perfil
+          </button>
         </div>
         <h2>Comentários {commentCount}</h2>
         {user && (
