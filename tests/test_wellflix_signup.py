@@ -36,6 +36,7 @@ class TestCadastroWellFlix(unittest.TestCase):
 
     def test_cadastro_valido_exibe_confirmacao(self):
         self.driver.find_element(By.ID, "signup-name").send_keys("Ana Silva")
+        self.driver.find_element(By.ID, "signup-cpf").send_keys("123.456.789-09")
         self.driver.find_element(By.ID, "signup-email").send_keys(
             "ana@example.com"
         )
@@ -60,7 +61,12 @@ class TestCadastroWellFlix(unittest.TestCase):
             EC.visibility_of_element_located((By.CSS_SELECTOR, '[role="alert"]'))
         )
         self.assertEqual(feedback.text, "Preencha todos os campos obrigatórios.")
-        for field_id in ("signup-name", "signup-email", "signup-password"):
+        for field_id in (
+            "signup-name",
+            "signup-cpf",
+            "signup-email",
+            "signup-password",
+        ):
             self.assertEqual(
                 self.driver.find_element(By.ID, field_id).get_attribute(
                     "aria-invalid"
@@ -70,6 +76,7 @@ class TestCadastroWellFlix(unittest.TestCase):
 
     def test_email_invalido_exibe_validacao(self):
         self.driver.find_element(By.ID, "signup-name").send_keys("Ana Silva")
+        self.driver.find_element(By.ID, "signup-cpf").send_keys("123.456.789-09")
         self.driver.find_element(By.ID, "signup-email").send_keys("email-invalido")
         self.driver.find_element(By.ID, "signup-password").send_keys("Senha123!")
         self.driver.find_element(

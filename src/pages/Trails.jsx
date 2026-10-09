@@ -153,24 +153,36 @@ export default function Trails({ go, customTrails = [] }) {
   return (
     <main className="wrap page trails-page">
       <header className="trails-intro">
-        <span className="eyebrow">SUA JORNADA CONTINUA</span>
-        <h1>Trilhas de Conteúdo</h1>
-        <p>
-          Programas completos, organizados em partes e episódios sequenciais
-          para você evoluir no seu ritmo.
-        </p>
+        {sharedPlaylist ? (
+          <>
+            <span className="eyebrow">PLAYLIST COMPARTILHADA</span>
+            <h1>{sharedPlaylist.name || "Trilha compartilhada"}</h1>
+            <p>Vídeos selecionados para esta trilha.</p>
+          </>
+        ) : (
+          <>
+            <span className="eyebrow">SUA JORNADA CONTINUA</span>
+            <h1>Trilhas de Conteúdo</h1>
+            <p>
+              Programas completos, organizados em partes e episódios sequenciais
+              para você evoluir no seu ritmo.
+            </p>
+          </>
+        )}
       </header>
 
-      <div className="trail-summary" aria-label="Resumo da sua jornada">
-        <div>
-          <strong>3 trilhas em andamento</strong>
-          <span>Programas para diferentes objetivos</span>
+      {!sharedPlaylist && (
+        <div className="trail-summary" aria-label="Resumo da sua jornada">
+          <div>
+            <strong>3 trilhas em andamento</strong>
+            <span>Programas para diferentes objetivos</span>
+          </div>
+          <div>
+            <strong>18 episódios concluídos</strong>
+            <span>Sua evolução acontece aula a aula</span>
+          </div>
         </div>
-        <div>
-          <strong>18 episódios concluídos</strong>
-          <span>Sua evolução acontece aula a aula</span>
-        </div>
-      </div>
+      )}
 
       {sharedPlaylist && (
         <section
@@ -214,10 +226,11 @@ export default function Trails({ go, customTrails = [] }) {
         </section>
       )}
 
-      <section
-        className="custom-trails-section"
-        aria-labelledby="custom-trails-title"
-      >
+      {!sharedPlaylist && (
+        <section
+          className="custom-trails-section"
+          aria-labelledby="custom-trails-title"
+        >
         <div className="custom-trails-heading">
           <div>
             <h2 id="custom-trails-title">Suas trilhas</h2>
@@ -292,8 +305,11 @@ export default function Trails({ go, customTrails = [] }) {
             <strong>Adicionar à minha trilha</strong> para começar.
           </p>
         )}
-      </section>
+        </section>
+      )}
 
+      {!sharedPlaylist && (
+        <>
       <section className="continue-watching" aria-labelledby="continue-title">
         <div className="continue-cover">
           <img src={videos[0][3]} alt="Treino de força" />
@@ -405,6 +421,8 @@ export default function Trails({ go, customTrails = [] }) {
           ))}
         </div>
       </section>
+        </>
+      )}
     </main>
   );
 }
