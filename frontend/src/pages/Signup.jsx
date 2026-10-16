@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { img } from "../data/content.js";
+import { loginAthlete, registerAthlete } from "../services/auth.js";
 
 export default function Signup({ mode = "signup", go, onSuccess }) {
   const isLogin = mode === "login";
@@ -12,6 +13,7 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
   });
   const [invalidFields, setInvalidFields] = useState([]);
   const [feedback, setFeedback] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -20,8 +22,10 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
     setFeedback(null);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    if (isSubmitting) return;
+
     const fieldsToValidate = isLogin
       ? { email: formData.email, password: formData.password }
       : formData;
@@ -45,15 +49,42 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
     }
 
     setInvalidFields([]);
-    if (isLogin) {
-      onSuccess?.({ name: formData.email.split("@")[0] });
+    if (!isLogin && event.currentTarget.elements.creator?.checked) {
+      setFeedback({
+        type: "error",
+        message: "O cadastro de profissional ainda não está disponível.",
+      });
       return;
     }
 
-    setFeedback({
-      type: "success",
-      message: `Cadastro realizado com sucesso para ${formData.name.trim()}.`,
-    });
+    setIsSubmitting(true);
+    try {
+      if (isLogin) {
+        const session = await loginAthlete(formData);
+        onSuccess?.({
+          id: session.usuario.id,
+          name: session.usuario.nome_completo,
+          email: session.usuario.email,
+          accessToken: session.access_token,
+        });
+      } else {
+        const athlete = await registerAthlete(formData);
+        setFeedback({
+          type: "success",
+          message: `Cadastro realizado com sucesso para ${athlete.nome_completo}.`,
+        });
+      }
+    } catch (error) {
+      setFeedback({
+        type: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Não foi possível concluir a solicitação.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -171,8 +202,14 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
           className="green"
           type="submit"
           data-testid={isLogin ? "login-submit" : "signup-submit"}
+          disabled={isSubmitting}
         >
-          {isLogin ? "Entrar" : "Cadastrar"} <ArrowUpRight size={13} />
+          {isSubmitting
+            ? "Aguarde..."
+            : isLogin
+              ? "Entrar"
+              : "Cadastrar"}{" "}
+          <ArrowUpRight size={13} />
         </button>
         {feedback && (
           <p

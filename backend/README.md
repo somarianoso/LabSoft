@@ -1,41 +1,44 @@
-# Backend WellFlix: assinaturas e trilhas
+# Backend WellFlix
 
-API Express/PostgreSQL separada do frontend. Os módulos `planos`, `assinaturas` e
-`trilhas` seguem o fluxo rota → service → repository e não criam tabelas durante
-a inicialização.
+API Express/PostgreSQL separada do frontend. Os módulos `atletas`, `auth`,
+`planos`, `assinaturas` e `trilhas` seguem o fluxo rota → service → repository
+e não criam tabelas durante a inicialização.
 
 ## Executar
 
-1. Copie `.env.example` para `.env` e configure `DATABASE_URL`. Não versione o
-   arquivo `.env`.
+1. Copie `.env.example` para `.env`, configure `DATABASE_URL` e defina
+   `AUTH_TOKEN_SECRET` como um segredo aleatório com pelo menos 32 bytes. Não
+   versione o arquivo `.env`.
 2. Instale as dependências com `npm install`.
-3. Com o schema compartilhado e o de vídeos já aplicados, execute
-   `npm run migrate`.
+3. Execute `npm run migrate`. As migrations deste backend criam identidade,
+   categorias e perfil de atleta. A migration de trilhas exige que a migration
+   de vídeos tenha sido integrada ao mesmo diretório antes dela.
 4. Inicie com `npm start` (ou `npm run dev` durante o desenvolvimento).
 5. Rode os testes unitários com `npm test`.
 
-O servidor inicia sem integração de autenticação, mas endpoints privados
-respondem `503 AUTHENTICATION_NOT_CONFIGURED`. Ao integrar a autenticação
-compartilhada, passe-a para `createApp({ pool, authenticateUser })`; ela deve
-validar uma sessão/token e definir `request.auth.usuarioId` com o UUID
-verificado. Nunca derive o atleta de um ID enviado pelo frontend. As chaves
-estrangeiras das entidades verificam que esse usuário possui perfil de atleta.
+Sem `AUTH_TOKEN_SECRET` válido, a API inicia, mas login e endpoints privados
+respondem `503 AUTHENTICATION_NOT_CONFIGURED`. O middleware compartilhado
+valida tokens Bearer assinados (HS256, expiração de 15 minutos) e define
+`request.auth.usuarioId` e `request.auth.papel` a partir das claims verificadas.
+Módulos podem injetar outro `authenticateUser` em
+`createApp({ pool, authenticateUser })`. Nunca derive o atleta de um ID enviado
+pelo frontend; use a identidade verificada na sessão/token.
 
 ## Dependências de schema compartilhado
 
-Este módulo **não cria** identidade, atletas, categorias ou vídeos. Para aplicar
-as migrations, os módulos compartilhados devem fornecer:
+As migrations iniciais criam `usuarios`, `papeis_usuario`, `categorias` e
+`atletas`:
 
-- `atletas(usuario_id UUID PRIMARY KEY REFERENCES usuarios(id))`;
-- `categorias(id UUID PRIMARY KEY, nome TEXT/VARCHAR UNIQUE)`;
-- `videos(id UUID PRIMARY KEY)`.
+- `usuarios` armazena nome, e-mail, CPF e hash da senha;
+- `papeis_usuario` mantém papéis extensíveis sem misturá-los aos dados pessoais;
+- `atletas(usuario_id UUID PRIMARY KEY REFERENCES usuarios(id))` representa o
+  perfil e é a referência usada por assinaturas e trilhas;
+- `categorias` é compartilhada pelos módulos que dependem dela.
 
-As migrations `002_assinaturas.sql` e `003_trilhas.sql` verificam esses
-pré-requisitos e falham explicitamente se estiverem ausentes. Integre-as na
-sequência única da equipe, após as migrations compartilhadas correspondentes.
-`001_planos.sql` não depende dessas tabelas. `wellflix_schema_migrations` é o
-registro central do executor para todas as migrations do backend; módulos
-futuros devem adicionar seus arquivos ao mesmo diretório e usar o mesmo
+`003_trilhas.sql` também depende de `videos(id UUID PRIMARY KEY)` e falha
+explicitamente se a migration de vídeos estiver ausente. Integre todas as
+migrations na sequência única da equipe, usando `wellflix_schema_migrations`;
+módulos futuros devem adicionar seus arquivos ao mesmo diretório e usar o mesmo
 comando, sem criar outro histórico de schema. Não edite migrations já
 aplicadas; crie uma migration corretiva.
 
@@ -52,6 +55,9 @@ Todas as respostas bem-sucedidas usam `{ "data": ... }`; erros usam
 | Método | Endpoint | Acesso | Uso |
 | --- | --- | --- | --- |
 | `GET` | `/api/health` | público | Verifica disponibilidade HTTP |
+| `POST` | `/api/atletas` | público | Cadastra conta e perfil de atleta em uma transação |
+| `GET` | `/api/atletas/me` | atleta | Consulta o próprio perfil |
+| `POST` | `/api/auth/sessao` | público | Valida credenciais e emite token Bearer |
 | `GET` | `/api/planos` | público | Lista planos ativos |
 | `GET` | `/api/assinaturas/atual` | atleta | Consulta assinatura ativa ou pendente |
 | `POST` | `/api/assinaturas` | atleta | Registra solicitação pendente |
@@ -65,7 +71,25 @@ Todas as respostas bem-sucedidas usam `{ "data": ... }`; erros usam
 | `DELETE` | `/api/trilhas/:trilhaId/videos/:videoId` | atleta | Remove vídeo da própria trilha |
 | `PUT` | `/api/trilhas/:trilhaId/videos/:videoId/progresso` | atleta | Registra progresso do vídeo na trilha |
 
-Exemplos:
+Cadastro (`POST /api/atletas`):
+
+```json
+{
+  "nome_completo": "Ana Silva",
+  "cpf": "123.456.789-09",
+  "email": "ana@example.com",
+  "senha": "senha-com-pelo-menos-8-caracteres"
+}
+```
+
+O backend normaliza e valida CPF/e-mail, armazena a senha usando scrypt e
+retorna `409 CONFLICT` para e-mail ou CPF duplicados. O login (`POST
+/api/auth/sessao`) recebe `email` e `senha` e retorna `access_token`,
+`token_type`, `expires_in` e dados públicos da conta. Envie o token em
+`Authorization: Bearer <access_token>`. O frontend atual o mantém somente em
+memória.
+
+Assinatura:
 
 ```json
 {
@@ -140,9 +164,7 @@ Para planos com `limite_categorias = NULL`, uma lista vazia em
 
 ## Frontend atual
 
-O checkout e as trilhas em `frontend/src` ainda usam dados de demonstração; o
-login atual não emite sessão autenticada e os vídeos de demonstração não têm
-UUIDs do catálogo. Para manter essas telas funcionais e evitar enviar dados de
-cartão ou IDs não verificados, a API disponibiliza contratos prontos, mas a
-conexão ponta a ponta deve ser ligada quando os módulos compartilhados de
-autenticação, categorias e catálogo de vídeos forem integrados.
+Cadastro/login de atletas em `frontend/src` consomem a API. O checkout e as
+trilhas ainda usam dados de demonstração, e os vídeos de demonstração não têm
+UUIDs do catálogo. A integração desses fluxos depende dos módulos de categorias
+e vídeos e do adaptador autenticado do provedor de pagamento.

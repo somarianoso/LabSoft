@@ -1,11 +1,17 @@
 import express from "express";
+import { createAuthRepository } from "./auth/auth.repository.js";
+import { createAuthRouter } from "./auth/auth.routes.js";
+import { createAuthService } from "./auth/auth.service.js";
 import { createAssinaturasRepository } from "./assinaturas/assinaturas.repository.js";
 import { createAssinaturasRouter } from "./assinaturas/assinaturas.routes.js";
 import { createAssinaturasService } from "./assinaturas/assinaturas.service.js";
+import { createAtletasRepository } from "./atletas/atletas.repository.js";
+import { createAtletasRouter } from "./atletas/atletas.routes.js";
+import { createAtletasService } from "./atletas/atletas.service.js";
 import { createPlanosRepository } from "./planos/planos.repository.js";
 import { createPlanosRouter } from "./planos/planos.routes.js";
 import { createPlanosService } from "./planos/planos.service.js";
-import { authenticationNotConfigured } from "./shared/authentication.js";
+import { createAuthenticationMiddleware } from "./shared/authentication.js";
 import { errorHandler, HttpError } from "./shared/http-error.js";
 import { createTrilhasRepository } from "./trilhas/trilhas.repository.js";
 import { createTrilhasRouter } from "./trilhas/trilhas.routes.js";
@@ -13,7 +19,8 @@ import { createTrilhasService } from "./trilhas/trilhas.service.js";
 
 export function createApp({
   pool,
-  authenticateUser = authenticationNotConfigured,
+  authenticateUser,
+  tokenSecret = process.env.AUTH_TOKEN_SECRET,
   frontendOrigin = process.env.FRONTEND_ORIGIN,
 }) {
   if (!pool) {
@@ -21,6 +28,7 @@ export function createApp({
   }
 
   const app = express();
+  const authenticate = authenticateUser || createAuthenticationMiddleware(tokenSecret);
   app.disable("x-powered-by");
   app.use((request, response, next) => {
     const origin = request.get("origin");
@@ -53,6 +61,8 @@ export function createApp({
   const planosRepository = createPlanosRepository(pool);
   const assinaturasRepository = createAssinaturasRepository(pool);
   const trilhasRepository = createTrilhasRepository(pool);
+  const atletasRepository = createAtletasRepository(pool);
+  const authRepository = createAuthRepository(pool);
 
   app.get("/api/health", (request, response) => {
     response.json({ data: { status: "ok" } });
@@ -62,15 +72,23 @@ export function createApp({
     createPlanosRouter(createPlanosService(planosRepository)),
   );
   app.use(
+    "/api/atletas",
+    createAtletasRouter(createAtletasService(atletasRepository), authenticate),
+  );
+  app.use(
+    "/api/auth",
+    createAuthRouter(createAuthService(authRepository, tokenSecret)),
+  );
+  app.use(
     "/api/assinaturas",
-    authenticateUser,
+    authenticate,
     createAssinaturasRouter(createAssinaturasService(assinaturasRepository)),
   );
   app.use(
     "/api/trilhas",
     createTrilhasRouter(
       createTrilhasService(trilhasRepository),
-      authenticateUser,
+      authenticate,
     ),
   );
   app.use((request, response) => {

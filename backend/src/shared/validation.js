@@ -33,3 +33,16 @@ export function requireNonEmptyText(value, fieldName, maxLength) {
 
   return value.trim();
 }
+
+export function normalizeEmail(value) {
+  if (
+    typeof value !== "string" ||
+    value.trim().length === 0 ||
+    value.trim().length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
+  ) {
+    throw new HttpError(400, "Informe um e-mail válido.", "INVALID_EMAIL");
+  }
+
+  return value.trim().toLowerCase();
+}

@@ -4,12 +4,15 @@
 
 O WellFlix é uma plataforma voltada a conectar profissionais qualificados a pessoas que desejam melhorar a própria saúde. A proposta é oferecer acesso a conteúdos e orientações de profissionais em áreas como atividade física, nutrição e bem-estar.
 
-O repositório está organizado em dois diretórios principais: `frontend/` contém a aplicação existente, construída com React e Vite; `backend/` está reservado para a implementação futura da API. As telas atuais apresentam as experiências de atletas, profissionais e moderadores com dados de demonstração. Ainda não há uma API nem conexão com banco de dados.
+O repositório está organizado em `frontend/`, com a aplicação React/Vite, e `backend/`, com a API Express e PostgreSQL. O backend já implementa cadastro/login de atletas, consulta de perfil, planos, assinaturas e trilhas. As experiências de profissionais e moderadores e partes do catálogo continuam usando dados de demonstração.
 
 ## Estrutura
 
 ```text
-backend/                            # reservado para a API futura
+backend/
+  ├── src/                          # módulos da API (atletas, auth, planos...)
+  ├── src/db/migrations/            # migrations SQL versionadas em sequência única
+  └── test/                         # testes Node.js
 frontend/
   ├── index.html
   ├── package.json
@@ -33,7 +36,7 @@ docs/                               # especificações e materiais de referênci
 - **Lucide React** fornece ícones.
 - **Navegação:** `frontend/src/App.jsx` traduz caminhos em páginas e usa o histórico do navegador; `frontend/src/routes/AppRoutes.jsx` seleciona e renderiza cada tela.
 - **Dados:** `frontend/src/data/content.js` e `frontend/src/data/plans.js` contêm dados estáticos. Trilhas personalizadas e avaliações de vídeo ficam no `localStorage`.
-- **Comportamentos de demonstração:** cadastro/login, pagamento, publicação e moderação não persistem em um serviço de backend.
+- **Comportamentos de demonstração:** pagamento, publicação e moderação ainda não persistem em um serviço de backend.
 
 ### Principais áreas do frontend
 
@@ -44,7 +47,7 @@ docs/                               # especificações e materiais de referênci
 | `frontend/src/routes/AppRoutes.jsx` | Seleção da página e passagem de propriedades de navegação. |
 | `frontend/src/data/` | Catálogo demonstrativo de vídeos/profissionais/categorias e planos. |
 | `frontend/src/styles/global.css` | Estilos globais e estilos das telas. |
-| `backend/` | Espaço reservado para a futura API; ainda sem implementação. |
+| `backend/src/` | API Express organizada em módulos independentes por domínio. |
 
 ## Como executar
 
@@ -64,6 +67,8 @@ npm run build
 ```
 
 O projeto também oferece `npm run preview` para servir localmente a compilação gerada. Execute esses comandos dentro de `frontend/`.
+
+Para executar e testar a API, consulte [backend/README.md](./backend/README.md).
 
 ## Divisão das responsabilidades entre os quatro integrantes
 

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createApp } from "../src/app.js";
+import { createAccessToken } from "../src/shared/tokens.js";
 
 async function withServer(app, run) {
   const server = app.listen(0);
@@ -37,6 +38,9 @@ test("health and plans are public while account endpoints require auth setup", a
 
     const trails = await fetch(`${baseUrl}/api/trilhas`);
     assert.equal(trails.status, 503);
+
+    const athleteProfile = await fetch(`${baseUrl}/api/atletas/me`);
+    assert.equal(athleteProfile.status, 503);
   });
 });
 
@@ -62,5 +66,137 @@ test("trail ownership is derived from authenticated context, not the request", a
     );
     assert.equal(response.status, 200);
     assert.equal(queriedAtletaId, atletaId);
+  });
+});
+
+test("athlete registration creates the user, role, and profile transactionally", async () => {
+  const userId = "77777777-7777-4777-8777-777777777777";
+  const statements = [];
+  const client = {
+    async query(sql, values) {
+      statements.push(sql.trim().split(/\s+/).slice(0, 3).join(" "));
+      if (sql.includes("INSERT INTO usuarios")) {
+        assert.equal(values[1], "12345678909");
+        assert.equal(values[2], "ana@example.com");
+        assert.notEqual(values[3], "Senha123!");
+        return {
+          rows: [
+            {
+              id: userId,
+              nome_completo: "Ana Silva",
+              email: "ana@example.com",
+              data_criacao: "2026-10-16T12:00:00.000Z",
+            },
+          ],
+        };
+      }
+      return { rows: [] };
+    },
+    release() {},
+  };
+  const app = createApp({
+    pool: { connect: async () => client, query: async () => ({ rows: [] }) },
+  });
+
+  await withServer(app, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/atletas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nome_completo: "Ana Silva",
+        cpf: "123.456.789-09",
+        email: "ANA@EXAMPLE.COM",
+        senha: "Senha123!",
+      }),
+    });
+    assert.equal(response.status, 201);
+    const result = await response.json();
+    assert.equal(result.data.id, userId);
+    assert.equal("cpf" in result.data, false);
+    assert.deepEqual(statements, [
+      "BEGIN",
+      "INSERT INTO usuarios",
+      "INSERT INTO papeis_usuario",
+      "INSERT INTO atletas",
+      "COMMIT",
+    ]);
+  });
+});
+
+test("signed access token authenticates the athlete profile endpoint", async () => {
+  const userId = "77777777-7777-4777-8777-777777777777";
+  const tokenSecret = "wellflix-test-secret-with-at-least-32-bytes";
+  const token = await createAccessToken(
+    { id: userId, papel: "atleta" },
+    tokenSecret,
+  );
+  const app = createApp({
+    pool: {
+      query: async (_query, values) => ({
+        rows: [
+          {
+            id: values[0],
+            nome_completo: "Ana Silva",
+            email: "ana@example.com",
+          },
+        ],
+      }),
+    },
+    tokenSecret,
+  });
+
+  await withServer(app, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/atletas/me`, {
+      headers: { Authorization: `Bearer ${token.access_token}` },
+    });
+    assert.equal(response.status, 200);
+    const profile = await response.json();
+    assert.equal(profile.data.id, userId);
+    assert.equal("cpf" in profile.data, false);
+
+    const unauthorized = await fetch(`${baseUrl}/api/atletas/me`);
+    assert.equal(unauthorized.status, 401);
+  });
+});
+
+test("duplicate athlete registration rolls back and returns a generic conflict", async () => {
+  const statements = [];
+  const client = {
+    async query(sql) {
+      const statement = sql.trim().split(/\s+/).slice(0, 3).join(" ");
+      statements.push(statement);
+      if (statement === "INSERT INTO usuarios") {
+        throw Object.assign(new Error("duplicate private value"), {
+          code: "23505",
+        });
+      }
+      return { rows: [] };
+    },
+    release() {},
+  };
+  const app = createApp({
+    pool: { connect: async () => client, query: async () => ({ rows: [] }) },
+  });
+
+  await withServer(app, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/atletas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nome_completo: "Ana Silva",
+        cpf: "123.456.789-09",
+        email: "ana@example.com",
+        senha: "Senha123!",
+      }),
+    });
+    assert.equal(response.status, 409);
+    assert.deepEqual(await response.json(), {
+      error: { code: "CONFLICT", message: "O registro já existe." },
+    });
+    assert.deepEqual(statements, [
+      "BEGIN",
+      "INSERT INTO usuarios",
+      "ROLLBACK",
+    ]);
   });
 });
