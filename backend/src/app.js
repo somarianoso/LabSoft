@@ -16,6 +16,9 @@ import { errorHandler, HttpError } from "./shared/http-error.js";
 import { createTrilhasRepository } from "./trilhas/trilhas.repository.js";
 import { createTrilhasRouter } from "./trilhas/trilhas.routes.js";
 import { createTrilhasService } from "./trilhas/trilhas.service.js";
+import { createVideosRepository } from "./videos/videos.repository.js";
+import { createVideosRouter } from "./videos/videos.routes.js";
+import { createVideosService } from "./videos/videos.service.js";
 
 export function createApp({
   pool,
@@ -63,6 +66,7 @@ export function createApp({
   const trilhasRepository = createTrilhasRepository(pool);
   const atletasRepository = createAtletasRepository(pool);
   const authRepository = createAuthRepository(pool);
+  const videosRepository = createVideosRepository(pool);
 
   app.get("/api/health", (request, response) => {
     response.json({ data: { status: "ok" } });
@@ -90,6 +94,10 @@ export function createApp({
       createTrilhasService(trilhasRepository),
       authenticate,
     ),
+  );
+  app.use(
+    "/api/videos",
+    createVideosRouter(createVideosService(videosRepository), authenticate),
   );
   app.use((request, response) => {
     response.status(404).json({
