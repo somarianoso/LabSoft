@@ -1,8 +1,15 @@
 # Backend WellFlix
 
+<<<<<<< Updated upstream
 API Express/PostgreSQL separada do frontend. Os módulos `atletas`, `auth`,
 `planos`, `assinaturas` e `trilhas` seguem o fluxo rota → service → repository
 e não criam tabelas durante a inicialização.
+=======
+API Express/PostgreSQL separada do frontend. Os módulos `planos`, `assinaturas` e
+`trilhas` seguem o fluxo rota → service → repository e não criam tabelas durante
+a inicialização. O schema de profissionais e moderadores é mantido em uma
+migration própria, sem acoplar seus perfis aos módulos de API.
+>>>>>>> Stashed changes
 
 ## Executar
 
@@ -29,6 +36,7 @@ pelo frontend; use a identidade verificada na sessão/token.
 As migrations iniciais criam `usuarios`, `papeis_usuario`, `categorias` e
 `atletas`:
 
+<<<<<<< Updated upstream
 - `usuarios` armazena nome, e-mail, CPF e hash da senha;
 - `papeis_usuario` mantém papéis extensíveis sem misturá-los aos dados pessoais;
 - `atletas(usuario_id UUID PRIMARY KEY REFERENCES usuarios(id))` representa o
@@ -39,6 +47,25 @@ As migrations iniciais criam `usuarios`, `papeis_usuario`, `categorias` e
 explicitamente se a migration de vídeos estiver ausente. Integre todas as
 migrations na sequência única da equipe, usando `wellflix_schema_migrations`;
 módulos futuros devem adicionar seus arquivos ao mesmo diretório e usar o mesmo
+=======
+- `usuarios(id UUID PRIMARY KEY)`;
+- `atletas(usuario_id UUID PRIMARY KEY REFERENCES usuarios(id))`;
+- `categorias(id UUID PRIMARY KEY, nome TEXT/VARCHAR UNIQUE)`;
+- `videos(id UUID PRIMARY KEY)`.
+
+As migrations `002_assinaturas.sql` e `003_trilhas.sql` verificam esses
+pré-requisitos e falham explicitamente se estiverem ausentes. Integre-as na
+sequência única da equipe, após as migrations compartilhadas correspondentes.
+`004_profissionais.sql` exige `usuarios`, `categorias` e `videos`; cria as
+tabelas do profissional e seus vínculos. `005_moderadores.sql` cria a tabela
+própria de moderadores, vinculada a `usuarios`. Nenhum dos perfis copia nome,
+e-mail ou CPF da conta. `profissional_videos` é a relação explícita entre
+profissionais e vídeos; o módulo de vídeos deve usar essa relação como fonte de
+autoria e não manter uma segunda associação concorrente.
+`001_planos.sql` não depende dessas tabelas. `wellflix_schema_migrations` é o
+registro central do executor para todas as migrations do backend; módulos
+futuros devem adicionar seus arquivos ao mesmo diretório e usar o mesmo
+>>>>>>> Stashed changes
 comando, sem criar outro histórico de schema. Não edite migrations já
 aplicadas; crie uma migration corretiva.
 
