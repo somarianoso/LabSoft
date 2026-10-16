@@ -1,46 +1,57 @@
-# WellFlix — Frontend
+# WellFlix
 
 ## Visão geral
 
 O WellFlix é uma plataforma voltada a conectar profissionais qualificados a pessoas que desejam melhorar a própria saúde. A proposta é oferecer acesso a conteúdos e orientações de profissionais em áreas como atividade física, nutrição e bem-estar.
 
-Atualmente, este repositório contém **somente o frontend**, construído com React e Vite. As telas apresentam as experiências de atletas, profissionais e moderadores com dados de demonstração. Ainda não há uma API nem conexão com banco de dados neste projeto.
+O repositório está organizado em dois diretórios principais: `frontend/` contém a aplicação existente, construída com React e Vite; `backend/` está reservado para a implementação futura da API. As telas atuais apresentam as experiências de atletas, profissionais e moderadores com dados de demonstração. Ainda não há uma API nem conexão com banco de dados.
 
-## Arquitetura atual
+## Estrutura
 
 ```text
-index.html
-  └── src/main.jsx                 # monta a aplicação React e importa o CSS global
-        └── src/App.jsx            # estado geral, navegação e dados locais
-              ├── src/routes/AppRoutes.jsx
-              │     └── src/pages/ # telas por funcionalidade
-              ├── src/components/  # componentes reutilizáveis
-              └── src/data/        # conteúdo e planos estáticos
+backend/                            # reservado para a API futura
+frontend/
+  ├── index.html
+  ├── package.json
+  ├── public/assets/
+  └── src/
+      ├── main.jsx                 # monta a aplicação React e importa o CSS global
+      ├── App.jsx                  # estado geral, navegação e dados locais
+      ├── routes/AppRoutes.jsx
+      ├── pages/                   # telas por funcionalidade
+      ├── components/              # componentes reutilizáveis
+      ├── data/                    # conteúdo e planos estáticos
+      └── styles/global.css
+selenium/                           # testes automatizados do frontend
+tests/                              # outros testes do projeto
+docs/                               # especificações e materiais de referência
 ```
 
 - **React** compõe a interface em páginas e componentes.
-- **Vite** fornece o servidor de desenvolvimento e gera a versão de produção.
-- **CSS** da aplicação está concentrado em `src/styles/global.css`.
+- **Vite** fornece o servidor de desenvolvimento e gera a versão de produção; sua configuração e dependências ficam em `frontend/`.
+- **CSS** da aplicação está concentrado em `frontend/src/styles/global.css`.
 - **Lucide React** fornece ícones.
-- **Navegação:** `App.jsx` traduz caminhos em páginas e usa o histórico do navegador; `AppRoutes.jsx` seleciona e renderiza cada tela.
-- **Dados:** `src/data/content.js` e `src/data/plans.js` contêm dados estáticos. Trilhas personalizadas e avaliações de vídeo ficam no `localStorage`.
+- **Navegação:** `frontend/src/App.jsx` traduz caminhos em páginas e usa o histórico do navegador; `frontend/src/routes/AppRoutes.jsx` seleciona e renderiza cada tela.
+- **Dados:** `frontend/src/data/content.js` e `frontend/src/data/plans.js` contêm dados estáticos. Trilhas personalizadas e avaliações de vídeo ficam no `localStorage`.
 - **Comportamentos de demonstração:** cadastro/login, pagamento, publicação e moderação não persistem em um serviço de backend.
 
 ### Principais áreas do frontend
 
 | Caminho | Conteúdo |
 | --- | --- |
-| `src/pages/` | Telas de início, exploração, detalhes de vídeo, profissionais, estúdio, moderação, trilhas, planos, checkout e cadastro/login. |
-| `src/components/` | Cabeçalho, rodapé, cartões, filtros, métricas e elementos reaproveitados pelas páginas. |
-| `src/routes/AppRoutes.jsx` | Seleção da página e passagem de propriedades de navegação. |
-| `src/data/` | Catálogo demonstrativo de vídeos/profissionais/categorias e planos. |
-| `src/styles/global.css` | Estilos globais e estilos das telas. |
+| `frontend/src/pages/` | Telas de início, exploração, detalhes de vídeo, profissionais, estúdio, moderação, trilhas, planos, checkout e cadastro/login. |
+| `frontend/src/components/` | Cabeçalho, rodapé, cartões, filtros, métricas e elementos reaproveitados pelas páginas. |
+| `frontend/src/routes/AppRoutes.jsx` | Seleção da página e passagem de propriedades de navegação. |
+| `frontend/src/data/` | Catálogo demonstrativo de vídeos/profissionais/categorias e planos. |
+| `frontend/src/styles/global.css` | Estilos globais e estilos das telas. |
+| `backend/` | Espaço reservado para a futura API; ainda sem implementação. |
 
 ## Como executar
 
 Requer Node.js e npm instalados.
 
 ```bash
+cd frontend
 npm install
 npm run dev
 ```
@@ -48,10 +59,11 @@ npm run dev
 Para verificar a compilação de produção:
 
 ```bash
+cd frontend
 npm run build
 ```
 
-O projeto também oferece `npm run preview` para servir localmente a compilação gerada.
+O projeto também oferece `npm run preview` para servir localmente a compilação gerada. Execute esses comandos dentro de `frontend/`.
 
 ## Divisão das responsabilidades entre os quatro integrantes
 

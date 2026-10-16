@@ -28,7 +28,7 @@ def main():
     # Garante modo imersivo e visibilidade inclusive no teste de cadastro.
     webdriver.ChromeOptions.add_argument = add_argument_for_visible_kiosk
 
-    print("Confirme que o app esta rodando (npm run dev) antes dos testes.")
+    print("Confirme que o app esta rodando (cd frontend && npm run dev) antes dos testes.")
     suite = unittest.defaultTestLoader.discover(
         start_dir=str(SELENIUM_DIR),
         pattern="test_*.py",

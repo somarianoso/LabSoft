@@ -5,7 +5,7 @@ applyTo: ["selenium/**/*.py", "selenium/README.md"]
 
 # WellFlix Selenium Tests
 
-- Run commands from the repository root. Start the app in a separate terminal with `npm run dev`; tests default to `http://localhost:5173`.
+- Start the app in a separate terminal with `cd frontend && npm run dev`; run test commands from the repository root. Tests default to `http://localhost:5173`.
 - Install dependencies with `python -m pip install -r selenium/requirements.txt`. Chrome is required; Selenium Manager may need internet access on its first run to obtain the driver.
 - Run all Selenium flows with `python -m unittest discover -s selenium -p 'test_*.py' -v`. This includes the three `test_historia_*.py` stories and `test_wellflix_signup.py`.
 - To run only the three history stories, use `python -m unittest discover -s selenium -p 'test_historia_*.py' -v`.

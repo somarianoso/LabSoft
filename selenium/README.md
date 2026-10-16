@@ -16,14 +16,15 @@ exemplo original está em `pcs3643_Risco/selenium/`.
 
 ## Executar
 
-Na raiz do projeto, inicie o app:
+Na raiz do projeto, instale as dependências e inicie o app:
 
 ```sh
+cd frontend
 npm install
 npm run dev
 ```
 
-Em outro terminal, instale Selenium e execute todos os fluxos Selenium:
+Em outro terminal, na raiz do projeto, instale Selenium e execute todos os fluxos Selenium:
 
 ```sh
 python3 -m venv .venv
