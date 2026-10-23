@@ -63,3 +63,26 @@ O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Si
 Os serviços de API estão marcados com o plano gratuito no Blueprint para evitar escolher recursos pagos por padrão. Serviços gratuitos entram em suspensão após inatividade e podem demorar para responder na primeira requisição; isso deve ser considerado na demonstração. Configure os serviços na mesma região do banco sempre que o provedor permitir.
 
 O banco guarda somente a URL de mídia; o arquivo de vídeo deve ser enviado para armazenamento externo. A confirmação de pagamento também não é simulada: novas assinaturas ficam `pendente_pagamento` até uma integração autenticada com provedor.
+
+## Dados fictícios para demonstração
+
+Para povoar um banco de desenvolvimento/demonstração com um atleta, três profissionais, um moderador, vídeos publicados e pendentes, comentários, avaliações, uma assinatura e uma trilha, aplique primeiro todas as migrations e depois execute:
+
+```bash
+cd backend
+npm run seed:demo -- --confirm-demo-database
+```
+
+O comando usa o `DATABASE_URL` de `backend/.env` e requer a confirmação explícita porque grava registros no banco selecionado. Não rode contra um banco com dados reais. O seed é repetível: executar novamente atualiza os mesmos registros de demonstração, sem duplicá-los.
+
+As cinco contas usam a senha `WellflixDemo123!`:
+
+| Perfil | E-mail |
+| --- | --- |
+| Atleta | `atleta.demo@wellflix.test` |
+| Profissional | `lara.demo@wellflix.test` |
+| Profissional | `caio.demo@wellflix.test` |
+| Profissional | `marina.demo@wellflix.test` |
+| Moderador | `moderador.demo@wellflix.test` |
+
+Para testar o login no Swagger de identidade, use `POST /api/auth/sessao` e informe o `papel` correspondente (`atleta`, `profissional` ou `moderador`). Os vídeos apontam para arquivos de amostra públicos; são dados fictícios, não conteúdo WellFlix real.

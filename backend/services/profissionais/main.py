@@ -80,7 +80,7 @@ def professional_detail(professional_id: UUID):
         if row:
             cur.execute("SELECT c.id, c.nome FROM categorias c JOIN categorias_profissional cp ON cp.categoria_id = c.id WHERE cp.profissional_id = %s ORDER BY c.nome", (professional_id,))
             row["categorias"] = cur.fetchall()
-            cur.execute("SELECT id, titulo, descricao, duracao_segundos, data_publicacao FROM videos WHERE profissional_id = %s AND situacao = 'publicado' ORDER BY data_publicacao DESC", (professional_id,))
+            cur.execute("SELECT id, profissional_id, %s AS profissional, titulo, descricao, duracao_segundos, url_conteudo, data_publicacao FROM videos WHERE profissional_id = %s AND situacao = 'publicado' ORDER BY data_publicacao DESC", (row["nome_completo"], professional_id))
             row["videos"] = cur.fetchall()
     if not row:
         raise HTTPException(404, detail={"code": "PROFILE_NOT_FOUND", "message": "Profissional não encontrado."})
@@ -115,7 +115,7 @@ def moderation_queue(user: Moderator, situacao: str = "aguardando_revisao"):
     if situacao not in allowed:
         raise HTTPException(422, detail={"code": "INVALID_STATUS", "message": "Estado de moderação inválido."})
     with connection() as conn, conn.cursor() as cur:
-        cur.execute("SELECT v.id, v.titulo, v.descricao, v.duracao_segundos, v.url_conteudo, v.situacao, v.data_criacao, u.id AS profissional_id, u.nome_completo AS profissional FROM videos v JOIN usuarios u ON u.id = v.profissional_id WHERE v.situacao = %s ORDER BY v.data_criacao", (situacao,))
+        cur.execute("SELECT v.id, v.titulo, v.descricao, v.duracao_segundos, v.url_conteudo, v.situacao, v.data_criacao, u.id AS profissional_id, u.nome_completo AS profissional, COALESCE(array_agg(DISTINCT c.nome) FILTER (WHERE c.nome IS NOT NULL), '{}') AS categorias FROM videos v JOIN usuarios u ON u.id = v.profissional_id LEFT JOIN categorias_video cv ON cv.video_id = v.id LEFT JOIN categorias c ON c.id = cv.categoria_id WHERE v.situacao = %s GROUP BY v.id, u.id ORDER BY v.data_criacao", (situacao,))
         rows = cur.fetchall()
     return success(rows)
 

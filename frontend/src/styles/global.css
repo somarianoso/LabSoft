@@ -1206,6 +1206,12 @@ textarea:focus-visible {
   height: 100%;
   object-fit: cover;
 }
+.player video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
 .player-bar {
   position: absolute;
   bottom: 0;

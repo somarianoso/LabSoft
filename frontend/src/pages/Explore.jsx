@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Search, ShieldCheck, Star } from "lucide-react";
-import { professionals, videos } from "../data/content.js";
 import ExploreFilters from "../components/ExploreFilters.jsx";
 import VideoCard from "../components/VideoCard.jsx";
+import { getCategories, getProfessionals, getVideos } from "../services/wellflix.js";
 
-const videoCategories = [...new Set(videos.map((video) => video[1]))];
 const allRatingFilters = new Set([4.5, 4, 3]);
 
 export default function Explore({
@@ -20,15 +19,34 @@ export default function Explore({
   const [selectedRatings, setSelectedRatings] = useState(
     () => new Set(allRatingFilters),
   );
+  const [videos, setVideos] = useState([]);
+  const [professionals, setProfessionals] = useState([]);
+  const [videoCategories, setVideoCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    Promise.all([getCategories(), getVideos(), getProfessionals()])
+      .then(([categories, catalogVideos, creators]) => {
+        if (!active) return;
+        setVideoCategories(categories);
+        setVideos(catalogVideos);
+        setProfessionals(creators);
+      })
+      .catch((requestError) => active && setError(requestError.message))
+      .finally(() => active && setLoading(false));
+    return () => { active = false; };
+  }, []);
   const isVideoSearch = searchType === "videos";
   const categories = isVideoSearch
     ? videoCategories
     : [...new Set(professionals.flatMap((professional) => professional.categories))];
-  const results = isVideoSearch
+  const results = useMemo(() => isVideoSearch
     ? videos.filter(
         (video) =>
           (selectedCategories.size === 0 || selectedCategories.has(video[1])) &&
-          [...selectedRatings].some((rating) => rating <= 4.9) &&
+          (selectedRatings.size === 0 || [...selectedRatings].some((rating) => (video.rating ?? 0) >= rating)) &&
           `${video[0]} ${video[1]}`
             .toLowerCase()
             .includes(query.trim().toLowerCase()),
@@ -39,11 +57,11 @@ export default function Explore({
             professional.categories.some((category) =>
               selectedCategories.has(category),
             )) &&
-          [...selectedRatings].some((rating) => rating <= 4.9) &&
+          (selectedRatings.size === 0 || [...selectedRatings].some((rating) => (professional.rating ?? 0) >= rating)) &&
           `${professional.name} ${professional.specialty} ${professional.categories.join(" ")}`
             .toLowerCase()
             .includes(query.trim().toLowerCase()),
-      );
+      ), [isVideoSearch, videos, professionals, selectedCategories, selectedRatings, query]);
   const resultNoun = isVideoSearch
     ? results.length === 1
       ? "vídeo"
@@ -134,6 +152,8 @@ export default function Explore({
               </span>
             </label>
           </div>
+          {loading && <p role="status">Carregando conteúdo do backend…</p>}
+          {error && <p role="alert">Não foi possível carregar os dados: {error}</p>}
           {isVideoSearch ? (
             <div className="video-grid" data-testid="video-results">
               {results.map((video) => (
@@ -157,7 +177,7 @@ export default function Explore({
                       ))}
                     </div>
                     <span className="professional-rating">
-                      <Star size={12} fill="currentColor" /> 4,9
+                      <Star size={12} fill="currentColor" /> {(professional.rating ?? 0).toFixed(1)}
                     </span>
                   </div>
                 </article>

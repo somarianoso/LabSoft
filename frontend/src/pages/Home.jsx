@@ -1,17 +1,30 @@
-import { ArrowUpRight, ChevronRight } from "lucide-react";
-import { cats, img, professionals, videos } from "../data/content.js";
+import { useEffect, useState } from "react";
+import { ArrowUpRight, ChevronRight, Dumbbell } from "lucide-react";
+import { cats, img } from "../data/content.js";
 import Expert from "../components/Expert.jsx";
 import SectionTitle from "../components/SectionTitle.jsx";
 import VideoCard from "../components/VideoCard.jsx";
-
-const featuredVideo = [
-  "Explosão e velocidade para atletas",
-  "Basquete",
-  "18 min",
-  img.athlete,
-];
+import { getCategories, getProfessionals, getVideos } from "../services/wellflix.js";
 
 export default function Home({ go }) {
+  const [content, setContent] = useState({ categories: [], videos: [], professionals: [] });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const leadVideo = content.videos[0] || null;
+
+  useEffect(() => {
+    let active = true;
+    Promise.all([getCategories(), getVideos(), getProfessionals()])
+      .then(([categories, videos, professionals]) => {
+        if (active) setContent({ categories, videos, professionals });
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      })
+      .finally(() => active && setLoading(false));
+    return () => { active = false; };
+  }, []);
+
   return (
     <main>
       <section className="hero wrap">
@@ -37,29 +50,32 @@ export default function Home({ go }) {
             </button>
           </div>
           <div className="social-proof">
-            <span>●●●</span> +18 mil atletas já estão evoluindo
+            <span>●●●</span> Conteúdos publicados por profissionais
           </div>
         </div>
         <div
           className="hero-art"
-          role="link"
-          tabIndex={0}
-          aria-label={`Assistir vídeo: ${featuredVideo[0]}`}
-          onClick={() => go("detalhe", featuredVideo)}
+          role={leadVideo ? "link" : undefined}
+          tabIndex={leadVideo ? 0 : -1}
+          aria-label={leadVideo ? `Assistir vídeo: ${leadVideo[0]}` : "Conteúdo em destaque indisponível"}
+          onClick={() => leadVideo && go("detalhe", leadVideo)}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if (leadVideo && event.key === "Enter") {
               event.preventDefault();
-              go("detalhe", featuredVideo);
+              go("detalhe", leadVideo);
             }
           }}
         >
           <img src={img.athlete} alt="Atleta em movimento" />
           <div className="featured">
-            <span>EM DESTAQUE · 18 MIN</span>
-            <strong>Explosão e velocidade para atletas</strong>
-            <small>
-              Com Lucas Freire <ChevronRight size={12} />
-            </small>
+            {leadVideo ? <>
+              <span>EM DESTAQUE · {leadVideo[2]}</span>
+              <strong>{leadVideo[0]}</strong>
+              <small>Com {leadVideo.professional || "Profissional WellFlix"} <ChevronRight size={12} /></small>
+            </> : <>
+              <span>{loading ? "CARREGANDO DO CATÁLOGO" : "CATÁLOGO WELLFLIX"}</span>
+              <strong>{loading ? "Buscando conteúdo publicado…" : "Nenhum vídeo publicado disponível"}</strong>
+            </>}
           </div>
         </div>
       </section>
@@ -71,7 +87,9 @@ export default function Home({ go }) {
           onAction={() => go("explorar")}
         />
         <div className="categories">
-          {cats.map(([name, Icon], i) => (
+          {content.categories.map((name, i) => {
+            const Icon = cats.find(([categoryName]) => categoryName === name)?.[1] || Dumbbell;
+            return (
             <button
               className={i === 0 ? "category selected" : "category"}
               key={name}
@@ -80,7 +98,8 @@ export default function Home({ go }) {
               <Icon size={18} />
               <strong>{name}</strong>
             </button>
-          ))}
+          );})}
+          {!loading && content.categories.length === 0 && <p role="status">Nenhuma categoria disponível no backend.</p>}
         </div>
       </section>
       <section className="section wrap">
@@ -91,9 +110,10 @@ export default function Home({ go }) {
           onAction={() => go("explorar")}
         />
         <div className="video-grid">
-          {videos.slice(0, 4).map((video) => (
+          {content.videos.slice(0, 4).map((video) => (
             <VideoCard key={video[0]} video={video} go={go} />
           ))}
+          {!loading && content.videos.length === 0 && <p role="status">Nenhum vídeo publicado disponível.</p>}
         </div>
       </section>
       <section className="trust wrap">
@@ -116,7 +136,7 @@ export default function Home({ go }) {
           </button>
         </div>
         <div className="expert-row">
-          {professionals.map((professional) => (
+          {content.professionals.slice(0, 3).map((professional) => (
             <Expert
               key={professional.name}
               name={professional.name}
@@ -124,8 +144,10 @@ export default function Home({ go }) {
               image={professional.image}
             />
           ))}
+          {!loading && content.professionals.length === 0 && <p role="status">Nenhum profissional cadastrado.</p>}
         </div>
       </section>
+      {error && <p className="wrap" role="alert">Não foi possível carregar o conteúdo do backend: {error}</p>}
     </main>
   );
 }

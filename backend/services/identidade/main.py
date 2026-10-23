@@ -94,7 +94,13 @@ def create_session(body: LoginRequest):
         "access_token": token,
         "token_type": "Bearer",
         "expires_in": 900,
-        "usuario": {"id": str(user["id"]), "nome_completo": user["nome_completo"], "email": user["email"], "papel": body.papel},
+        "usuario": {
+            "id": str(user["id"]),
+            "nome_completo": user["nome_completo"],
+            "email": user["email"],
+            "papel": body.papel,
+            "papeis": roles,
+        },
     })
 
 

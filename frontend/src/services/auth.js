@@ -12,9 +12,9 @@ export function registerAthlete({ name, cpf, email, password }) {
   });
 }
 
-export function loginAthlete({ email, password }) {
+export function loginAthlete({ email, password, role = "atleta" }) {
   return apiRequest("auth", "/api/auth/sessao", {
     method: "POST",
-    body: { email, senha: password },
+    body: { email, senha: password, papel: role },
   });
 }

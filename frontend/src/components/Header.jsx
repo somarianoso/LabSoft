@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { img } from "../data/content.js";
 
-export default function Header({ page, role, go, switchRole, menu, setMenu, user }) {
+export default function Header({ page, role, go, switchRole, menu, setMenu, user, logout }) {
+  const availableRoles = user?.roles || [];
   const roleName =
     role === "moderador"
       ? "Moderador"
@@ -69,7 +70,7 @@ export default function Header({ page, role, go, switchRole, menu, setMenu, user
         ))}
       </nav>
       <div className="header-actions">
-        <div className="role-switcher">
+        {availableRoles.length > 1 && <div className="role-switcher">
           <button
             className={`role-trigger${role === "moderador" ? " moderator-trigger" : ""}`}
             aria-label="Selecionar tipo de usuário"
@@ -84,36 +85,31 @@ export default function Header({ page, role, go, switchRole, menu, setMenu, user
           </button>
           <div className="role-menu">
             <span>Visualizar como</span>
-            <button
-              className={role === "atleta" ? "selected" : ""}
-              onClick={() => switchRole("atleta")}
-            >
-              <UserRound size={14} /> Atleta comum
-            </button>
-            <button
-              className={role === "profissional" ? "selected" : ""}
-              onClick={() => switchRole("profissional")}
-            >
-              <BriefcaseBusiness size={14} /> Profissional
-            </button>
-            <button
-              className={role === "moderador" ? "selected" : ""}
-              onClick={() => switchRole("moderador")}
-            >
-              <ShieldCheck size={14} /> Moderador
-            </button>
+            {availableRoles.includes("atleta") && (
+              <button className={role === "atleta" ? "selected" : ""} onClick={() => switchRole("atleta")}>
+                <UserRound size={14} /> Atleta comum
+              </button>
+            )}
+            {availableRoles.includes("profissional") && (
+              <button className={role === "profissional" ? "selected" : ""} onClick={() => switchRole("profissional")}>
+                <BriefcaseBusiness size={14} /> Profissional
+              </button>
+            )}
+            {availableRoles.includes("moderador") && (
+              <button className={role === "moderador" ? "selected" : ""} onClick={() => switchRole("moderador")}>
+                <ShieldCheck size={14} /> Moderador
+              </button>
+            )}
           </div>
-        </div>
-        {role !== "moderador" && (
-          <button
-            className="login"
-            data-testid="header-login"
-            onClick={() => go("login")}
-          >
-            {user?.name || "Entrar"}
-          </button>
-        )}
-        {role === "atleta" && (
+        </div>}
+        <button
+          className="login"
+          data-testid="header-login"
+          onClick={() => user ? logout() : go("login")}
+        >
+          {user ? "Sair" : "Entrar"}
+        </button>
+        {role === "atleta" && !user && (
           <button className="green small" onClick={() => go("cadastro")}>
             Começar grátis <ArrowUpRight size={13} />
           </button>

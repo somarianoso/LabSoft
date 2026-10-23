@@ -1,8 +1,15 @@
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import PlanBenefits from "../components/PlanBenefits.jsx";
-import { plans } from "../data/plans.js";
+import { getPlans } from "../services/wellflix.js";
 
 export default function Plans({ go }) {
+  const [plans, setPlans] = useState([]);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    getPlans().then(setPlans).catch((requestError) => setError(requestError.message));
+  }, []);
+
   return (
     <main className="wrap page plans">
       <span className="eyebrow">ESCOLHA SUA EVOLUÇÃO</span>
@@ -37,6 +44,8 @@ export default function Plans({ go }) {
           </article>
         ))}
       </div>
+      {error && <p role="alert">Não foi possível carregar os planos do backend: {error}</p>}
+      {plans.length === 0 && !error && <p role="status">Carregando planos…</p>}
       <div className="payment">
         <h3>
           ▣<br />

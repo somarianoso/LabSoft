@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Check,
-  CirclePause,
-  CirclePlay,
   ListPlus,
   Plus,
-  Star,
+  ThumbsDown,
+  ThumbsUp,
   X,
 } from "lucide-react";
-import { img, videos } from "../data/content.js";
+import { img } from "../data/content.js";
 import VideoCard from "../components/VideoCard.jsx";
+import { addVideoComment, getMyVideoRating, getNextVideos, getVideo } from "../services/wellflix.js";
 
 export default function Detail({
   go,
@@ -19,49 +19,62 @@ export default function Detail({
   customTrails,
   createCustomTrail,
   addVideoToCustomTrail,
-  videoRatings,
   rateVideo,
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(video || null);
+  const [relatedVideos, setRelatedVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [actionError, setActionError] = useState("");
   const [commentText, setCommentText] = useState("");
-  const [commentCount, setCommentCount] = useState(248);
   const [showTrailDialog, setShowTrailDialog] = useState(false);
   const [newTrailName, setNewTrailName] = useState("");
   const [trailNotice, setTrailNotice] = useState("");
-  const [comments, setComments] = useState([
-    {
-      initials: "JP",
-      name: "João Pedro",
-      text: "Treino excelente. A explicação da amplitude no agachamento mudou minha execução.",
-    },
-    {
-      initials: "ML",
-      name: "Mia Lima",
-      text: "Didática muito clara e progressão bem estruturada!",
-    },
-  ]);
-  const selectedVideo = video || videos[0];
+  const [comments, setComments] = useState([]);
+  const [myBackendRating, setMyBackendRating] = useState(null);
   const isAthlete = role === "atleta";
-  const currentRating = videoRatings[selectedVideo[0]] || 0;
 
-  const submitComment = (event) => {
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setLoadError("");
+    const load = async () => {
+      const detail = video?.id ? await getVideo(video.id) : video;
+      if (!detail) throw new Error("Escolha um vídeo publicado no catálogo.");
+      if (active) {
+        setSelectedVideo(detail);
+        setComments(detail.comments || []);
+      }
+      const next = detail.id ? await getNextVideos(detail.id).catch(() => []) : [];
+      if (active) setRelatedVideos(next);
+    };
+    load().catch((error) => active && setLoadError(error.message))
+      .finally(() => active && setLoading(false));
+    return () => { active = false; };
+  }, [video?.id]);
+
+  useEffect(() => {
+    if (!selectedVideo?.id || !user?.accessToken || role !== "atleta") return;
+    let active = true;
+    getMyVideoRating(selectedVideo.id, user.accessToken)
+      .then((rating) => active && setMyBackendRating(rating?.gostou ?? null))
+      .catch(() => active && setMyBackendRating(null));
+    return () => { active = false; };
+  }, [selectedVideo?.id, user?.accessToken, role]);
+
+  const submitComment = async (event) => {
     event.preventDefault();
     const text = commentText.trim();
     if (!text) return;
 
-    const name = user.name;
-    const initials =
-      name
-        .split(/[.\s_-]+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((part) => part[0])
-        .join("")
-        .toUpperCase() || "U";
-
-    setComments((current) => [...current, { initials, name, text }]);
-    setCommentCount((count) => count + 1);
-    setCommentText("");
+    try {
+      const comment = await addVideoComment(selectedVideo, text, user.accessToken);
+      const name = user.name;
+      const initials = name.split(/[.\s_-]+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "U";
+      setComments((current) => [{ id: comment.id, initials, name, text: comment.conteudo }, ...current]);
+      setCommentText("");
+      setActionError("");
+    } catch (error) { setActionError(error.message); }
   };
 
   const submitNewTrail = (event) => {
@@ -69,10 +82,13 @@ export default function Detail({
     const name = newTrailName.trim();
     if (!name) return;
 
-    createCustomTrail(name, selectedVideo);
-    setTrailNotice(`"${name}" criada com este vídeo.`);
-    setNewTrailName("");
-    setShowTrailDialog(false);
+    createCustomTrail(name, selectedVideo)
+      .then(() => {
+        setTrailNotice(`"${name}" criada com este vídeo.`);
+        setNewTrailName("");
+        setShowTrailDialog(false);
+      })
+      .catch((error) => setActionError(error.message));
   };
 
   const addVideoToTrail = (trail) => {
@@ -81,45 +97,39 @@ export default function Detail({
       return;
     }
 
-    addVideoToCustomTrail(trail.id, selectedVideo);
-    setTrailNotice(`Vídeo adicionado à trilha "${trail.name}".`);
-    setShowTrailDialog(false);
+    addVideoToCustomTrail(trail.id, selectedVideo)
+      .then(() => {
+        setTrailNotice(`Vídeo adicionado à trilha "${trail.name}".`);
+        setShowTrailDialog(false);
+      })
+      .catch((error) => setActionError(error.message));
   };
+
+  const chooseRating = async (liked) => {
+    try {
+      await rateVideo(selectedVideo, liked);
+      setMyBackendRating(liked);
+      setActionError("");
+    } catch (error) { setActionError(error.message); }
+  };
+
+  if (loading) return <main className="wrap page"><p role="status">Carregando vídeo do backend…</p></main>;
+  if (!selectedVideo) return <main className="wrap page"><p role="alert">{loadError || "Vídeo indisponível."}</p></main>;
 
   return (
     <main className="wrap page detail">
       <div className="detail-main">
         <div className="player" data-testid="video-player">
-          <img src={selectedVideo[3] || img.athlete} alt={selectedVideo[0]} />
-          <button
-            className="player-toggle"
-            type="button"
-            aria-label={isPlaying ? "Pausar vídeo" : "Reproduzir vídeo"}
-            data-testid="player-toggle"
-            onClick={() => setIsPlaying((playing) => !playing)}
-          >
-            {isPlaying ? <CirclePause size={42} /> : <CirclePlay size={42} />}
-          </button>
-          <span className="player-status" role="status" data-testid="playback-status">
-            {isPlaying ? "Reproduzindo prévia" : "Prévia pausada"}
-          </span>
-          <div className="player-bar">
-            <i />
-            <span>00:00 / {selectedVideo[2]}</span>
-          </div>
+          {selectedVideo.mediaUrl ? <video src={selectedVideo.mediaUrl} poster={selectedVideo[3] || img.athlete} controls preload="metadata" /> : <img src={selectedVideo[3] || img.athlete} alt={selectedVideo[0]} />}
         </div>
         <span className="video-meta">{selectedVideo[1].toUpperCase()} · CONTEÚDO CERTIFICADO</span>
         <h1 data-testid="video-title">{selectedVideo[0]}</h1>
-        <p>
-          Uma sessão completa para construir força, estabilidade e potência.
-          Aprenda técnica, progressão de carga e os ajustes que protegem sua
-          execução.
-        </p>
+        <p>{selectedVideo.description || "Conteúdo publicado por um profissional WellFlix."}</p>
         <div className="coach-line">
           <img src={img.coach} alt="Caio Mendes" />
           <div>
-            <strong>Caio Mendes</strong>
-            <small>Preparador físico · CREF verificado</small>
+            <strong>{selectedVideo.professional || "Profissional WellFlix"}</strong>
+            <small>Profissional verificado</small>
           </div>
           <button
             className="dark-button"
@@ -136,37 +146,18 @@ export default function Detail({
           >
             <div>
               <h2 id="video-rating-title">Avalie este vídeo</h2>
-              <p>Como você avalia este conteúdo?</p>
+              <p>Marque se gostou deste conteúdo. Sua escolha será salva no banco.</p>
             </div>
             <div
               className="video-rating-stars"
               role="group"
               aria-label="Sua avaliação"
             >
-              {[1, 2, 3, 4, 5].map((rating) => (
-                <button
-                  key={rating}
-                  type="button"
-                  className={rating <= currentRating ? "selected" : ""}
-                  aria-label={`Avaliar com ${rating} ${
-                    rating === 1 ? "estrela" : "estrelas"
-                  }`}
-                  aria-pressed={currentRating === rating}
-                  onClick={() => rateVideo(selectedVideo[0], rating)}
-                >
-                  <Star
-                    size={23}
-                    fill={rating <= currentRating ? "currentColor" : "none"}
-                  />
-                </button>
-              ))}
+              <button type="button" className={myBackendRating === false ? "selected" : ""} aria-label="Não gostei" aria-pressed={myBackendRating === false} onClick={() => chooseRating(false)}><ThumbsDown size={22} /></button>
+              <button type="button" className={myBackendRating === true ? "selected" : ""} aria-label="Gostei" aria-pressed={myBackendRating === true} onClick={() => chooseRating(true)}><ThumbsUp size={22} /></button>
             </div>
             <span className="video-rating-status" role="status">
-              {currentRating
-                ? `Sua avaliação: ${currentRating} de 5 ${
-                    currentRating === 1 ? "estrela" : "estrelas"
-                  }`
-                : "Selecione de 1 a 5 estrelas"}
+              {myBackendRating === null ? "Ainda não avaliado" : myBackendRating ? "Você gostou deste conteúdo" : "Você não gostou deste conteúdo"}
             </span>
           </section>
         )}
@@ -194,8 +185,8 @@ export default function Detail({
             )}
           </section>
         )}
-        <h2>Comentários {commentCount}</h2>
-        {user && (
+        <h2>Comentários {comments.length}</h2>
+        {user?.accessToken && role === "atleta" && (
           <form className="comment-form" onSubmit={submitComment}>
             <label htmlFor="video-comment">Deixe seu comentário</label>
             <textarea
@@ -216,8 +207,10 @@ export default function Detail({
             </button>
           </form>
         )}
-        {comments.map(({ initials, name, text }, index) => (
-          <div className="comment" key={`${name}-${index}`}>
+        {actionError && <p role="alert">{actionError}</p>}
+        {loadError && <p role="alert">{loadError}</p>}
+        {comments.map(({ id, initials, name, text }, index) => (
+          <div className="comment" key={id || `${name}-${index}`}>
             <b>{initials}</b>
             <span>
               <strong>{name}</strong>
@@ -228,7 +221,7 @@ export default function Detail({
       </div>
       <aside className="side-videos">
         <h2>Continue evoluindo</h2>
-        {videos.slice(0, 3).map((v) => (
+        {relatedVideos.slice(0, 3).map((v) => (
           <VideoCard key={v[0]} video={v} go={go} />
         ))}
       </aside>

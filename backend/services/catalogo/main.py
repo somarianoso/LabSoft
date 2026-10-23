@@ -148,6 +148,17 @@ def rate_video(video_id: UUID, body: RatingRequest, user: Athlete):
     return success(row)
 
 
+@app.get("/api/videos/{video_id}/avaliacao/me")
+def my_video_rating(video_id: UUID, user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT gostou FROM avaliacoes WHERE video_id = %s AND usuario_id = %s",
+            (video_id, user["id"]),
+        )
+        row = cur.fetchone()
+    return success(row)
+
+
 @app.post("/api/videos", status_code=status.HTTP_201_CREATED)
 def submit_video(body: VideoSubmission, user: Professional):
     if not body.url_conteudo.startswith(("https://", "http://")):

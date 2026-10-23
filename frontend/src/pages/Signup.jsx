@@ -10,6 +10,7 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
     cpf: "",
     email: "",
     password: "",
+    role: "atleta",
   });
   const [invalidFields, setInvalidFields] = useState([]);
   const [feedback, setFeedback] = useState(null);
@@ -60,12 +61,16 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
     setIsSubmitting(true);
     try {
       if (isLogin) {
-        const session = await loginAthlete(formData);
+        const response = await loginAthlete(formData);
         onSuccess?.({
-          id: session.usuario.id,
-          name: session.usuario.nome_completo,
-          email: session.usuario.email,
-          accessToken: session.access_token,
+          accessToken: response.access_token,
+          role: response.usuario.papel,
+          user: {
+            id: response.usuario.id,
+            name: response.usuario.nome_completo,
+            email: response.usuario.email,
+            roles: response.usuario.papeis || [response.usuario.papel],
+          },
         });
       } else {
         const athlete = await registerAthlete(formData);
@@ -192,6 +197,21 @@ export default function Signup({ mode = "signup", go, onSuccess }) {
             aria-describedby={invalidFields.includes("password") ? "signup-feedback" : undefined}
           />
         </label>
+        {isLogin && (
+          <label htmlFor="login-role">
+            Entrar como
+            <select
+              id="login-role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="atleta">Atleta</option>
+              <option value="profissional">Profissional</option>
+              <option value="moderador">Moderador</option>
+            </select>
+          </label>
+        )}
         {!isLogin && (
           <label className="creator-check" htmlFor="signup-creator">
             <input id="signup-creator" name="creator" type="checkbox" />

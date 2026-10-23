@@ -3,6 +3,15 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
 import { defaultPlan } from "./data/plans.js";
+import {
+  addTrailVideo,
+  clearSession,
+  createTrail,
+  getMyTrails,
+  readSession,
+  saveSession,
+  saveVideoRating,
+} from "./services/wellflix.js";
 
 const pathsByPage = {
   home: "/inicio",
@@ -31,47 +40,19 @@ function roleForPage(page) {
   return "atleta";
 }
 
-function loadCustomTrails() {
-  try {
-    const savedTrails = window.localStorage.getItem("wellflix-custom-trails");
-    const parsedTrails = savedTrails ? JSON.parse(savedTrails) : [];
-    return Array.isArray(parsedTrails) ? parsedTrails : [];
-  } catch (error) {
-    console.error("Não foi possível carregar suas trilhas salvas.", error);
-    return [];
-  }
-}
-
-function loadVideoRatings() {
-  try {
-    const savedRatings = window.localStorage.getItem("wellflix-video-ratings");
-    const parsedRatings = savedRatings ? JSON.parse(savedRatings) : {};
-
-    if (!parsedRatings || typeof parsedRatings !== "object" || Array.isArray(parsedRatings)) {
-      throw new Error("Formato das avaliações salvas inválido.");
-    }
-
-    return Object.fromEntries(
-      Object.entries(parsedRatings).filter(
-        ([, rating]) =>
-          Number.isInteger(rating) && rating >= 1 && rating <= 5,
-      ),
-    );
-  } catch (error) {
-    console.error("Não foi possível carregar suas avaliações.", error);
-    return {};
-  }
-}
-
 export default function App() {
   const initialPage = pageFromLocation();
   const initialHistoryState = window.history.state || {};
+  const savedSession = readSession();
   const [page, setPage] = useState(initialPage);
   const [role, setRole] = useState(
-    initialHistoryState.role || roleForPage(initialPage),
+    savedSession?.role || initialHistoryState.role || roleForPage(initialPage),
   );
   const [menu, setMenu] = useState(false);
-  const [user, setUser] = useState(null);
+  const [authSession, setAuthSession] = useState(savedSession);
+  const user = authSession?.user
+    ? { ...authSession.user, accessToken: authSession.accessToken }
+    : null;
   const [selectedVideo, setSelectedVideo] = useState(
     initialHistoryState.selectedVideo || null,
   );
@@ -84,8 +65,7 @@ export default function App() {
   const [selectedPlan, setSelectedPlan] = useState(
     initialHistoryState.selectedPlan || defaultPlan,
   );
-  const [customTrails, setCustomTrails] = useState(loadCustomTrails);
-  const [videoRatings, setVideoRatings] = useState(loadVideoRatings);
+  const [customTrails, setCustomTrails] = useState([]);
 
   useEffect(() => {
     const restoreNavigation = (navigationState) => {
@@ -124,26 +104,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        "wellflix-custom-trails",
-        JSON.stringify(customTrails),
-      );
-    } catch (error) {
-      console.error("Não foi possível salvar suas trilhas.", error);
+    if (!user?.accessToken) {
+      setCustomTrails([]);
+      return;
     }
-  }, [customTrails]);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        "wellflix-video-ratings",
-        JSON.stringify(videoRatings),
-      );
-    } catch (error) {
-      console.error("Não foi possível salvar suas avaliações.", error);
-    }
-  }, [videoRatings]);
+    let active = true;
+    getMyTrails(user.accessToken)
+      .then((trails) => active && setCustomTrails(trails))
+      .catch((error) => console.error("Não foi possível carregar suas trilhas do backend.", error));
+    return () => { active = false; };
+  }, [user?.accessToken]);
 
   const go = (next, payload, nextRole = role) => {
     const navigationState = {
@@ -173,16 +143,15 @@ export default function App() {
     setMenu(false);
     window.scrollTo(0, 0);
   };
-  const createCustomTrail = (name, video) => {
-    const newTrail = {
-      id: window.crypto.randomUUID(),
-      name,
-      videos: [video],
-    };
-    setCustomTrails((current) => [...current, newTrail]);
+  const createCustomTrail = async (name, video) => {
+    if (!user?.accessToken) throw new Error("Entre na sua conta de atleta para criar uma trilha.");
+    const newTrail = await createTrail(name, video, user.accessToken);
+    setCustomTrails((current) => [newTrail, ...current]);
     return newTrail;
   };
-  const addVideoToCustomTrail = (trailId, video) => {
+  const addVideoToCustomTrail = async (trailId, video) => {
+    if (!user?.accessToken) throw new Error("Entre na sua conta de atleta para editar uma trilha.");
+    await addTrailVideo(trailId, video, user.accessToken);
     setCustomTrails((current) =>
       current.map((trail) =>
         trail.id === trailId &&
@@ -192,14 +161,18 @@ export default function App() {
       ),
     );
   };
-  const rateVideo = (videoTitle, rating) => {
-    setVideoRatings((current) => ({ ...current, [videoTitle]: rating }));
+  const rateVideo = async (video, liked) => {
+    if (!user?.accessToken) throw new Error("Entre na sua conta de atleta para avaliar vídeos.");
+    await saveVideoRating(video, liked, user.accessToken);
   };
-  const login = (account) => {
-    setUser(account);
-    go("home");
+  const login = (session) => {
+    saveSession(session);
+    setAuthSession(session);
+    setRole(session.role);
+    go("home", undefined, session.role);
   };
   const switchRole = (nextRole) => {
+    if (!user?.roles?.includes(nextRole)) return;
     go(
       nextRole === "moderador"
         ? "moderador"
@@ -209,6 +182,12 @@ export default function App() {
       undefined,
       nextRole,
     );
+  };
+  const logout = () => {
+    clearSession();
+    setAuthSession(null);
+    setRole("atleta");
+    go("home", undefined, "atleta");
   };
   return (
     <div className="site">
@@ -220,6 +199,7 @@ export default function App() {
         menu={menu}
         setMenu={setMenu}
         user={user}
+        logout={logout}
       />
       <AppRoutes
         page={page}
@@ -230,7 +210,6 @@ export default function App() {
         customTrails={customTrails}
         createCustomTrail={createCustomTrail}
         addVideoToCustomTrail={addVideoToCustomTrail}
-        videoRatings={videoRatings}
         rateVideo={rateVideo}
         selectedVideo={selectedVideo}
         exploreCategory={exploreCategory}
