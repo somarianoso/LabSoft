@@ -1,7 +1,7 @@
 import re
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator, model_validator
 from psycopg.errors import UniqueViolation
 
@@ -14,6 +14,7 @@ from backend.services.shared.passwords import hash_password, verify_password
 app = FastAPI(title="WellFlix — Identidade e atleta", version="1.0.0")
 configure_app(app)
 install_error_handlers(app)
+Moderator = Annotated[dict, Depends(require_role("moderador"))]
 
 
 class AthleteRegistration(BaseModel):
@@ -168,6 +169,37 @@ def get_my_user(user: Annotated[dict, Depends(current_user)]):
     if not profile:
         raise HTTPException(404, detail={"code": "USER_NOT_FOUND", "message": "Conta não encontrada."})
     return success(profile)
+
+
+@app.get(
+    "/api/usuarios",
+    summary="Listar contas (moderador)",
+    description="Lista dados básicos das contas para conferência. Senhas e hashes nunca são retornados.",
+)
+def list_users(
+    _moderator: Moderator,
+    limite: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT u.id, u.nome_completo, u.email, u.data_criacao,
+                   COALESCE(
+                       array_agg(p.papel ORDER BY p.papel)
+                           FILTER (WHERE p.papel IS NOT NULL),
+                       ARRAY[]::varchar[]
+                   ) AS papeis
+            FROM usuarios u
+            LEFT JOIN papeis_usuario p ON p.usuario_id = u.id
+            GROUP BY u.id
+            ORDER BY u.data_criacao DESC, u.id
+            LIMIT %s OFFSET %s
+            """,
+            (limite, offset),
+        )
+        rows = cur.fetchall()
+    return success(rows)
 
 
 @app.put("/api/atletas/me/perfil", summary="Atualizar meu perfil de atleta", description="Atualiza o nome e/ou e-mail da conta autenticada. Envie ao menos um campo.")
