@@ -21,9 +21,10 @@ O frontend React é publicado uma única vez pelo grupo como **Static Site**. El
 
    O `render.yaml` já contém esses parâmetros para o Static Site `wellflix-frontend`. Para a publicação inicial somente do frontend, crie um Static Site pelo painel; criar uma Blueprint Instance pode propor os quatro Web Services também, que são as entregas individuais dos integrantes.
 
-4. Para permitir que rotas do React funcionem ao abrir ou recarregar diretamente uma página, adicione em **Redirects/Rewrites** uma regra **Rewrite**: source `/*`, destination `/index.html`.
-5. Clique em **Create Static Site** e aguarde o primeiro deploy. Copie a URL `https://...onrender.com` exibida na página do serviço. Essa é a origem do frontend e o valor de `FRONTEND_ORIGIN` nas quatro APIs, sem caminho no final.
-6. O site pode ser publicado antes das APIs para obter a URL e conferir o carregamento da interface. Para os recursos dinâmicos funcionarem, depois que as APIs estiverem no ar, cadastre no Static Site as quatro variáveis `VITE_*_API_URL` da seção abaixo e faça um novo deploy. Até então, as chamadas ainda podem apontar para os endereços locais definidos como fallback no código.
+4. Nesta tela de criação, você ainda não precisa preencher as variáveis `VITE_*_API_URL`. Se aparecer uma linha de variável vazia, remova-a pelo ícone de lixeira. Role até o final e clique em **Create Static Site**.
+5. Aguarde o deploy inicial. Quando ele terminar, copie a URL `https://...onrender.com` exibida na página do serviço. Essa é a origem do frontend e o valor de `FRONTEND_ORIGIN` nas quatro APIs, sem caminho no final.
+6. Depois de criado, abra a aba **Redirects/Rewrites** do Static Site e adicione uma regra: **Source Path** `/*`, **Destination Path** `/index.html`, **Action** `Rewrite`. Salve a regra. Ela permite abrir ou recarregar diretamente rotas do React.
+7. O site pode ser publicado antes das APIs para obter a URL e conferir o carregamento da interface. Para os recursos dinâmicos funcionarem, depois que as APIs estiverem no ar, abra **Environment** no Static Site, cadastre as quatro variáveis `VITE_*_API_URL` da seção abaixo e faça um novo deploy. Até então, as chamadas ainda podem apontar para os endereços locais definidos como fallback no código.
 
 Somente uma pessoa precisa criar o Static Site compartilhado. Se cada aluno tiver que entregar uma URL própria, cada um entrega a URL da sua API, conforme a atividade; o link do frontend é complementar e compartilhado. Para entender as configurações de [Static Sites](https://render.com/docs/static-sites) e os caminhos usados com `rootDir`, consulte a [especificação do Blueprint](https://render.com/docs/blueprint-spec) e o guia de [monorepos no Render](https://render.com/docs/monorepo-support).
 
