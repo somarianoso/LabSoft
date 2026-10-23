@@ -14,7 +14,6 @@ from backend.services.shared.passwords import hash_password, verify_password
 app = FastAPI(title="WellFlix — Identidade e atleta", version="1.0.0")
 configure_app(app)
 install_error_handlers(app)
-Moderator = Annotated[dict, Depends(require_role("moderador"))]
 
 
 class AthleteRegistration(BaseModel):
@@ -173,11 +172,10 @@ def get_my_user(user: Annotated[dict, Depends(current_user)]):
 
 @app.get(
     "/api/usuarios",
-    summary="Listar contas (moderador)",
-    description="Lista dados básicos das contas para conferência. Senhas e hashes nunca são retornados.",
+    summary="Listar contas fictícias de demonstração",
+    description="Público: lista somente contas com e-mail no domínio reservado wellflix.test. Não retorna CPF, senha ou hash.",
 )
 def list_users(
-    _moderator: Moderator,
     limite: int = Query(default=50, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ):
@@ -192,11 +190,12 @@ def list_users(
                    ) AS papeis
             FROM usuarios u
             LEFT JOIN papeis_usuario p ON p.usuario_id = u.id
+            WHERE u.email LIKE %s
             GROUP BY u.id
             ORDER BY u.data_criacao DESC, u.id
             LIMIT %s OFFSET %s
             """,
-            (limite, offset),
+            ("%@wellflix.test", limite, offset),
         )
         rows = cur.fetchall()
     return success(rows)

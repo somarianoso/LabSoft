@@ -17,7 +17,7 @@ Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 80
 
 | Serviço | Rotas principais |
 | --- | --- |
-| `identidade` (Sophia) | `POST /api/atletas`, `POST /api/auth/sessao`, `GET /api/atletas/me`, `GET /api/usuarios/me`, `GET /api/usuarios` (moderador), `PUT /api/atletas/me/perfil` |
+| `identidade` (Sophia) | `POST /api/atletas`, `POST /api/auth/sessao`, `GET /api/atletas/me`, `GET /api/usuarios/me`, `GET /api/usuarios` (contas fictícias públicas), `PUT /api/atletas/me/perfil` |
 | `conta` (Maria Eduarda) | `GET /api/planos`, `GET/POST /api/assinaturas`, rotas `/api/trilhas` com `POST/GET/PUT/DELETE`, `GET /api/trilhas/publicas` |
 | `profissionais` (Gabriel) | Rotas `/api/profissionais` (inclui criação/edição de perfil, seguir/deixar de seguir) e `/api/moderacao` |
 | `catalogo` (Luís) | Rotas `/api/categorias` e `/api/videos` com consultas, cadastro, edição e remoção autorizada; comentários e avaliações também podem ser editados/removidos pelo autor |
@@ -29,7 +29,7 @@ Todas as rotas abaixo usam o PostgreSQL configurado em `DATABASE_URL`. As rotas 
 | Serviço | Método e rota | Acesso | O que faz |
 |---|---|---|---|
 | Identidade | `GET /api/usuarios/me` | Token de qualquer papel | Lê nome, e-mail e papéis da conta autenticada. |
-| Identidade | `GET /api/usuarios?limite=50&offset=0` | Token de moderador | Lista nome, e-mail, papéis e data de cadastro para conferência. Nunca retorna senha, CPF ou hash de senha. |
+| Identidade | `GET /api/usuarios?limite=50&offset=0` | Público | Lista somente contas fictícias com e-mail `@wellflix.test`, para conferência. Nunca retorna CPF, senha, hash ou contas fora desse domínio. |
 | Identidade | `PUT /api/atletas/me/perfil` | Token de atleta | Atualiza nome e/ou e-mail. Corpo: `{"nome_completo":"Ana Silva","email":"ana@example.com"}`; envie ao menos um campo. |
 | Conta | `GET /api/assinaturas` | Token de atleta | Lista o histórico de assinaturas e as categorias associadas à conta. |
 | Conta | `GET /api/trilhas/publicas?q=treino&limite=20&offset=0` | Público | Pesquisa trilhas públicas e retorna quantidade de vídeos e autor. `q` é opcional. |
