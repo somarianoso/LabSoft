@@ -2,10 +2,10 @@ import re
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, status
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from psycopg.errors import UniqueViolation
 
-from backend.services.shared.auth import issue_token, require_role
+from backend.services.shared.auth import current_user, issue_token, require_role
 from backend.services.shared.config import configure_app, success
 from backend.services.shared.database import connection
 from backend.services.shared.errors import install_error_handlers
@@ -51,6 +51,37 @@ class LoginRequest(BaseModel):
     email: str
     senha: str
     papel: str = "atleta"
+
+
+class AthleteProfileRequest(BaseModel):
+    nome_completo: str | None = Field(default=None, min_length=2, max_length=120)
+    email: str | None = Field(default=None, min_length=5, max_length=254)
+
+    @field_validator("nome_completo")
+    @classmethod
+    def normalize_profile_name(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = " ".join(value.split())
+        if len(normalized) < 2:
+            raise ValueError("Informe um nome com pelo menos dois caracteres.")
+        return normalized
+
+    @field_validator("email")
+    @classmethod
+    def normalize_profile_email(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip().lower()
+        if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", normalized):
+            raise ValueError("E-mail inválido.")
+        return normalized
+
+    @model_validator(mode="after")
+    def require_at_least_one_field(self):
+        if self.nome_completo is None and self.email is None:
+            raise ValueError("Informe nome_completo ou email para atualizar.")
+        return self
 
 
 @app.get("/health")
@@ -116,3 +147,52 @@ def get_my_athlete(user: Annotated[dict, Depends(require_role("atleta"))]):
         raise HTTPException(404, detail={"code": "ATHLETE_NOT_FOUND", "message": "Perfil de atleta não encontrado."})
     athlete["cpf"] = "***.***.***-" + athlete["cpf"][-2:]
     return success(athlete)
+
+
+@app.get("/api/usuarios/me", summary="Consultar minha conta", description="Retorna os dados básicos e papéis da conta autenticada, sem expor CPF ou senha.")
+def get_my_user(user: Annotated[dict, Depends(current_user)]):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT u.id, u.nome_completo, u.email, u.data_criacao,
+                COALESCE(
+                    (SELECT array_agg(p.papel ORDER BY p.papel)
+                     FROM papeis_usuario p WHERE p.usuario_id = u.id),
+                    ARRAY[]::varchar[]
+                ) AS papeis
+            FROM usuarios u WHERE u.id = %s
+            """,
+            (user["id"],),
+        )
+        profile = cur.fetchone()
+    if not profile:
+        raise HTTPException(404, detail={"code": "USER_NOT_FOUND", "message": "Conta não encontrada."})
+    return success(profile)
+
+
+@app.put("/api/atletas/me/perfil", summary="Atualizar meu perfil de atleta", description="Atualiza o nome e/ou e-mail da conta autenticada. Envie ao menos um campo.")
+@app.post("/api/atletas/me/perfil", summary="Atualizar meu perfil de atleta (compatibilidade)", include_in_schema=False)
+def update_my_athlete_profile(
+    body: AthleteProfileRequest,
+    user: Annotated[dict, Depends(require_role("atleta"))],
+):
+    try:
+        with connection() as conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE usuarios AS u
+                SET nome_completo = COALESCE(%s, u.nome_completo),
+                    email = COALESCE(%s, u.email),
+                    data_atualizacao = now()
+                FROM atletas AS a
+                WHERE u.id = a.usuario_id AND u.id = %s
+                RETURNING u.id, u.nome_completo, u.email, u.data_atualizacao
+                """,
+                (body.nome_completo, body.email, user["id"]),
+            )
+            profile = cur.fetchone()
+    except UniqueViolation:
+        raise HTTPException(409, detail={"code": "EMAIL_IN_USE", "message": "Este e-mail já está associado a outra conta."})
+    if not profile:
+        raise HTTPException(404, detail={"code": "ATHLETE_NOT_FOUND", "message": "Perfil de atleta não encontrado."})
+    return success(profile)

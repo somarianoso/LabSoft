@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
+from psycopg.errors import ForeignKeyViolation, UniqueViolation
 from backend.services.shared.auth import require_role
 from backend.services.shared.config import configure_app, success
 from backend.services.shared.database import connection
@@ -13,6 +14,7 @@ configure_app(app)
 install_error_handlers(app)
 Athlete = Annotated[dict, Depends(require_role("atleta"))]
 Professional = Annotated[dict, Depends(require_role("profissional"))]
+Moderator = Annotated[dict, Depends(require_role("moderador"))]
 
 
 class VideoSubmission(BaseModel):
@@ -55,6 +57,30 @@ class RatingRequest(BaseModel):
     gostou: bool
 
 
+class CategoryRequest(BaseModel):
+    nome: str = Field(min_length=2, max_length=100)
+
+    @field_validator("nome")
+    @classmethod
+    def normalize_name(cls, value: str) -> str:
+        normalized = " ".join(value.split())
+        if len(normalized) < 2:
+            raise ValueError("O nome da categoria deve ter pelo menos dois caracteres.")
+        return normalized
+
+
+class CategoryUpdate(BaseModel):
+    nome: str = Field(min_length=2, max_length=100)
+
+    @field_validator("nome")
+    @classmethod
+    def normalize_name(cls, value: str) -> str:
+        normalized = " ".join(value.split())
+        if len(normalized) < 2:
+            raise ValueError("O nome da categoria deve ter pelo menos dois caracteres.")
+        return normalized
+
+
 @app.get("/health")
 def health():
     return success({"status": "ok", "service": "catalogo"})
@@ -66,6 +92,69 @@ def list_categories():
         cur.execute("SELECT id, nome FROM categorias ORDER BY nome")
         rows = cur.fetchall()
     return success(rows)
+
+
+@app.get("/api/categorias/{category_id}", summary="Consultar categoria e quantidade de vídeos")
+def get_category(category_id: UUID):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT c.id, c.nome, count(DISTINCT v.id)::int AS quantidade_videos
+            FROM categorias c
+            LEFT JOIN categorias_video cv ON cv.categoria_id = c.id
+            LEFT JOIN videos v ON v.id = cv.video_id AND v.situacao = 'publicado'
+            WHERE c.id = %s
+            GROUP BY c.id
+            """,
+            (category_id,),
+        )
+        row = cur.fetchone()
+    if not row:
+        raise HTTPException(404, detail={"code": "CATEGORY_NOT_FOUND", "message": "Categoria não encontrada."})
+    return success(row)
+
+
+@app.post("/api/categorias", status_code=status.HTTP_201_CREATED, summary="Cadastrar categoria (moderador)")
+def create_category(body: CategoryRequest, _user: Moderator):
+    try:
+        with connection() as conn, conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO categorias (nome) VALUES (%s) RETURNING id, nome, data_criacao",
+                (body.nome,),
+            )
+            row = cur.fetchone()
+    except UniqueViolation:
+        raise HTTPException(409, detail={"code": "CATEGORY_ALREADY_EXISTS", "message": "Já existe uma categoria com esse nome."})
+    return success(row)
+
+
+@app.put("/api/categorias/{category_id}", summary="Atualizar categoria (moderador)")
+def update_category(category_id: UUID, body: CategoryUpdate, _user: Moderator):
+    try:
+        with connection() as conn, conn.cursor() as cur:
+            cur.execute(
+                "UPDATE categorias SET nome = %s WHERE id = %s RETURNING id, nome, data_criacao",
+                (body.nome, category_id),
+            )
+            row = cur.fetchone()
+    except UniqueViolation:
+        raise HTTPException(409, detail={"code": "CATEGORY_ALREADY_EXISTS", "message": "Já existe uma categoria com esse nome."})
+    if not row:
+        raise HTTPException(404, detail={"code": "CATEGORY_NOT_FOUND", "message": "Categoria não encontrada."})
+    return success(row)
+
+
+@app.delete("/api/categorias/{category_id}", summary="Excluir categoria sem uso (moderador)")
+def delete_category(category_id: UUID, _user: Moderator):
+    try:
+        with connection() as conn, conn.cursor() as cur:
+            cur.execute("DELETE FROM categorias WHERE id = %s RETURNING id", (category_id,))
+            row = cur.fetchone()
+    except ForeignKeyViolation:
+        raise HTTPException(409, detail={"code": "CATEGORY_IN_USE", "message": "A categoria está vinculada a vídeos, assinaturas ou profissionais."})
+    if not row:
+        raise HTTPException(404, detail={"code": "CATEGORY_NOT_FOUND", "message": "Categoria não encontrada."})
+    return success({"id": row["id"], "excluida": True})
 
 
 @app.get("/api/videos/me")
@@ -117,6 +206,57 @@ def get_video(video_id: UUID):
     return success(row)
 
 
+@app.get("/api/videos/{video_id}/comentarios", summary="Listar comentários de um vídeo")
+def list_video_comments(
+    video_id: UUID,
+    limite: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT 1 FROM videos WHERE id = %s AND situacao = 'publicado'",
+            (video_id,),
+        )
+        if not cur.fetchone():
+            raise HTTPException(404, detail={"code": "VIDEO_NOT_FOUND", "message": "Vídeo não encontrado ou ainda não publicado."})
+        cur.execute(
+            """
+            SELECT cm.id, cm.conteudo, cm.data_criacao,
+                   u.id AS usuario_id, u.nome_completo AS usuario
+            FROM comentarios cm
+            JOIN usuarios u ON u.id = cm.usuario_id
+            WHERE cm.video_id = %s
+            ORDER BY cm.data_criacao DESC
+            LIMIT %s OFFSET %s
+            """,
+            (video_id, limite, offset),
+        )
+        rows = cur.fetchall()
+    return success(rows)
+
+
+@app.get("/api/videos/{video_id}/avaliacoes/resumo", summary="Consultar resumo das avaliações")
+def video_rating_summary(video_id: UUID):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT COALESCE(AVG(CASE WHEN a.gostou THEN 1.0 ELSE 0.0 END), 0)::float AS avaliacao_media,
+                   count(a.usuario_id)::int AS total_avaliacoes,
+                   count(*) FILTER (WHERE a.gostou)::int AS total_gostaram,
+                   count(*) FILTER (WHERE NOT a.gostou)::int AS total_nao_gostaram
+            FROM videos v
+            LEFT JOIN avaliacoes a ON a.video_id = v.id
+            WHERE v.id = %s AND v.situacao = 'publicado'
+            GROUP BY v.id
+            """,
+            (video_id,),
+        )
+        row = cur.fetchone()
+    if not row:
+        raise HTTPException(404, detail={"code": "VIDEO_NOT_FOUND", "message": "Vídeo não encontrado ou ainda não publicado."})
+    return success(row)
+
+
 @app.get("/api/videos/{video_id}/proximos")
 def next_videos(video_id: UUID, limite: int = Query(default=6, ge=1, le=20)):
     with connection() as conn, conn.cursor() as cur:
@@ -138,6 +278,32 @@ def add_comment(video_id: UUID, body: CommentRequest, user: Athlete):
     return success(row)
 
 
+@app.put("/api/videos/{video_id}/comentarios/{comment_id}", summary="Editar meu comentário")
+def update_comment(video_id: UUID, comment_id: UUID, body: CommentRequest, user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "UPDATE comentarios SET conteudo = %s WHERE id = %s AND video_id = %s AND usuario_id = %s RETURNING id, video_id, usuario_id, conteudo, data_criacao",
+            (body.conteudo, comment_id, video_id, user["id"]),
+        )
+        row = cur.fetchone()
+    if not row:
+        raise HTTPException(404, detail={"code": "COMMENT_NOT_FOUND", "message": "Comentário não encontrado nesta conta/vídeo."})
+    return success(row)
+
+
+@app.delete("/api/videos/{video_id}/comentarios/{comment_id}", summary="Excluir meu comentário")
+def delete_comment(video_id: UUID, comment_id: UUID, user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "DELETE FROM comentarios WHERE id = %s AND video_id = %s AND usuario_id = %s RETURNING id",
+            (comment_id, video_id, user["id"]),
+        )
+        row = cur.fetchone()
+    if not row:
+        raise HTTPException(404, detail={"code": "COMMENT_NOT_FOUND", "message": "Comentário não encontrado nesta conta/vídeo."})
+    return success({"id": row["id"], "excluido": True})
+
+
 @app.put("/api/videos/{video_id}/avaliacao")
 def rate_video(video_id: UUID, body: RatingRequest, user: Athlete):
     with connection() as conn, conn.cursor() as cur:
@@ -146,6 +312,17 @@ def rate_video(video_id: UUID, body: RatingRequest, user: Athlete):
     if not row:
         raise HTTPException(404, detail={"code": "VIDEO_NOT_FOUND", "message": "Vídeo publicado não encontrado."})
     return success(row)
+
+
+@app.delete("/api/videos/{video_id}/avaliacao", summary="Remover minha avaliação")
+def delete_rating(video_id: UUID, user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "DELETE FROM avaliacoes WHERE video_id = %s AND usuario_id = %s RETURNING video_id",
+            (video_id, user["id"]),
+        )
+        row = cur.fetchone()
+    return success({"video_id": str(video_id), "excluida": row is not None})
 
 
 @app.get("/api/videos/{video_id}/avaliacao/me")
@@ -178,3 +355,56 @@ def submit_video(body: VideoSubmission, user: Professional):
         if categories:
             cur.executemany("INSERT INTO categorias_video (video_id, categoria_id) VALUES (%s, %s)", [(video["id"], category_id) for category_id in categories])
     return success(video)
+
+
+@app.put("/api/videos/{video_id}", summary="Atualizar meu vídeo ainda não publicado")
+def update_video(video_id: UUID, body: VideoSubmission, user: Professional):
+    if not body.url_conteudo.startswith(("https://", "http://")):
+        raise HTTPException(422, detail={"code": "INVALID_MEDIA_URL", "message": "Use uma URL HTTPS/HTTP de mídia."})
+    categories = list(dict.fromkeys(body.categorias))
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT situacao FROM videos WHERE id = %s AND profissional_id = %s FOR UPDATE",
+            (video_id, user["id"]),
+        )
+        current = cur.fetchone()
+        if not current:
+            raise HTTPException(404, detail={"code": "VIDEO_NOT_FOUND", "message": "Vídeo não encontrado nesta conta."})
+        if current["situacao"] not in {"rascunho", "aguardando_revisao", "rejeitado"}:
+            raise HTTPException(409, detail={"code": "VIDEO_NOT_EDITABLE", "message": "Somente vídeos não publicados podem ser editados."})
+        if categories:
+            cur.execute(
+                "SELECT categoria_id FROM categorias_profissional WHERE profissional_id = %s AND categoria_id = ANY(%s)",
+                (user["id"], categories),
+            )
+            authorized = {row["categoria_id"] for row in cur.fetchall()}
+            if authorized != set(categories):
+                raise HTTPException(403, detail={"code": "CATEGORY_NOT_AUTHORIZED", "message": "O profissional só pode usar categorias autorizadas."})
+        cur.execute(
+            "UPDATE videos SET titulo = %s, descricao = %s, duracao_segundos = %s, url_conteudo = %s, situacao = 'aguardando_revisao', data_atualizacao = now() WHERE id = %s RETURNING id, profissional_id, titulo, descricao, duracao_segundos, url_conteudo, situacao, data_atualizacao",
+            (body.titulo, body.descricao, body.duracao_segundos, body.url_conteudo, video_id),
+        )
+        video = cur.fetchone()
+        cur.execute("DELETE FROM categorias_video WHERE video_id = %s", (video_id,))
+        if categories:
+            cur.executemany(
+                "INSERT INTO categorias_video (video_id, categoria_id) VALUES (%s, %s)",
+                [(video_id, category_id) for category_id in categories],
+            )
+    return success(video)
+
+
+@app.delete("/api/videos/{video_id}", summary="Excluir meu vídeo não publicado")
+def delete_video(video_id: UUID, user: Professional):
+    try:
+        with connection() as conn, conn.cursor() as cur:
+            cur.execute(
+                "DELETE FROM videos WHERE id = %s AND profissional_id = %s AND situacao IN ('rascunho', 'aguardando_revisao', 'rejeitado') RETURNING id",
+                (video_id, user["id"]),
+            )
+            row = cur.fetchone()
+    except ForeignKeyViolation:
+        raise HTTPException(409, detail={"code": "VIDEO_IN_USE", "message": "O vídeo está vinculado a uma trilha e não pode ser removido."})
+    if not row:
+        raise HTTPException(404, detail={"code": "VIDEO_NOT_FOUND_OR_NOT_DELETABLE", "message": "Vídeo não encontrado nesta conta ou já publicado/arquivado."})
+    return success({"id": row["id"], "excluido": True})

@@ -17,21 +17,45 @@ Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 80
 
 | Serviço | Rotas principais |
 | --- | --- |
-| `identidade` (Sophia) | `POST /api/atletas`, `POST /api/auth/sessao`, `GET /api/atletas/me` |
-| `conta` (Maria Eduarda) | `GET /api/planos`, rotas `/api/assinaturas` e `/api/trilhas` |
-| `profissionais` (Gabriel) | Rotas `/api/profissionais` e `/api/moderacao` (fila, aprovação/rejeição e arquivamento lógico) |
-| `catalogo` (Luís) | Rotas `/api/categorias`, `/api/videos`, comentários, avaliações e submissões |
+| `identidade` (Sophia) | `POST /api/atletas`, `POST /api/auth/sessao`, `GET /api/atletas/me`, `GET /api/usuarios/me`, `PUT /api/atletas/me/perfil` |
+| `conta` (Maria Eduarda) | `GET /api/planos`, `GET/POST /api/assinaturas`, rotas `/api/trilhas` com `POST/GET/PUT/DELETE`, `GET /api/trilhas/publicas` |
+| `profissionais` (Gabriel) | Rotas `/api/profissionais` (inclui criação/edição de perfil, seguir/deixar de seguir) e `/api/moderacao` |
+| `catalogo` (Luís) | Rotas `/api/categorias` e `/api/videos` com consultas, cadastro, edição e remoção autorizada; comentários e avaliações também podem ser editados/removidos pelo autor |
+
+### Rotas adicionais para consultar e gravar dados
+
+Todas as rotas abaixo usam o PostgreSQL configurado em `DATABASE_URL`. As rotas privadas precisam do token obtido pelo login no serviço `identidade`. No Swagger de cada serviço (`/docs`), clique em **Try it out**; no campo `authorization`, envie `Bearer SEU_ACCESS_TOKEN`.
+
+| Serviço | Método e rota | Acesso | O que faz |
+|---|---|---|---|
+| Identidade | `GET /api/usuarios/me` | Token de qualquer papel | Lê nome, e-mail e papéis da conta autenticada. |
+| Identidade | `PUT /api/atletas/me/perfil` | Token de atleta | Atualiza nome e/ou e-mail. Corpo: `{"nome_completo":"Ana Silva","email":"ana@example.com"}`; envie ao menos um campo. |
+| Conta | `GET /api/assinaturas` | Token de atleta | Lista o histórico de assinaturas e as categorias associadas à conta. |
+| Conta | `GET /api/trilhas/publicas?q=treino&limite=20&offset=0` | Público | Pesquisa trilhas públicas e retorna quantidade de vídeos e autor. `q` é opcional. |
+| Conta | `PUT /api/trilhas/{trail_id}` | Token de atleta dono | Atualiza nome e/ou privacidade da trilha. |
+| Conta | `DELETE /api/trilhas/{trail_id}` | Token de atleta dono | Exclui a trilha e seu progresso associado. |
+| Profissionais | `POST /api/profissionais/me` | Token de profissional | Cria o perfil profissional se ainda não existir. Corpo: `{"especialidade":"Fisioterapia","biografia":"Atendimento esportivo","categorias":["UUID_DA_CATEGORIA"]}`. |
+| Profissionais | `PUT /api/profissionais/me` | Token de profissional | Cria ou substitui os dados e categorias do próprio perfil. |
+| Profissionais | `GET /api/profissionais/me/seguindo` | Token de atleta | Lista os profissionais seguidos pela conta autenticada. |
+| Profissionais | `DELETE /api/profissionais/{professional_id}/seguir` | Token de atleta | Deixa de seguir o profissional informado. |
+| Catálogo | `GET /api/categorias/{category_id}` | Público | Lê uma categoria e o total de vídeos publicados associados. |
+| Catálogo | `POST /api/categorias` | Token de moderador | Cadastra uma categoria. Corpo: `{"nome":"Corrida"}`. |
+| Catálogo | `PUT/DELETE /api/categorias/{category_id}` | Token de moderador | Renomeia ou exclui categoria. Exclusão retorna `409` se ela estiver vinculada a vídeos, assinaturas ou profissionais. |
+| Catálogo | `GET /api/videos/{video_id}/comentarios?limite=50&offset=0` | Público | Lista comentários paginados de um vídeo publicado. |
+| Catálogo | `PUT/DELETE /api/videos/{video_id}/comentarios/{comment_id}` | Token do autor | Edita ou exclui o próprio comentário. No `PUT`, corpo: `{"conteudo":"Comentário atualizado"}`. |
+| Catálogo | `GET /api/videos/{video_id}/avaliacoes/resumo` | Público | Retorna a média de aprovação e totais de gostei/não gostei. |
+| Catálogo | `DELETE /api/videos/{video_id}/avaliacao` | Token de atleta | Remove a própria avaliação do vídeo. |
+| Catálogo | `PUT/DELETE /api/videos/{video_id}` | Token do profissional dono | Atualiza ou exclui vídeo não publicado. A edição reenvia o vídeo para moderação; publicados e arquivados não podem ser excluídos por esta rota. |
+
+As rotas de criação respondem `201`; atualizações, consultas e exclusões respondem `200`. `POST /api/profissionais/me` retorna `409` se o perfil já existir; nesse caso, atualize com `PUT /api/profissionais/me`. IDs de categorias e vídeos são UUIDs retornados pelas próprias rotas GET. Para visualizar esses endpoints no Render, envie as alterações ao GitHub e espere o redeploy do serviço correspondente.
 
 Rotas privadas esperam `Authorization: Bearer <access_token>`. Login emite token válido por 15 minutos com os papéis já registrados em `papeis_usuario`. Não existe endpoint público para se promover a profissional ou moderador; esses papéis devem ser concedidos por processo administrativo confiável.
 
-Para ambiente de demonstração, primeiro crie a conta pela rota pública de cadastro de atleta. Depois, um administrador pode conceder os papéis e criar os perfis pelo console SQL do banco, substituindo os e-mails pelos da equipe:
+Para ambiente de demonstração, primeiro crie a conta pela rota pública de cadastro de atleta. Um administrador concede os papéis pelo console SQL do banco, substituindo os e-mails pelos da equipe. Depois de receber o papel profissional, a pessoa cria o próprio perfil com `POST /api/profissionais/me`; o papel de moderador continua sendo concedido somente por processo administrativo confiável:
 
 ```sql
 INSERT INTO papeis_usuario (usuario_id, papel)
 SELECT id, 'profissional' FROM usuarios WHERE lower(email) = lower('profissional@example.com')
-ON CONFLICT DO NOTHING;
-INSERT INTO profissionais (usuario_id)
-SELECT id FROM usuarios WHERE lower(email) = lower('profissional@example.com')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO papeis_usuario (usuario_id, papel)

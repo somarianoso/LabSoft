@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
 from psycopg.errors import ForeignKeyViolation, UniqueViolation
 
@@ -104,6 +104,39 @@ def current_subscription(user: Athlete):
     return success(row)
 
 
+@app.get("/api/assinaturas", summary="Listar meu histórico de assinaturas")
+def subscription_history(user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT a.id, a.situacao, a.metodo_pagamento, a.referencia_pagamento,
+                   a.data_inicio, a.data_vencimento, a.data_criacao,
+                   p.codigo AS codigo_plano, p.nome AS nome_plano,
+                   p.preco_mensal_centavos
+            FROM assinaturas a
+            JOIN planos p ON p.id = a.plano_id
+            WHERE a.atleta_id = %s
+            ORDER BY a.data_criacao DESC
+            LIMIT 100
+            """,
+            (user["id"],),
+        )
+        rows = cur.fetchall()
+        for row in rows:
+            cur.execute(
+                """
+                SELECT c.id, c.nome
+                FROM categorias c
+                JOIN categorias_assinatura ca ON ca.categoria_id = c.id
+                WHERE ca.assinatura_id = %s
+                ORDER BY c.nome
+                """,
+                (row["id"],),
+            )
+            row["categorias"] = cur.fetchall()
+    return success(rows)
+
+
 @app.post("/api/assinaturas/{subscription_id}/cancelamento")
 def cancel_subscription(subscription_id: UUID, user: Athlete):
     with connection() as conn, conn.cursor() as cur:
@@ -125,6 +158,38 @@ def get_public_trail(trail_id: UUID):
     if not trail:
         raise HTTPException(404, detail={"code": "TRAIL_NOT_FOUND", "message": "Trilha pública não encontrada."})
     return success(trail)
+
+
+@app.get("/api/trilhas/publicas", summary="Pesquisar trilhas públicas")
+def list_public_trails(
+    q: str | None = None,
+    limite: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+):
+    clauses = ["t.privacidade = 'publica'"]
+    params: list = []
+    if q and q.strip():
+        clauses.append("(t.nome ILIKE %s OR u.nome_completo ILIKE %s)")
+        params.extend([f"%{q.strip()}%", f"%{q.strip()}%"])
+    params.extend([limite, offset])
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            f"""
+            SELECT t.id, t.nome, t.data_criacao, t.data_atualizacao,
+                   u.nome_completo AS criador,
+                   count(vt.video_id)::int AS quantidade_videos
+            FROM trilhas t
+            JOIN usuarios u ON u.id = t.atleta_id
+            LEFT JOIN videos_trilha vt ON vt.trilha_id = t.id
+            WHERE {' AND '.join(clauses)}
+            GROUP BY t.id, u.nome_completo
+            ORDER BY t.data_atualizacao DESC
+            LIMIT %s OFFSET %s
+            """,
+            params,
+        )
+        rows = cur.fetchall()
+    return success(rows)
 
 
 @app.get("/api/trilhas")
@@ -158,7 +223,8 @@ def get_trail(trail_id: UUID, user: Athlete):
     return success(trail)
 
 
-@app.patch("/api/trilhas/{trail_id}")
+@app.put("/api/trilhas/{trail_id}", summary="Atualizar uma trilha")
+@app.patch("/api/trilhas/{trail_id}", include_in_schema=False)
 def update_trail(trail_id: UUID, body: TrailUpdate, user: Athlete):
     if body.privacidade is not None and body.privacidade not in {"privada", "publica"}:
         raise HTTPException(422, detail={"code": "INVALID_PRIVACY", "message": "Privacidade deve ser privada ou publica."})
@@ -170,6 +236,19 @@ def update_trail(trail_id: UUID, body: TrailUpdate, user: Athlete):
     if not row:
         raise HTTPException(404, detail={"code": "TRAIL_NOT_FOUND", "message": "Trilha não encontrada."})
     return success(row)
+
+
+@app.delete("/api/trilhas/{trail_id}", summary="Excluir uma trilha própria")
+def delete_trail(trail_id: UUID, user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "DELETE FROM trilhas WHERE id = %s AND atleta_id = %s RETURNING id",
+            (trail_id, user["id"]),
+        )
+        row = cur.fetchone()
+    if not row:
+        raise HTTPException(404, detail={"code": "TRAIL_NOT_FOUND", "message": "Trilha não encontrada."})
+    return success({"id": row["id"], "excluida": True})
 
 
 @app.post("/api/trilhas/{trail_id}/videos", status_code=status.HTTP_201_CREATED)

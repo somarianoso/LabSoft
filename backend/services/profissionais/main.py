@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel, Field
-from psycopg.errors import ForeignKeyViolation
+from psycopg.errors import ForeignKeyViolation, UniqueViolation
 
 from backend.services.shared.auth import require_role
 from backend.services.shared.config import configure_app, success
@@ -70,6 +70,59 @@ def upsert_profile(body: ProfessionalProfile, user: Professional):
         except ForeignKeyViolation:
             raise HTTPException(422, detail={"code": "UNKNOWN_CATEGORY", "message": "Uma ou mais categorias não existem."})
     return success(profile)
+
+
+@app.post("/api/profissionais/me", status_code=status.HTTP_201_CREATED, summary="Criar meu perfil profissional")
+def create_profile(body: ProfessionalProfile, user: Professional):
+    try:
+        with connection() as conn, conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO profissionais (usuario_id, especialidade, biografia) VALUES (%s, %s, %s) RETURNING usuario_id, especialidade, biografia, data_criacao, data_atualizacao",
+                (user["id"], body.especialidade, body.biografia),
+            )
+            profile = cur.fetchone()
+            if body.categorias:
+                cur.executemany(
+                    "INSERT INTO categorias_profissional (profissional_id, categoria_id) VALUES (%s, %s)",
+                    [(user["id"], category_id) for category_id in set(body.categorias)],
+                )
+    except UniqueViolation:
+        raise HTTPException(409, detail={"code": "PROFILE_ALREADY_EXISTS", "message": "Este usuário já possui um perfil profissional. Use PUT para atualizá-lo."})
+    except ForeignKeyViolation:
+        raise HTTPException(422, detail={"code": "UNKNOWN_CATEGORY", "message": "Uma ou mais categorias não existem."})
+    return success(profile)
+
+
+@app.get("/api/profissionais/me/seguindo", summary="Listar profissionais que sigo")
+def followed_professionals(user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT u.id, u.nome_completo, p.especialidade, p.biografia,
+                   count(DISTINCT seguidores.seguidor_id)::int AS seguidores,
+                   count(DISTINCT v.id)::int AS quantidade_videos,
+                   (SELECT COALESCE(AVG(CASE WHEN a.gostou THEN 1.0 ELSE 0.0 END), 0)::float
+                    FROM videos v2 JOIN avaliacoes a ON a.video_id = v2.id
+                    WHERE v2.profissional_id = p.usuario_id AND v2.situacao = 'publicado') AS avaliacao_media
+            FROM seguimentos_profissional meu
+            JOIN profissionais p ON p.usuario_id = meu.profissional_id
+            JOIN usuarios u ON u.id = p.usuario_id
+            LEFT JOIN seguimentos_profissional seguidores ON seguidores.profissional_id = p.usuario_id
+            LEFT JOIN videos v ON v.profissional_id = p.usuario_id AND v.situacao = 'publicado'
+            WHERE meu.seguidor_id = %s
+            GROUP BY u.id, p.usuario_id
+            ORDER BY u.nome_completo
+            """,
+            (user["id"],),
+        )
+        rows = cur.fetchall()
+        for row in rows:
+            cur.execute(
+                "SELECT c.id, c.nome FROM categorias c JOIN categorias_profissional cp ON cp.categoria_id = c.id WHERE cp.profissional_id = %s ORDER BY c.nome",
+                (row["id"],),
+            )
+            row["categorias"] = cur.fetchall()
+    return success(rows)
 
 
 @app.get("/api/profissionais/{professional_id}")
