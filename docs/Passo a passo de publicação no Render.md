@@ -6,6 +6,27 @@
 
 O repositório já contém quatro serviços FastAPI e um `render.yaml` com a configuração inicial. Para a entrega individual, cada aluno pode criar seu serviço pelo painel do Render usando os comandos deste documento.
 
+## Publicar o frontend primeiro
+
+O frontend React é publicado uma única vez pelo grupo como **Static Site**. Ele não é um Web Service FastAPI: o Render compila o React/Vite e publica os arquivos estáticos. Uma pessoa pode ficar responsável por criar e manter esse recurso; os quatro alunos continuam publicando individualmente suas APIs.
+
+1. Envie a versão atual do repositório para o GitHub e confirme que a branch escolhida contém a pasta `frontend/` e o `render.yaml`.
+2. No Render, escolha **New → Static Site**, conecte o repositório WellFlix e selecione a branch correta.
+3. Configure:
+
+   - **Name:** por exemplo, `wellflix-frontend` (se estiver disponível).
+   - **Root Directory:** `frontend`.
+   - **Build Command:** `npm install && npm run build`.
+   - **Publish Directory:** `dist`.
+
+   O `render.yaml` já contém esses parâmetros para o Static Site `wellflix-frontend`. Para a publicação inicial somente do frontend, crie um Static Site pelo painel; criar uma Blueprint Instance pode propor os quatro Web Services também, que são as entregas individuais dos integrantes.
+
+4. Para permitir que rotas do React funcionem ao abrir ou recarregar diretamente uma página, adicione em **Redirects/Rewrites** uma regra **Rewrite**: source `/*`, destination `/index.html`.
+5. Clique em **Create Static Site** e aguarde o primeiro deploy. Copie a URL `https://...onrender.com` exibida na página do serviço. Essa é a origem do frontend e o valor de `FRONTEND_ORIGIN` nas quatro APIs, sem caminho no final.
+6. O site pode ser publicado antes das APIs para obter a URL e conferir o carregamento da interface. Para os recursos dinâmicos funcionarem, depois que as APIs estiverem no ar, cadastre no Static Site as quatro variáveis `VITE_*_API_URL` da seção abaixo e faça um novo deploy. Até então, as chamadas ainda podem apontar para os endereços locais definidos como fallback no código.
+
+Somente uma pessoa precisa criar o Static Site compartilhado. Se cada aluno tiver que entregar uma URL própria, cada um entrega a URL da sua API, conforme a atividade; o link do frontend é complementar e compartilhado. Para entender as configurações de [Static Sites](https://render.com/docs/static-sites) e os caminhos usados com `rootDir`, consulte a [especificação do Blueprint](https://render.com/docs/blueprint-spec) e o guia de [monorepos no Render](https://render.com/docs/monorepo-support).
+
 ## Antes de publicar
 
 1. Enviem as alterações para o GitHub e confirmem que o repositório está acessível às quatro contas.
