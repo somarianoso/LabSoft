@@ -1,4 +1,5 @@
 import logging
+import os
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -21,6 +22,20 @@ def install_error_handlers(app: FastAPI) -> None:
         return JSONResponse(status_code=422, content={"error": {"code": "VALIDATION_ERROR", "message": "Os dados enviados são inválidos."}})
 
     @app.exception_handler(Exception)
-    async def unexpected_error(_request: Request, exc: Exception):
+    async def unexpected_error(request: Request, _exc: Exception):
         logging.getLogger("wellflix.api").exception("Erro não tratado na API")
-        return JSONResponse(status_code=500, content={"error": {"code": "INTERNAL_ERROR", "message": "Erro interno do servidor."}})
+        headers = {}
+        origin = request.headers.get("origin")
+        allowed_origins = {
+            item.strip()
+            for item in os.getenv("FRONTEND_ORIGIN", "").split(",")
+            if item.strip()
+        }
+        if origin and origin in allowed_origins:
+            headers["Access-Control-Allow-Origin"] = origin
+            headers["Vary"] = "Origin"
+        return JSONResponse(
+            status_code=500,
+            content={"error": {"code": "INTERNAL_ERROR", "message": "Erro interno do servidor."}},
+            headers=headers,
+        )
