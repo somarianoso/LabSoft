@@ -4,15 +4,19 @@
 
 O WellFlix é uma plataforma voltada a conectar profissionais qualificados a pessoas que desejam melhorar a própria saúde. A proposta é oferecer acesso a conteúdos e orientações de profissionais em áreas como atividade física, nutrição e bem-estar.
 
-O repositório está organizado em `frontend/`, com a aplicação React/Vite, e `backend/`, com a API Express e PostgreSQL. O backend já implementa cadastro/login de atletas, consulta de perfil, planos, assinaturas e trilhas. As experiências de profissionais e moderadores e partes do catálogo continuam usando dados de demonstração.
+O repositório contém o frontend React/Vite em `frontend/`, quatro APIs FastAPI em `services/` e as migrations PostgreSQL em `backend/src/db/migrations/`. Cada app FastAPI cobre um domínio e pode ser publicado individualmente no Render. O Express em `backend/src/` permanece como referência legada. Veja [como executar e implantar os serviços](./services/README.md), o [plano de implementação](./docs/Plano%20de%20implementa%C3%A7%C3%A3o%20do%20backend.md) e o [guia do banco](./docs/Guia%20de%20implementa%C3%A7%C3%A3o%20do%20banco%20de%20dados.md).
 
 ## Estrutura
 
 ```text
-backend/
-  ├── src/                          # módulos da API (atletas, auth, planos...)
-  ├── src/db/migrations/            # migrations SQL versionadas em sequência única
-  └── test/                         # testes Node.js
+services/
+  ├── identidade/                   # FastAPI: Sophia
+  ├── conta/                        # FastAPI: Maria Eduarda
+  ├── profissionais/                # FastAPI: Gabriel
+  ├── catalogo/                     # FastAPI: Luís
+  └── shared/                       # conexão, autenticação, erros e senhas
+backend/src/db/migrations/          # migrations PostgreSQL compartilhadas
+render.yaml                         # blueprint dos quatro serviços e do frontend
 frontend/
   ├── index.html
   ├── package.json
@@ -47,11 +51,12 @@ docs/                               # especificações e materiais de referênci
 | `frontend/src/routes/AppRoutes.jsx` | Seleção da página e passagem de propriedades de navegação. |
 | `frontend/src/data/` | Catálogo demonstrativo de vídeos/profissionais/categorias e planos. |
 | `frontend/src/styles/global.css` | Estilos globais e estilos das telas. |
-| `backend/src/` | API Express organizada em módulos independentes por domínio. |
+| `services/` | Quatro APIs FastAPI separadas por domínio. |
+| `backend/src/db/migrations/` | Histórico SQL único do PostgreSQL. |
 
 ## Como executar
 
-Requer Node.js e npm instalados.
+O frontend requer Node.js e npm instalados.
 
 ```bash
 cd frontend
@@ -68,7 +73,7 @@ npm run build
 
 O projeto também oferece `npm run preview` para servir localmente a compilação gerada. Execute esses comandos dentro de `frontend/`.
 
-Para executar e testar a API, consulte [backend/README.md](./backend/README.md).
+Para executar localmente as APIs FastAPI e aplicar as migrations, consulte [services/README.md](./services/README.md) e [backend/README.md](./backend/README.md).
 
 ## Divisão das responsabilidades entre os quatro integrantes
 

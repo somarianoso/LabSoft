@@ -1,0 +1,1 @@
+"""Serviços FastAPI do WellFlix."""

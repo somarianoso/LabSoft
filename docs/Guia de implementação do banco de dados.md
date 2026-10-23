@@ -6,13 +6,13 @@ Este guia organiza o trabalho da equipe para transformar as entidades definidas 
 
 | Tecnologia | Uso |
 | --- | --- |
-| **JavaScript com Node.js** | Implementar o backend/API que recebe as requisições do frontend e aplica as regras do sistema. |
-| **Express** | Definir rotas HTTP da API, como cadastro, consulta de vídeos e criação de trilhas. |
+| **Python** | Implementar quatro serviços independentes que recebem as requisições do frontend e aplicam as regras do sistema. |
+| **FastAPI** | Definir rotas HTTP, validar contratos e publicar documentação OpenAPI/Swagger. |
 | **PostgreSQL** | Persistir usuários, perfis, vídeos, assinaturas, trilhas e suas relações. |
 | **SQL** | Criar e alterar tabelas, restrições, índices e consultas. |
 | **React/Vite existente** | Apresentar telas e chamar a API por HTTP; não deve se conectar diretamente ao banco. |
 
-O backend pode acessar o PostgreSQL usando o pacote `pg` e consultas SQL parametrizadas. Mantenham as dependências do backend em `server/package.json`, separadas das dependências do frontend na raiz. A equipe deve escolher e compartilhar um único processo de migrações SQL antes de começar a criar tabelas; não mantenham cópias divergentes do schema nem façam a API criar tabelas automaticamente ao iniciar.
+Os serviços Python podem acessar o PostgreSQL usando `psycopg` e consultas parametrizadas. Mantenham dependências em `requirements.txt` por serviço, separadas das dependências do frontend. A equipe deve compartilhar um único processo e histórico de migrações SQL; não mantenham cópias divergentes do schema nem façam os serviços criar tabelas automaticamente ao iniciar. O código Express existente é legado/referência e não atende ao critério FastAPI da atividade.
 
 ## 2. Arquitetura
 
@@ -20,10 +20,10 @@ O backend pode acessar o PostgreSQL usando o pacote `pg` e consultas SQL paramet
 Navegador (React/Vite)
         │ HTTPS/JSON
         ▼
-API Node.js/Express
-        │ SQL parametrizado
-        ▼
-PostgreSQL hospedado externamente
+FastAPI Identidade/Atleta (Sophia) ─────┐
+FastAPI Planos/Assinaturas/Trilhas (Maria)├─ SQL parametrizado ─► PostgreSQL compartilhado
+FastAPI Profissionais/Moderação (Gabriel)├
+FastAPI Catálogo/Vídeos/Interações (Luís)┘
 
 Arquivos de vídeo ──► armazenamento de arquivos/objetos
                       (o banco guarda apenas a chave/localização)
@@ -33,28 +33,19 @@ O navegador nunca recebe credenciais do PostgreSQL. As credenciais ficam em vari
 
 ## 3. Organização de pastas sugerida
 
-Manter a aplicação existente em `src/` e adicionar um backend separado:
+Manter o frontend React existente e organizar quatro serviços Python implantáveis separadamente:
 
 ```text
-src/                              # frontend React/Vite existente
-server/
-  package.json                    # dependências e comandos do backend
-  .env.example                    # nomes das variáveis, sem valores secretos
-  src/
-    app.js                        # configuração do Express
-    server.js                     # inicialização HTTP
-    routes/                       # definição de endpoints
-    controllers/                  # leitura da requisição e resposta HTTP
-    services/                     # regras de negócio
-    repositories/                 # acesso SQL ao PostgreSQL
-    middleware/                   # autenticação, autorização e erros
-    db/
-      pool.js                     # conexão compartilhada com pg
-      migrations/                 # SQL versionado, aplicado em ordem
-      seeds/                      # dados iniciais controlados
+frontend/                         # React/Vite existente
+services/identidade/              # Sophia: FastAPI, requirements.txt
+services/conta/                   # Maria: FastAPI, requirements.txt
+services/profissionais/           # Gabriel: FastAPI, requirements.txt
+services/catalogo/                # Luís: FastAPI, requirements.txt
+shared/                            # autenticação/utilitários comuns
+backend/src/db/migrations/         # histórico SQL compartilhado
 ```
 
-Fluxo esperado: `rota → controller → service → repository → PostgreSQL`. Controllers não devem conter SQL; repositories não devem conhecer detalhes de HTTP. Para escopos pequenos, a equipe pode simplificar a separação, mas deve manter essas responsabilidades claras.
+Fluxo esperado: `rota FastAPI → regra de negócio → repository → PostgreSQL`. Rotas não devem concentrar SQL; repositories não devem conhecer HTTP. Os quatro serviços compartilham contrato de resposta/erro, validação do token e banco; não devem duplicar tabelas nem manter migrations divergentes.
 
 ## 4. Convenções comuns para todas as tabelas
 
@@ -70,7 +61,7 @@ Fluxo esperado: `rota → controller → service → repository → PostgreSQL`.
 - Evitar listas em uma única coluna, campos com JSON usado para representar relações, ou cópias de dados que possam ser obtidos por consulta.
 - Para operações com várias gravações relacionadas, usar transações.
 
-IDs devem ser gerados por uma estratégia uniforme: PostgreSQL (`gen_random_uuid()`) ou aplicação Node.js, definida pela equipe. Não misturar estratégias sem uma razão documentada. Os nomes de tabelas dos exemplos e das tarefas abaixo seguem a convenção obrigatória em português.
+IDs devem ser gerados por uma estratégia uniforme: PostgreSQL (`gen_random_uuid()`) ou aplicação Python, definida pela equipe. Não misturar estratégias sem uma razão documentada. Os nomes de tabelas dos exemplos e das tarefas abaixo seguem a convenção obrigatória em português.
 
 ## 5. Divisão das implementações por integrante
 
@@ -78,12 +69,11 @@ Esta divisão segue os responsáveis listados em [Especificação de Bancos de d
 
 | Integrante | Tabelas sugeridas | Escopo da implementação |
 | --- | --- | --- |
-| **Sophia — Atleta** | `atletas` | Implementar os dados próprios do atleta e a chave estrangeira para a conta comum. Não incluir listas de assinaturas, vídeos, profissionais seguidos ou trilhas na linha do atleta. |
-| **Gabriel — Profissional e Moderador** | `profissionais`, `categorias_profissional`, `seguimentos_profissional`; papel moderador em `papeis_usuario` e, se houver atributos próprios, `moderadores` | Implementar perfil profissional, categorias e seguidores. Integrar o papel moderador à estrutura compartilhada de `papeis_usuario`; criar `moderadores` apenas se houver dados exclusivos além dos mantidos na conta. |
-| **Luís — Vídeo** | `videos`, `revisoes_video`, `categorias_video` (somente se um vídeo puder ter várias categorias) | Implementar metadados, profissional autor, categoria(s), duração, localização do arquivo e situação de publicação. Registrar decisões de moderação vinculadas ao moderador e ao vídeo. |
-| **Maria Eduarda — Assinatura e Trilhas** | `planos`, `assinaturas`, `categorias_assinatura`, `trilhas`, `videos_trilha`, `progresso_trilha` | Implementar planos e assinaturas vinculados ao atleta, incluindo categorias selecionadas; implementar trilhas, ordem dos vídeos, privacidade e progresso. Os planos atuais em `src/data/plans.js` podem virar dados iniciais de `planos`. |
-| **Equipe — infraestrutura compartilhada** | `usuarios`, `papeis_usuario`, `categorias` | A especificação não atribui essas entidades a uma pessoa. A equipe deve designar um mantenedor antes das migrations dependentes. Todos devem usar os mesmos registros e IDs, sem criar cópias locais. |
-| **Equipe — comentários e avaliações** | `comentarios`, `avaliacoes` | A especificação cita esses recursos, mas não indica um responsável. Definir em conjunto quem os implementará; cada registro deve referenciar usuário e vídeo. Avaliar se haverá uma avaliação por usuário por vídeo. |
+| **Sophia — Serviço de identidade/atleta** | `usuarios`, `papeis_usuario`, `atletas` | FastAPI para cadastro/login, hash de senha, token e perfil próprio. `/me` deve usar o usuário autenticado, nunca um ID fornecido pelo navegador. |
+| **Gabriel — Serviço de profissionais/moderação** | `profissionais`, `categorias_profissional`, `seguimentos_profissional`, `moderadores` | FastAPI para perfis, categorias, seguidores, fila de revisão e decisões de moderador protegidas por papel. |
+| **Luís — Serviço de catálogo/vídeos** | `categorias`, `videos`, `revisoes_video`, `categorias_video`, `comentarios`, `avaliacoes` | FastAPI para descoberta, filtros, detalhe/player, comentários e avaliações. O catálogo público lista somente conteúdo aprovado; arquivos ficam em armazenamento externo. |
+| **Maria Eduarda — Serviço de planos/assinaturas/trilhas** | `planos`, `assinaturas`, `categorias_assinatura`, `trilhas`, `videos_trilha`, `progresso_trilha` | FastAPI para planos, solicitações/cancelamentos de assinatura, categorias, trilhas e progresso. Sem provedor de pagamento, manter assinatura pendente. |
+| **Equipe — infraestrutura compartilhada** | PostgreSQL, migrations e contrato comum | A equipe mantém um único banco e uma única sequência de migrations. Sophia mantém as tabelas de identidade; Luís mantém categorias e catálogo. Cada serviço deve usar os mesmos registros e IDs, sem cópias locais. |
 
 ### Como converter os campos do rascunho em relações
 
@@ -153,13 +143,15 @@ CREATE TABLE videos_trilha (
 - Validar autenticação e autorização no backend. Não confiar em papel, `usuario_id` ou permissões enviados pelo navegador sem verificá-los na sessão/token.
 - Restringir CORS às origens necessárias e usar HTTPS no ambiente publicado.
 
-Exemplo de consulta parametrizada com `pg`:
+Exemplo de consulta parametrizada com `psycopg`:
 
 ```js
-const result = await pool.query(
-  "SELECT id, titulo FROM videos WHERE situacao = $1",
-  ["publicado"],
-);
+with connection.cursor() as cursor:
+    cursor.execute(
+        "SELECT id, titulo FROM videos WHERE situacao = %s",
+        ("publicado",),
+    )
+    videos = cursor.fetchall()
 ```
 
 ## 8. Contrato de implementação para cada integrante
@@ -173,22 +165,24 @@ Cada responsável por uma entidade deve entregar:
 5. **Rotas e controller**, se fizerem parte do escopo combinado daquela entrega.
 6. **Testes** da migração e das operações principais, incluindo erros previsíveis como duplicidade e referência inexistente.
 7. **Exemplo de requisição e resposta JSON** para o frontend consumir.
+8. **Deploy Render individual** com URL pública própria, `/health`, `/docs` e demonstração das rotas atribuídas.
 
 Antes de abrir uma alteração para revisão, a pessoa deve confirmar que as migrações aplicam em um banco vazio, funcionam na ordem prevista e não quebram tabelas de outros integrantes. Uma migração já compartilhada/aplicada não deve ser editada retroativamente; criar uma nova migração corretiva.
 
 ## 9. Ordem recomendada das migrações
 
-As chaves estrangeiras determinam a ordem. Uma sequência inicial possível:
+As chaves estrangeiras determinam a ordem. A sequência SQL já presente no repositório é:
 
-1. `usuarios` e `papeis_usuario`
-2. `categorias` e `planos`
-3. `atletas`, `profissionais` e, se necessário, `moderadores`
-4. `categorias_profissional`
-5. `videos` e seus vínculos com profissionais/categorias
-6. `revisoes_video`, `comentarios` e `avaliacoes`
-7. `seguimentos_profissional`
-8. `assinaturas` e `categorias_assinatura`
-9. `trilhas`, `videos_trilha` e `progresso_trilha`
+1. `000_identidade.sql` — `usuarios`, `papeis_usuario`, `categorias`
+2. `000_identidade_atletas.sql` — `atletas`
+3. `001_planos.sql` — `planos`
+4. `002_assinaturas.sql` — `assinaturas`, `categorias_assinatura`
+5. `003_5_videos.sql` — `videos`, `categorias_video`, `revisoes_video`
+6. `003_trilhas.sql` — `trilhas`, `videos_trilha`, `progresso_trilha`
+7. `004_profissionais.sql` — perfis, categorias e seguimentos profissionais
+8. `005_moderadores.sql` — perfis moderadores
+9. `006_interacoes.sql` — comentários e avaliações
+10. `007_categorias_iniciais.sql` — categorias demonstrativas do frontend
 
 As tabelas `usuarios`, `papeis_usuario` e `categorias` são infraestrutura compartilhada e precisam ser criadas ou atribuídas a um mantenedor antes das migrations dependentes. Se atletas, profissionais ou moderadores não tiverem atributos próprios além do papel, a equipe pode representá-los apenas em `papeis_usuario`; não criar estruturas vazias por duplicidade. Essa decisão precisa ser acordada por todos, pois afeta as chaves estrangeiras.
 
@@ -204,7 +198,7 @@ As tabelas `usuarios`, `papeis_usuario` e `categorias` são infraestrutura compa
 
 ## 11. Integração gradual com o frontend existente
 
-Atualmente, partes da interface são demonstrações com dados em `src/data/content.js`, `src/data/plans.js`, estado React ou `localStorage`. A migração para dados persistidos pode ser feita por funcionalidade:
+Partes da interface ainda são demonstrações com dados em `frontend/src/data/content.js`, `frontend/src/data/plans.js`, estado React ou `localStorage`. Cadastro e login já usam o cliente de API e o serviço de identidade. A integração dos outros fluxos deve seguir por funcionalidade:
 
 1. Cadastro/login e identidade do usuário.
 2. Catálogo de vídeos e perfis de profissionais.
@@ -212,7 +206,7 @@ Atualmente, partes da interface são demonstrações com dados em `src/data/cont
 4. Comentários, avaliações, seguidores e trilhas.
 5. Planos, assinaturas e integração do pagamento.
 
-O backend deve expor endpoints JSON estáveis, por exemplo `GET /api/videos`, `POST /api/videos`, `POST /api/videos/:id/reviews` e `POST /api/subscriptions`. O frontend deve consumir esses endpoints; as páginas não devem abrir conexão PostgreSQL nem conter SQL.
+Os serviços expõem endpoints JSON estáveis, por exemplo `GET /api/videos`, `POST /api/videos`, `POST /api/videos/{video_id}/comentarios` e `POST /api/assinaturas`. O frontend deve consumir esses endpoints usando as URLs dos serviços; as páginas não devem abrir conexão PostgreSQL nem conter SQL.
 
 ## 12. Critérios de conclusão do banco
 

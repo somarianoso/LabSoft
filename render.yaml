@@ -1,0 +1,80 @@
+services:
+  - type: web
+    name: wellflix-identidade
+    runtime: python
+    plan: free
+    buildCommand: pip install -r services/identidade/requirements.txt
+    startCommand: uvicorn services.identidade.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_TOKEN_SECRET
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+
+  - type: web
+    name: wellflix-conta
+    runtime: python
+    plan: free
+    buildCommand: pip install -r services/conta/requirements.txt
+    startCommand: uvicorn services.conta.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_TOKEN_SECRET
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+
+  - type: web
+    name: wellflix-profissionais
+    runtime: python
+    plan: free
+    buildCommand: pip install -r services/profissionais/requirements.txt
+    startCommand: uvicorn services.profissionais.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_TOKEN_SECRET
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+
+  - type: web
+    name: wellflix-catalogo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r services/catalogo/requirements.txt
+    startCommand: uvicorn services.catalogo.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_TOKEN_SECRET
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+
+  - type: web
+    name: wellflix-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_AUTH_API_URL
+        sync: false
+      - key: VITE_ACCOUNT_API_URL
+        sync: false
+      - key: VITE_CREATOR_API_URL
+        sync: false
+      - key: VITE_CATALOG_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
