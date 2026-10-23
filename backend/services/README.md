@@ -1,17 +1,17 @@
 # Serviços FastAPI do WellFlix
 
-Há quatro aplicações FastAPI independentes. Todas usam o PostgreSQL existente, as migrations em `backend/src/db/migrations/` e o token HS256 compartilhado. Cada aplicação expõe `/health` e a documentação automática em `/docs`.
+Há quatro aplicações FastAPI independentes. Todas usam o PostgreSQL existente, as migrations em `../src/db/migrations/` e o token HS256 compartilhado. Cada aplicação expõe `/health` e a documentação automática em `/docs`.
 
 ## Executar localmente
 
 Na raiz do repositório, instale as dependências do serviço desejado e execute Uvicorn:
 
 ```bash
-pip install -r services/identidade/requirements.txt
-uvicorn services.identidade.main:app --reload --port 8001
+pip install -r backend/services/identidade/requirements.txt
+uvicorn backend.services.identidade.main:app --reload --port 8001
 ```
 
-Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 8002, 8003 e 8004, respectivamente. Copie `.env.example` para `.env` na raiz e configure `DATABASE_URL`, `AUTH_TOKEN_SECRET` (mínimo de 32 bytes) e `FRONTEND_ORIGIN`. Não use credenciais reais no Git.
+Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 8002, 8003 e 8004, respectivamente. Copie `backend/.env.example` para `backend/.env` e configure `DATABASE_URL`, `AUTH_TOKEN_SECRET` (mínimo de 32 bytes) e `FRONTEND_ORIGIN`. Não use credenciais reais no Git.
 
 ## Responsabilidades e rotas
 
@@ -51,14 +51,14 @@ Antes do primeiro deploy, aplique uma vez todas as migrations existentes e as no
 ```bash
 cd backend
 cp .env.example .env
-# Edite backend/.env e configure DATABASE_URL antes de continuar.
+# Edite .env e configure DATABASE_URL antes de continuar.
 npm install
 npm run migrate
 ```
 
 O comando aplica em ordem as migrations de `src/db/migrations/`; `006_interacoes.sql` cria as tabelas de comentários e avaliações e `007_categorias_iniciais.sql` adiciona as categorias usadas pela interface sem duplicá-las. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
 
-O `render.yaml` define quatro Web Services Python e um Static Site React. Revise as variáveis secretas durante a criação dos recursos no Render: todos os backends precisam do mesmo `DATABASE_URL` e `AUTH_TOKEN_SECRET`; `FRONTEND_ORIGIN` deve ser a origem real do Static Site. As variáveis `VITE_*_API_URL` do frontend devem receber as quatro URLs públicas Render. A configuração de um Blueprint cria recursos, mas não aplica migrations automaticamente.
+O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Site React. Revise as variáveis secretas durante a criação dos recursos no Render: todos os backends precisam do mesmo `DATABASE_URL` e `AUTH_TOKEN_SECRET`; `FRONTEND_ORIGIN` deve ser a origem real do Static Site. As variáveis `VITE_*_API_URL` do frontend devem receber as quatro URLs públicas Render. A configuração de um Blueprint cria recursos, mas não aplica migrations automaticamente.
 
 Os serviços de API estão marcados com o plano gratuito no Blueprint para evitar escolher recursos pagos por padrão. Serviços gratuitos entram em suspensão após inatividade e podem demorar para responder na primeira requisição; isso deve ser considerado na demonstração. Configure os serviços na mesma região do banco sempre que o provedor permitir.
 

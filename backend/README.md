@@ -1,6 +1,6 @@
 # PostgreSQL e migrations do WellFlix
 
-O backend Express existente foi mantido como referência e não é a API usada na entrega FastAPI. As quatro APIs Python estão em `../services/`; consulte [services/README.md](../services/README.md) para executar localmente e [render.yaml](../render.yaml) para a configuração de deploy.
+O backend Express existente foi mantido como referência legada e não é a API usada na entrega FastAPI. As quatro APIs Python estão em `services/`; consulte [services/README.md](services/README.md) para executar localmente e [../render.yaml](../render.yaml) para a configuração de deploy.
 
 ## Banco de dados
 
@@ -15,4 +15,4 @@ O comando aplica em ordem as migrations de `src/db/migrations/`, incluindo `006_
 
 ## API de referência em Node
 
-O código Express deste diretório pode ser executado com `npm start`, mas não atende ao critério de entrega que exige FastAPI/Python. Use os quatro serviços em `services/` para integração e publicação.
+O código Express em `src/` pode ser executado com `npm start`, mas não atende ao critério de entrega que exige FastAPI/Python. Use os quatro serviços em `services/` para integração e publicação.

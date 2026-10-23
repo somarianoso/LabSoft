@@ -3,8 +3,8 @@ services:
     name: wellflix-identidade
     runtime: python
     plan: free
-    buildCommand: pip install -r services/identidade/requirements.txt
-    startCommand: uvicorn services.identidade.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r backend/services/identidade/requirements.txt
+    startCommand: uvicorn backend.services.identidade.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
@@ -18,8 +18,8 @@ services:
     name: wellflix-conta
     runtime: python
     plan: free
-    buildCommand: pip install -r services/conta/requirements.txt
-    startCommand: uvicorn services.conta.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r backend/services/conta/requirements.txt
+    startCommand: uvicorn backend.services.conta.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
@@ -33,8 +33,8 @@ services:
     name: wellflix-profissionais
     runtime: python
     plan: free
-    buildCommand: pip install -r services/profissionais/requirements.txt
-    startCommand: uvicorn services.profissionais.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r backend/services/profissionais/requirements.txt
+    startCommand: uvicorn backend.services.profissionais.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
@@ -48,8 +48,8 @@ services:
     name: wellflix-catalogo
     runtime: python
     plan: free
-    buildCommand: pip install -r services/catalogo/requirements.txt
-    startCommand: uvicorn services.catalogo.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r backend/services/catalogo/requirements.txt
+    startCommand: uvicorn backend.services.catalogo.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL

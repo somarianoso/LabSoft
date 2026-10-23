@@ -5,10 +5,10 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel, Field
 from psycopg.errors import ForeignKeyViolation
 
-from services.shared.auth import require_role
-from services.shared.config import configure_app, success
-from services.shared.database import connection
-from services.shared.errors import install_error_handlers
+from backend.services.shared.auth import require_role
+from backend.services.shared.config import configure_app, success
+from backend.services.shared.database import connection
+from backend.services.shared.errors import install_error_handlers
 
 app = FastAPI(title="WellFlix — Profissionais e moderação", version="1.0.0")
 configure_app(app)

@@ -45,7 +45,7 @@ server/
     server.js                     # inicialização HTTP
     routes/                       # definição de endpoints
     controllers/                  # leitura da requisição e resposta HTTP
-    services/                     # regras de negócio
+    backend/services/              # APIs FastAPI e regras de negócio
     repositories/                 # acesso SQL ao PostgreSQL
     middleware/                   # autenticação, autorização e erros
     db/

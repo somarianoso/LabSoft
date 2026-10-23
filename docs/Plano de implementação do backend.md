@@ -6,7 +6,7 @@ Entregar **quatro serviços de backend independentes em FastAPI/Python**, conect
 
 ## O que já existe no repositório
 
-O critério da atividade pede **backend FastAPI/Python**. Foram criados quatro serviços Python independentes em `services/`, reutilizando o schema PostgreSQL e usando o código Express como referência legada. Os serviços têm rotas iniciais por domínio, autenticação Bearer compartilhada, respostas JSON envelopadas e endpoints `/health` e `/docs`.
+O critério da atividade pede **backend FastAPI/Python**. Foram criados quatro serviços Python independentes em `backend/services/`, reutilizando o schema PostgreSQL e usando o código Express como referência legada. Os serviços têm rotas iniciais por domínio, autenticação Bearer compartilhada, respostas JSON envelopadas e endpoints `/health` e `/docs`.
 
 O código Express segue disponível em `backend/`, mas não é o backend a publicar para a atividade. As APIs FastAPI foram separadas por domínio; cadastro e login do atleta já consomem a API de identidade pelo frontend. Checkout, trilhas, conteúdo, publicação e moderação ainda precisam de integração completa com as telas. Pagamento real, armazenamento de mídia e aprovação de papéis dependem de integrações/configuração adicionais.
 
@@ -14,12 +14,12 @@ O código Express segue disponível em `backend/`, mas não é o backend a publi
 
 | Serviço/domínio | Funcionalidades previstas nos documentos | Situação observada |
 | --- | --- | --- |
-| Conta e autenticação | Cadastro, login e validação de sessão | API FastAPI criada em `services/identidade`; perfil e login de atleta estão disponíveis. |
-| Catálogo e descoberta | Banner, destaques, profissionais, vídeos e filtros por categoria/avaliação | API FastAPI criada em `services/catalogo`; partes de banner/destaques e telas ainda usam demonstrações. |
+| Conta e autenticação | Cadastro, login e validação de sessão | API FastAPI criada em `backend/services/identidade`; perfil e login de atleta estão disponíveis. |
+| Catálogo e descoberta | Banner, destaques, profissionais, vídeos e filtros por categoria/avaliação | API FastAPI criada em `backend/services/catalogo`; partes de banner/destaques e telas ainda usam demonstrações. |
 | Player e interação | Obter vídeo, próximos vídeos, comentários e avaliações gostei/não gostei | Rotas FastAPI e migration de comentários/avaliações criadas; falta conectar telas. |
-| Planos, assinatura e pagamento | Listar planos, registrar assinatura/compra e atualizar acesso do atleta | API FastAPI criada em `services/conta`; confirmação de pagamento depende de integração segura com provedor. |
+| Planos, assinatura e pagamento | Listar planos, registrar assinatura/compra e atualizar acesso do atleta | API FastAPI criada em `backend/services/conta`; confirmação de pagamento depende de integração segura com provedor. |
 | Trilhas | Listar/criar/editar trilhas, adicionar/remover vídeos e salvar progresso | Rotas FastAPI criadas; falta integrar telas e substituir IDs demonstrativos por IDs do catálogo. |
-| Perfil do profissional | Mostrar dados e vídeos, seguir profissional | Rotas FastAPI criadas em `services/profissionais`; perfis e papéis precisam ser provisionados no banco. |
+| Perfil do profissional | Mostrar dados e vídeos, seguir profissional | Rotas FastAPI criadas em `backend/services/profissionais`; perfis e papéis precisam ser provisionados no banco. |
 | Estúdio do criador | Ver envios recentes e publicar/upload de vídeo | Rotas FastAPI de submissão e listagem criadas; arquivo precisa estar em armazenamento externo. |
 | Moderação | Listar pendentes/publicados/rejeitados, aprovar/rejeitar e remover conteúdo | Rotas FastAPI de decisão e arquivamento lógico criadas; moderador precisa ter papel provisionado e falta integrar painel. |
 | Alertas | Notificar por WhatsApp sobre novo conteúdo relevante ao plano/interesses | Funcionalidade prevista no documento de usuários; deixar como etapa posterior, sujeita a provedor externo. |
@@ -28,7 +28,7 @@ O código Express segue disponível em `backend/`, mas não é o backend a publi
 
 ### 1. Fechar arquitetura e contrato dos serviços
 
-- Manter quatro diretórios implantáveis independentemente, um por serviço/aluno, cada qual com `main.py` e `requirements.txt`; compartilhar configuração local em `services/.env.example`. Cada serviço expõe `/health` e `/docs`.
+- Manter quatro diretórios implantáveis independentemente em `backend/services/`, um por serviço/aluno, cada qual com `main.py` e `requirements.txt`; compartilhar configuração em `backend/.env.example`. Cada serviço expõe `/health` e `/docs`.
 - Manter o prefixo `/api` em todos os serviços. Cada serviço usa a mesma `DATABASE_URL` e o mesmo segredo de autenticação, mas credenciais são configuradas separadamente nos serviços Render.
 - Compartilhar o contrato HTTP: sucesso `{ "data": ... }`, erro `{ "error": { "code": "...", "message": "..." } }`; autenticação Bearer e papéis `atleta`, `profissional`, `moderador`.
 - Usar PostgreSQL e migrations existentes como referência; não criar schema concorrente. Garantir que os quatro serviços apontam para o mesmo banco e para a mesma sequência de migrations.
@@ -65,7 +65,7 @@ Configuração no Blueprint `render.yaml`: cada serviço instala seu `requiremen
 
 Arquitetura para cumprir a entrega individual: **React como Static Site**, **quatro FastAPI Web Services** (um por integrante) e **um PostgreSQL compartilhado**. Cada Web Service tem URL Render individual e `/docs`; todos leem as variáveis de ambiente necessárias. Guardar `DATABASE_URL`, segredo de autenticação e credenciais de integrações como variáveis do Render. Cada backend escuta em `0.0.0.0` na porta fornecida por `$PORT`, expõe `/health` e permite CORS apenas para os domínios necessários. Usar URL interna do banco quando serviços e banco estiverem na mesma região.
 
-Para o FastAPI, o guia do Render usa `pip install -r requirements.txt` no build e `uvicorn main:app --host 0.0.0.0 --port $PORT` para iniciar; ajustar o módulo conforme a estrutura do projeto. Deploys gratuitos podem suspender o serviço web após período sem atividade, então considerar esse comportamento na apresentação. Aplicar migrations de forma controlada antes de iniciar a nova versão e conferir os dados existentes antes de qualquer alteração destrutiva.
+Com **Root Directory vazio** (raiz do repositório), use o build `pip install -r backend/services/<servico>/requirements.txt` e o start `uvicorn backend.services.<servico>.main:app --host 0.0.0.0 --port $PORT`, como já configurado em `render.yaml`. Deploys gratuitos podem suspender o serviço web após período sem atividade, então considerar esse comportamento na apresentação. Aplicar migrations de forma controlada antes de iniciar a nova versão e conferir os dados existentes antes de qualquer alteração destrutiva.
 
 O frontend precisa receber URLs públicas separadas por variáveis de build (por exemplo `VITE_AUTH_API_URL`, `VITE_CATALOG_API_URL`, `VITE_CREATOR_API_URL`, `VITE_ACCOUNT_API_URL`) e enviar o token nas rotas privadas. Remover dependências de mocks gradualmente, começando pelos fluxos de cada entrega.
 

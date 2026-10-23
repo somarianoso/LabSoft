@@ -37,11 +37,11 @@ Manter o frontend React existente e organizar quatro serviços Python implantáv
 
 ```text
 frontend/                         # React/Vite existente
-services/identidade/              # Sophia: FastAPI, requirements.txt
-services/conta/                   # Maria: FastAPI, requirements.txt
-services/profissionais/           # Gabriel: FastAPI, requirements.txt
-services/catalogo/                # Luís: FastAPI, requirements.txt
-shared/                            # autenticação/utilitários comuns
+backend/services/identidade/      # Sophia: FastAPI, requirements.txt
+backend/services/conta/           # Maria: FastAPI, requirements.txt
+backend/services/profissionais/   # Gabriel: FastAPI, requirements.txt
+backend/services/catalogo/        # Luís: FastAPI, requirements.txt
+backend/services/shared/          # autenticação/utilitários comuns
 backend/src/db/migrations/         # histórico SQL compartilhado
 ```
 

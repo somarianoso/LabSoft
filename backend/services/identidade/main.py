@@ -5,11 +5,11 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel, Field, field_validator
 from psycopg.errors import UniqueViolation
 
-from services.shared.auth import issue_token, require_role
-from services.shared.config import configure_app, success
-from services.shared.database import connection
-from services.shared.errors import install_error_handlers
-from services.shared.passwords import hash_password, verify_password
+from backend.services.shared.auth import issue_token, require_role
+from backend.services.shared.config import configure_app, success
+from backend.services.shared.database import connection
+from backend.services.shared.errors import install_error_handlers
+from backend.services.shared.passwords import hash_password, verify_password
 
 app = FastAPI(title="WellFlix — Identidade e atleta", version="1.0.0")
 configure_app(app)
