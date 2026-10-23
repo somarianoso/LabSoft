@@ -70,7 +70,22 @@ VALUES
     ('20000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-000000000002', 'Controle de bola para armadores', 'Fundamentos demonstrativos de basquete.', 1080, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', 'publicado', now() - interval '4 days'),
     ('20000000-0000-4000-8000-000000000004', '10000000-0000-4000-8000-000000000004', 'Sono: o treino invisível', 'Conteúdo demonstrativo sobre descanso e recuperação.', 840, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', 'publicado', now() - interval '3 days'),
     ('20000000-0000-4000-8000-000000000005', '10000000-0000-4000-8000-000000000004', 'Proteína sem complicação', 'Introdução demonstrativa à nutrição esportiva.', 1200, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', 'publicado', now() - interval '2 days'),
-    ('20000000-0000-4000-8000-000000000006', '10000000-0000-4000-8000-000000000002', 'Prevenção de lesões no joelho', 'Envio demonstrativo que aguarda revisão do moderador.', 1620, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'aguardando_revisao', NULL)
+    ('20000000-0000-4000-8000-000000000006', '10000000-0000-4000-8000-000000000002', 'Prevenção de lesões no joelho', 'Envio demonstrativo que aguarda revisão do moderador.', 1620, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000007', '10000000-0000-4000-8000-000000000002', 'Aquecimento para corrida sem impacto', 'Vídeo fictício para testar a fila de aprovação.', 720, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000008', '10000000-0000-4000-8000-000000000002', 'Mobilidade de tornozelo para atletas', 'Vídeo fictício para testar a fila de aprovação.', 900, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000009', '10000000-0000-4000-8000-000000000002', 'Fortalecimento do joelho em casa', 'Vídeo fictício para testar a fila de aprovação.', 1080, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000010', '10000000-0000-4000-8000-000000000002', 'Alongamento depois do treino', 'Vídeo fictício para testar a fila de aprovação.', 840, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000011', '10000000-0000-4000-8000-000000000002', 'Como aterrissar com segurança no basquete', 'Vídeo fictício para testar a fila de aprovação.', 1260, 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000012', '10000000-0000-4000-8000-000000000003', 'Agachamento: técnica e controle', 'Vídeo fictício para testar a fila de aprovação.', 960, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000013', '10000000-0000-4000-8000-000000000003', 'Treino de força para iniciantes', 'Vídeo fictício para testar a fila de aprovação.', 1500, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000014', '10000000-0000-4000-8000-000000000003', 'Mobilidade de ombros antes da musculação', 'Vídeo fictício para testar a fila de aprovação.', 780, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000015', '10000000-0000-4000-8000-000000000003', 'Yoga para recuperação muscular', 'Vídeo fictício para testar a fila de aprovação.', 1320, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000016', '10000000-0000-4000-8000-000000000003', 'Prancha e estabilidade do tronco', 'Vídeo fictício para testar a fila de aprovação.', 660, 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000017', '10000000-0000-4000-8000-000000000004', 'Lanche pré-treino rápido', 'Vídeo fictício para testar a fila de aprovação.', 600, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000018', '10000000-0000-4000-8000-000000000004', 'Hidratação durante exercícios', 'Vídeo fictício para testar a fila de aprovação.', 720, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000019', '10000000-0000-4000-8000-000000000004', 'Jantar simples para recuperação', 'Vídeo fictício para testar a fila de aprovação.', 1140, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000020', '10000000-0000-4000-8000-000000000004', 'Sono e recuperação depois do treino', 'Vídeo fictício para testar a fila de aprovação.', 1020, 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', 'aguardando_revisao', NULL),
+    ('20000000-0000-4000-8000-000000000021', '10000000-0000-4000-8000-000000000004', 'Montando um prato equilibrado', 'Vídeo fictício para testar a fila de aprovação.', 900, 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'aguardando_revisao', NULL)
 ON CONFLICT (id) DO UPDATE SET
     profissional_id = EXCLUDED.profissional_id,
     titulo = EXCLUDED.titulo,
@@ -89,7 +104,22 @@ FROM (VALUES
     ('20000000-0000-4000-8000-000000000003'::uuid, 'Basquete'),
     ('20000000-0000-4000-8000-000000000004'::uuid, 'Recuperação'),
     ('20000000-0000-4000-8000-000000000005'::uuid, 'Nutrição'),
-    ('20000000-0000-4000-8000-000000000006'::uuid, 'Lesões')
+    ('20000000-0000-4000-8000-000000000006'::uuid, 'Lesões'),
+    ('20000000-0000-4000-8000-000000000007'::uuid, 'Basquete'),
+    ('20000000-0000-4000-8000-000000000008'::uuid, 'Lesões'),
+    ('20000000-0000-4000-8000-000000000009'::uuid, 'Lesões'),
+    ('20000000-0000-4000-8000-000000000010'::uuid, 'Basquete'),
+    ('20000000-0000-4000-8000-000000000011'::uuid, 'Basquete'),
+    ('20000000-0000-4000-8000-000000000012'::uuid, 'Musculação'),
+    ('20000000-0000-4000-8000-000000000013'::uuid, 'Musculação'),
+    ('20000000-0000-4000-8000-000000000014'::uuid, 'Musculação'),
+    ('20000000-0000-4000-8000-000000000015'::uuid, 'Yoga'),
+    ('20000000-0000-4000-8000-000000000016'::uuid, 'Yoga'),
+    ('20000000-0000-4000-8000-000000000017'::uuid, 'Nutrição'),
+    ('20000000-0000-4000-8000-000000000018'::uuid, 'Nutrição'),
+    ('20000000-0000-4000-8000-000000000019'::uuid, 'Nutrição'),
+    ('20000000-0000-4000-8000-000000000020'::uuid, 'Recuperação'),
+    ('20000000-0000-4000-8000-000000000021'::uuid, 'Recuperação')
 ) AS seed(video_id, categoria_nome)
 JOIN categorias c ON c.nome = seed.categoria_nome
 ON CONFLICT DO NOTHING;

@@ -153,6 +153,14 @@ export async function followProfessional(id, token) {
   return apiRequest("creator", `/api/profissionais/${id}/seguir`, { method: "POST", token });
 }
 
+export async function getProfessionalFollowStatus(id, token) {
+  return apiRequest("creator", `/api/profissionais/${id}/seguir`, { token });
+}
+
+export async function unfollowProfessional(id, token) {
+  return apiRequest("creator", `/api/profissionais/${id}/seguir`, { method: "DELETE", token });
+}
+
 export async function getMySubmissions(token) {
   return (await apiRequest("catalog", "/api/videos/me", { token })).map(mapVideo);
 }

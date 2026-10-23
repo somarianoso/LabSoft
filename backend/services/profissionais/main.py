@@ -140,6 +140,20 @@ def professional_detail(professional_id: UUID):
     return success(row)
 
 
+@app.get("/api/profissionais/{professional_id}/seguir")
+def follow_status(professional_id: UUID, user: Athlete):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT EXISTS (SELECT 1 FROM profissionais WHERE usuario_id = %s) AS profissional_existe, "
+            "EXISTS (SELECT 1 FROM seguimentos_profissional WHERE profissional_id = %s AND seguidor_id = %s) AS seguindo",
+            (professional_id, professional_id, user["id"]),
+        )
+        row = cur.fetchone()
+    if not row["profissional_existe"]:
+        raise HTTPException(404, detail={"code": "PROFILE_NOT_FOUND", "message": "Profissional não encontrado."})
+    return success({"profissional_id": str(professional_id), "seguindo": row["seguindo"]})
+
+
 @app.post("/api/profissionais/{professional_id}/seguir", status_code=status.HTTP_201_CREATED)
 def follow_professional(professional_id: UUID, user: Athlete):
     if str(professional_id) == user["id"]:
