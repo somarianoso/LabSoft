@@ -8,6 +8,15 @@ load_dotenv()
 
 
 def configure_app(app: FastAPI) -> None:
+    @app.get("/", include_in_schema=False)
+    def service_info():
+        return success({
+            "status": "ok",
+            "service": app.title,
+            "health": "/health",
+            "docs": "/docs",
+        })
+
     origins = [
         origin.strip()
         for origin in os.getenv("FRONTEND_ORIGIN", "").split(",")
