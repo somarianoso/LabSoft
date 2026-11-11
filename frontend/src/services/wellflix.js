@@ -208,6 +208,14 @@ export function addTrailVideo(trailId, video, token) {
   });
 }
 
+export function deleteTrail(trailId, token) {
+  return apiRequest("account", `/api/trilhas/${trailId}`, { method: "DELETE", token });
+}
+
+export function removeTrailVideo(trailId, videoId, token) {
+  return apiRequest("account", `/api/trilhas/${trailId}/videos/${videoId}`, { method: "DELETE", token });
+}
+
 export async function getModerationVideos(status, token) {
   const query = new URLSearchParams({ situacao: status });
   const rows = await apiRequest("creator", `/api/moderacao/videos?${query}`, { token });

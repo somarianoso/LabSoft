@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import PlanBenefits from "../components/PlanBenefits.jsx";
+import PaymentFields from "../components/PaymentFields.jsx";
 import { getCategories, getPlans } from "../services/wellflix.js";
 import { apiRequest } from "../services/api.js";
 
@@ -11,6 +12,7 @@ export default function Checkout({ plan, go, user }) {
   const [paymentMethod, setPaymentMethod] = useState("pix");
   const [feedback, setFeedback] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsappConfirmation, setWhatsappConfirmation] = useState(false);
 
   useEffect(() => {
     Promise.all([getPlans(), getCategories()])
@@ -34,6 +36,7 @@ export default function Checkout({ plan, go, user }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (isSubmitting) return;
     if (!user?.accessToken) {
       setFeedback({ type: "error", message: "Entre na sua conta de atleta antes de solicitar uma assinatura." });
       return;
@@ -108,12 +111,18 @@ export default function Checkout({ plan, go, user }) {
           )}
           <label htmlFor="checkout-payment-method">
             Método de pagamento
-            <select id="checkout-payment-method" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}>
+            <select id="checkout-payment-method" value={paymentMethod} onChange={(event) => { setPaymentMethod(event.target.value); setFeedback(null); }}>
               <option value="pix">Pix</option>
               <option value="cartao">Cartão</option>
               <option value="boleto">Boleto</option>
             </select>
           </label>
+          <PaymentFields key={paymentMethod} method={paymentMethod} />
+          <label className="checkout-whatsapp" htmlFor="checkout-whatsapp">
+            <input id="checkout-whatsapp" type="checkbox" checked={whatsappConfirmation} onChange={(event) => setWhatsappConfirmation(event.target.checked)} aria-describedby="checkout-whatsapp-help" />
+            Gostaria de receber a confirmação/comprovante da assinatura pelo WhatsApp
+          </label>
+          <p id="checkout-whatsapp-help" className="checkout-help">Recurso futuro: esta opção é demonstrativa e não será salva nem enviará mensagens nesta versão.</p>
           {!user?.accessToken && <button className="dark-button" type="button" onClick={() => go("login")}>Entrar para solicitar a assinatura</button>}
           <button className="green" type="submit" data-testid="checkout-submit" disabled={isSubmitting}>
             {isSubmitting ? "Enviando…" : "Solicitar assinatura"} <ArrowUpRight size={14} />

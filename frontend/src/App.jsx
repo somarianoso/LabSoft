@@ -7,8 +7,10 @@ import {
   addTrailVideo,
   clearSession,
   createTrail,
+  deleteTrail,
   getMyTrails,
   readSession,
+  removeTrailVideo,
   saveSession,
   saveVideoRating,
 } from "./services/wellflix.js";
@@ -66,6 +68,8 @@ export default function App() {
     initialHistoryState.selectedPlan || defaultPlan,
   );
   const [customTrails, setCustomTrails] = useState([]);
+  const [trailsLoading, setTrailsLoading] = useState(false);
+  const [trailsError, setTrailsError] = useState("");
 
   useEffect(() => {
     const restoreNavigation = (navigationState) => {
@@ -106,12 +110,18 @@ export default function App() {
   useEffect(() => {
     if (!user?.accessToken) {
       setCustomTrails([]);
+      setTrailsLoading(false);
+      setTrailsError("");
       return;
     }
     let active = true;
+    setCustomTrails([]);
+    setTrailsLoading(true);
+    setTrailsError("");
     getMyTrails(user.accessToken)
       .then((trails) => active && setCustomTrails(trails))
-      .catch((error) => console.error("Não foi possível carregar suas trilhas do backend.", error));
+      .catch((error) => active && setTrailsError(error.message))
+      .finally(() => active && setTrailsLoading(false));
     return () => { active = false; };
   }, [user?.accessToken]);
 
@@ -155,11 +165,23 @@ export default function App() {
     setCustomTrails((current) =>
       current.map((trail) =>
         trail.id === trailId &&
-        !trail.videos.some((savedVideo) => savedVideo[0] === video[0])
+        !trail.videos.some((savedVideo) => savedVideo.id === video.id)
           ? { ...trail, videos: [...trail.videos, video] }
           : trail,
       ),
     );
+  };
+  const deleteCustomTrail = async (trailId) => {
+    if (!user?.accessToken) throw new Error("Entre na sua conta de atleta para excluir uma trilha.");
+    await deleteTrail(trailId, user.accessToken);
+    setCustomTrails((current) => current.filter((trail) => trail.id !== trailId));
+  };
+  const removeVideoFromCustomTrail = async (trailId, videoId) => {
+    if (!user?.accessToken) throw new Error("Entre na sua conta de atleta para editar uma trilha.");
+    await removeTrailVideo(trailId, videoId, user.accessToken);
+    setCustomTrails((current) => current.map((trail) => trail.id === trailId
+      ? { ...trail, videos: trail.videos.filter((video) => video.id !== videoId) }
+      : trail));
   };
   const rateVideo = async (video, liked) => {
     if (!user?.accessToken) throw new Error("Entre na sua conta de atleta para avaliar vídeos.");
@@ -208,8 +230,12 @@ export default function App() {
         login={login}
         user={user}
         customTrails={customTrails}
+        trailsLoading={trailsLoading}
+        trailsError={trailsError}
         createCustomTrail={createCustomTrail}
         addVideoToCustomTrail={addVideoToCustomTrail}
+        deleteCustomTrail={deleteCustomTrail}
+        removeVideoFromCustomTrail={removeVideoFromCustomTrail}
         rateVideo={rateVideo}
         selectedVideo={selectedVideo}
         exploreCategory={exploreCategory}

@@ -41,8 +41,12 @@ export default function AppRoutes({
   exploreType,
   selectedPlan,
   customTrails,
+  trailsLoading,
+  trailsError,
   createCustomTrail,
   addVideoToCustomTrail,
+  deleteCustomTrail,
+  removeVideoFromCustomTrail,
   rateVideo,
 }) {
   if (page === "login") {
@@ -72,7 +76,7 @@ export default function AppRoutes({
   return (
     <Page
       {...(routesWithNavigation.has(page) ? { go } : {})}
-      {...(page === "trilhas" ? { customTrails } : {})}
+      {...(page === "trilhas" ? { customTrails, trailsLoading, trailsError, deleteCustomTrail, removeVideoFromCustomTrail } : {})}
       {...(page === "profissionais"
         ? { isOwnProfile: role === "profissional", user }
         : {})}

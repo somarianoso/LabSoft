@@ -92,7 +92,7 @@ export default function Detail({
   };
 
   const addVideoToTrail = (trail) => {
-    if (trail.videos.some((savedVideo) => savedVideo[0] === selectedVideo[0])) {
+    if (trail.videos.some((savedVideo) => savedVideo.id === selectedVideo.id)) {
       setTrailNotice(`Este vídeo já está na trilha "${trail.name}".`);
       return;
     }
@@ -259,7 +259,7 @@ export default function Detail({
               <div className="trail-dialog-list">
                 {customTrails.map((trail) => {
                   const alreadyAdded = trail.videos.some(
-                    (savedVideo) => savedVideo[0] === selectedVideo[0],
+                    (savedVideo) => savedVideo.id === selectedVideo.id,
                   );
                   return (
                     <button
