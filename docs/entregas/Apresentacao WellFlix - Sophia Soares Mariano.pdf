@@ -1,0 +1,197 @@
+%PDF-1.4
+%âãÏÓ
+1 0 obj
+<< /Length 384 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (WELLFLIX • MICRO SERVIÇO DE IDENTIDADE) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (Sophia Soares Mariano) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (Arquitetura, cadastro e autenticação) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (01 / 09) Tj ET
+endstream
+endobj
+2 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 1 0 R >>
+endobj
+3 0 obj
+<< /Length 677 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (CENÁRIO DE NEGÓCIO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (Identidade para uma experiência personalizada) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (A pessoa cria uma conta para acessar conteúdos de bem-estar e) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 299 Tm (treinamento.) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 263 Tm (O sistema permite retornar com segurança e consultar o próprio) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 227 Tm (perfil.) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (02 / 09) Tj ET
+endstream
+endobj
+4 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 3 0 R >>
+endobj
+5 0 obj
+<< /Length 738 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (ARQUITETURA DA SOLUÇÃO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (Do navegador aos dados persistidos) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (Frontend React ? API FastAPI ? PostgreSQL) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 299 Tm (A API de identidade valida o cadastro, autentica atletas e) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 263 Tm (fornece dados do perfil autenticado.) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (Render • comunicação HTTPS • dados organizados em usuários, papéis e atletas) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (03 / 09) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 903 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (CADASTRO DE ATLETA) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (POST  /api/atletas) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm ({) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 304 Tm ("nome_completo": "Ana Beatriz Lima",) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 273 Tm ("cpf": "52998224725",) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 242 Tm ("email": "ana.lima.demo@wellflix.test",) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 211 Tm ("senha": "TreinoDemo2026!") Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 180 Tm (}) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (A senha é armazenada como hash. O cadastro cria o papel atleta e o perfil correspondente.) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (04 / 09) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 787 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (AUTENTICAÇÃO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (POST  /api/auth/sessao) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm ({) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 304 Tm ("email": "ana.lima.demo@wellflix.test",) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 273 Tm ("senha": "TreinoDemo2026!",) Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 242 Tm ("papel": "atleta") Tj ET
+BT /F3 19 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 211 Tm (}) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (A resposta fornece um token Bearer para autenticar as próximas requisições.) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (05 / 09) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 9 0 R >>
+endobj
+11 0 obj
+<< /Length 686 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (PERFIL PROTEGIDO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (GET  /api/atletas/me) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (Authorization: Bearer <access_token>) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 299 Tm (Resposta: dados do perfil autenticado; CPF apresentado de) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 263 Tm (forma mascarada.) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (Token válido: acesso autorizado • sem token: requisição não autorizada) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (06 / 09) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 11 0 R >>
+endobj
+13 0 obj
+<< /Length 955 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (VALIDAÇÕES E PROTEÇÃO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (Consistência dos dados e da sessão) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (• Nome completo, CPF com 11 dígitos, e-mail válido e senha com) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 299 Tm (mínimo de 8 caracteres.) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 263 Tm (• E-mail e CPF duplicados são recusados.) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 227 Tm (• Credenciais incorretas não iniciam sessão.) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 191 Tm (• Apenas o perfil autenticado pode consultar seus dados.) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (Cadastro público cria atletas; papéis administrativos exigem concessão autorizada.) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (07 / 09) Tj ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 13 0 R >>
+endobj
+15 0 obj
+<< /Length 704 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (DEMONSTRAÇÃO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (WellFlix • cadastro, login e perfil) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (Frontend) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 299 Tm (wellflix-frontend.onrender.com) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 263 Tm (API de identidade) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 227 Tm (wellflix-identidade-sophia.onrender.com) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (Swagger: /docs • Saúde: /health) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (08 / 09) Tj ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 15 0 R >>
+endobj
+17 0 obj
+<< /Length 659 >>
+stream
+0.043 0.071 0.125 rg 0 0 960 540 re f
+BT /F2 13 Tf 0.250 0.770 0.720 rg 1 0 0 1 54 485 Tm (CONCLUSÃO) Tj ET
+BT /F2 31 Tf 1.000 1.000 1.000 rg 1 0 0 1 54 414 Tm (Identidade confiável para o WellFlix) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 335 Tm (O microserviço conecta cadastro, autenticação e acesso) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 299 Tm (protegido ao perfil, integrando a interface à persistência dos) Tj ET
+BT /F1 21 Tf 0.880 0.920 0.960 rg 1 0 0 1 62 263 Tm (dados.) Tj ET
+BT /F1 12 Tf 0.620 0.690 0.780 rg 1 0 0 1 54 82 Tm (Sophia Soares Mariano) Tj ET
+BT /F2 11 Tf 0.250 0.770 0.720 rg 1 0 0 1 867 34 Tm (09 / 09) Tj ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 19 0 R /F2 20 0 R /F3 21 0 R >> >> /Contents 17 0 R >>
+endobj
+19 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+20 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+21 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+22 0 obj
+<< /Type /Pages /Kids [2 0 R 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R] /Count 9 >>
+endobj
+23 0 obj
+<< /Type /Catalog /Pages 22 0 R >>
+endobj
+xref
+0 24
+0000000000 65535 f 
+0000000015 00000 n 
+0000000449 00000 n 
+0000000599 00000 n 
+0000001326 00000 n 
+0000001476 00000 n 
+0000002264 00000 n 
+0000002414 00000 n 
+0000003367 00000 n 
+0000003517 00000 n 
+0000004354 00000 n 
+0000004505 00000 n 
+0000005242 00000 n 
+0000005394 00000 n 
+0000006400 00000 n 
+0000006552 00000 n 
+0000007307 00000 n 
+0000007459 00000 n 
+0000008169 00000 n 
+0000008321 00000 n 
+0000008419 00000 n 
+0000008522 00000 n 
+0000008618 00000 n 
+0000008729 00000 n 
+trailer
+<< /Size 24 /Root 23 0 R >>
+startxref
+8780
+%%EOF

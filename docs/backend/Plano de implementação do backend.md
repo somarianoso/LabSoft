@@ -79,10 +79,10 @@ O frontend precisa receber URLs públicas separadas por variáveis de build (por
 
 ## Referências
 
-- `docs/Serviços backend.pdf`
-- `docs/Lista de Usuários e de Funcionalidades (1).pdf`
-- `docs/Especificação de Bancos de dados.md`
-- `docs/Guia de implementação do banco de dados.md`
+- `docs/backend/Serviços backend.pdf`
+- `docs/produto/Lista de Usuários e de Funcionalidades (1).pdf`
+- `docs/banco_dados/Especificação de Bancos de dados.md`
+- `docs/banco_dados/Guia de implementação do banco de dados.md`
 - [Render: Deploy a FastAPI App](https://render.com/docs/deploy-fastapi)
 - [Render: Static Sites](https://render.com/docs/static-sites)
 - [Render: Web Services](https://render.com/docs/web-services)

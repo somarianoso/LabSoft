@@ -1,15 +1,11 @@
+# Dependências e builds
 node_modules/
 dist/
 .vite/
-.DS_Store
-.env
-.venv/
-__pycache__/
-*.py[cod]
-selenium/__pycache__/*.pyc
 
-# Ambiente virtual Python
+# Ambientes virtuais Python
 .venv/
+.venv-pdf/
 venv/
 
 # Cache do Python
@@ -18,3 +14,9 @@ __pycache__/
 
 # Arquivos de ambiente e segredos
 .env
+
+# Sistema
+.DS_Store
+
+# Clone de referência usado pelo roteiro Selenium
+selenium/pcs3643_Risco/

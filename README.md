@@ -4,22 +4,12 @@
 
 O WellFlix é uma plataforma voltada a conectar profissionais qualificados a pessoas que desejam melhorar a própria saúde. A proposta é oferecer acesso a conteúdos e orientações de profissionais em áreas como atividade física, nutrição e bem-estar.
 
-O repositório contém o frontend React/Vite em `frontend/` e quatro APIs FastAPI em `backend/services/`. Cada app cobre um domínio e pode ser publicado individualmente no Render. As migrations PostgreSQL ficam em `backend/src/db/migrations/`; a API Express em `backend/src/` permanece como referência legada. Veja [como executar e implantar os serviços](./backend/services/README.md), o [plano de implementação](./docs/Plano%20de%20implementa%C3%A7%C3%A3o%20do%20backend.md) e o [guia do banco](./docs/Guia%20de%20implementa%C3%A7%C3%A3o%20do%20banco%20de%20dados.md).
+O repositório é dividido em três partes: o frontend React/Vite em `frontend/`, o backend com quatro APIs FastAPI em `backend/services/` e o banco de dados PostgreSQL (migrations e seeds) em `database/`. Cada API cobre um domínio e pode ser publicada individualmente no Render. A API Express em `backend/src/` permanece como referência legada. Veja [como executar e implantar os serviços](./backend/services/README.md), o [plano de implementação](./docs/backend/Plano%20de%20implementa%C3%A7%C3%A3o%20do%20backend.md) e o [guia do banco](./docs/banco_dados/Guia%20de%20implementa%C3%A7%C3%A3o%20do%20banco%20de%20dados.md).
 
 ## Estrutura
 
 ```text
-backend/
-  ├── services/
-  │   ├── identidade/               # FastAPI: Sophia
-  │   ├── conta/                    # FastAPI: Maria Eduarda
-  │   ├── profissionais/            # FastAPI: Gabriel
-  │   ├── catalogo/                 # FastAPI: Luís
-  │   └── shared/                   # conexão, autenticação, erros e senhas
-  └── src/
-      └── db/migrations/            # migrations PostgreSQL compartilhadas
-render.yaml                         # blueprint dos quatro serviços e do frontend
-frontend/
+frontend/                           # FRONTEND (Static Site no Render)
   ├── index.html
   ├── package.json
   ├── public/assets/
@@ -31,9 +21,27 @@ frontend/
       ├── components/              # componentes reutilizáveis
       ├── data/                    # conteúdo e planos estáticos
       └── styles/global.css
+backend/                            # BACKEND (Web Services Python no Render)
+  ├── services/
+  │   ├── identidade/               # FastAPI: Sophia
+  │   ├── conta/                    # FastAPI: Maria Eduarda
+  │   ├── profissionais/            # FastAPI: Gabriel
+  │   ├── catalogo/                 # FastAPI: Luís
+  │   └── shared/                   # conexão, autenticação, erros e senhas
+  └── src/                          # API Express legada (referência)
+      └── db/                       # executores: migrate.js, seed-demo.js, pool.js
+database/                           # BANCO DE DADOS (PostgreSQL)
+  ├── migrations/                   # histórico SQL compartilhado pelas quatro APIs
+  └── seeds/demo.sql                # dados fictícios de demonstração
+render.yaml                         # blueprint dos quatro serviços e do frontend
 selenium/                           # testes automatizados do frontend
-tests/                              # outros testes do projeto
-docs/                               # especificações e materiais de referência
+tests/test_moderator.py             # teste Selenium avulso do moderador (fora da suíte)
+docs/                               # documentação
+  ├── backend/                      # plano, arquitetura e publicação no Render
+  ├── banco_dados/                  # especificação, guia e diagrama ER
+  ├── produto/                      # especificação do produto e protótipos Figma
+  ├── testes/                       # roteiros e checklists de teste
+  └── entregas/                     # entregas individuais, roteiros de vídeo e apresentações
 ```
 
 - **React** compõe a interface em páginas e componentes.
@@ -54,7 +62,8 @@ docs/                               # especificações e materiais de referênci
 | `frontend/src/data/` | Catálogo demonstrativo de vídeos/profissionais/categorias e planos. |
 | `frontend/src/styles/global.css` | Estilos globais e estilos das telas. |
 | `backend/services/` | Quatro APIs FastAPI separadas por domínio. |
-| `backend/src/db/migrations/` | Histórico SQL único do PostgreSQL. |
+| `database/migrations/` | Histórico SQL único do PostgreSQL. |
+| `database/seeds/` | Dados fictícios de demonstração. |
 
 ## Como executar
 
@@ -75,7 +84,7 @@ npm run build
 
 O projeto também oferece `npm run preview` para servir localmente a compilação gerada. Execute esses comandos dentro de `frontend/`.
 
-Para executar localmente as APIs FastAPI e aplicar as migrations, consulte [backend/services/README.md](./backend/services/README.md) e [backend/README.md](./backend/README.md).
+Para executar localmente as APIs FastAPI e aplicar as migrations, consulte [backend/services/README.md](./backend/services/README.md) e [database/README.md](./database/README.md).
 
 ## Divisão das responsabilidades entre os quatro integrantes
 

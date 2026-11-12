@@ -4,7 +4,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createPool } from "./pool.js";
 
-const migrationsDirectory = join(dirname(fileURLToPath(import.meta.url)), "migrations");
+const migrationsDirectory = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..", "..", "..", "database", "migrations",
+);
 const pool = createPool();
 
 try {

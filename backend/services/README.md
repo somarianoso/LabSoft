@@ -1,6 +1,6 @@
 # Serviços FastAPI do WellFlix
 
-Há quatro aplicações FastAPI independentes. Todas usam o PostgreSQL existente, as migrations em `../src/db/migrations/` e o token HS256 compartilhado. Cada aplicação expõe `/health` e a documentação automática em `/docs`.
+Há quatro aplicações FastAPI independentes. Todas usam o PostgreSQL existente, as migrations em `../../database/migrations/` e o token HS256 compartilhado. Cada aplicação expõe `/health` e a documentação automática em `/docs`.
 
 ## Executar localmente
 
@@ -81,7 +81,7 @@ npm install
 npm run migrate
 ```
 
-O comando aplica em ordem as migrations de `src/db/migrations/`; `006_interacoes.sql` cria as tabelas de comentários e avaliações e `007_categorias_iniciais.sql` adiciona as categorias usadas pela interface sem duplicá-las. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
+O comando aplica em ordem as migrations de `database/migrations/` (na raiz do repositório); `006_interacoes.sql` cria as tabelas de comentários e avaliações e `007_categorias_iniciais.sql` adiciona as categorias usadas pela interface sem duplicá-las. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
 
 O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Site React. Revise as variáveis secretas durante a criação dos recursos no Render: todos os backends precisam do mesmo `DATABASE_URL` e `AUTH_TOKEN_SECRET`; `FRONTEND_ORIGIN` deve ser a origem real do Static Site. As variáveis `VITE_*_API_URL` do frontend devem receber as quatro URLs públicas Render. A configuração de um Blueprint cria recursos, mas não aplica migrations automaticamente.
 

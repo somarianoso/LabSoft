@@ -1,6 +1,6 @@
 # Diagrama entidade-relacionamento
 
-Este diagrama representa as tabelas e chaves estrangeiras criadas pelas migrations em `backend/src/db/migrations`. Os atributos marcados como `PK` são chaves primárias; `FK` identifica chaves estrangeiras. Nas tabelas associativas, a chave primária é composta pelas colunas marcadas.
+Este diagrama representa as tabelas e chaves estrangeiras criadas pelas migrations em `database/migrations`. Os atributos marcados como `PK` são chaves primárias; `FK` identifica chaves estrangeiras. Nas tabelas associativas, a chave primária é composta pelas colunas marcadas.
 
 ## Como ler as ligações
 

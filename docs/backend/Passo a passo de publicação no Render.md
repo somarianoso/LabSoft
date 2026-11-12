@@ -48,7 +48,7 @@ Antes de apontar as APIs para o banco, confirmem com o grupo que este banco pode
 
    Aplique migrations uma única vez no banco compartilhado. Se o comando falhar por tabela já existente, parem e confiram o histórico/schema com o responsável pelo banco; não apaguem tabelas para contornar o erro.
 
-4. Para incluir os registros fictícios de teste descritos no [guia dos serviços](../backend/services/README.md), execute também `npm run seed:demo -- --confirm-demo-database`. Esse seed é opcional e deve ser usado apenas se o grupo concordar em inserir dados demonstrativos nesse banco.
+4. Para incluir os registros fictícios de teste descritos no [guia dos serviços](../../backend/services/README.md), execute também `npm run seed:demo -- --confirm-demo-database`. Esse seed é opcional e deve ser usado apenas se o grupo concordar em inserir dados demonstrativos nesse banco.
 
 Se a máquina não conseguir conectar ao host e à porta do Labsoft, o backend no Render também pode não conseguir. O administrador da rede/banco precisará confirmar que conexões externas são permitidas e, se houver filtro por IP, liberar as faixas de saída dos Web Services Render. No Render, consulte cada Web Service em **Connect → Outbound** para obter essas faixas; serviços Render usam faixas de saída conforme a região. ([Documentação de IPs de saída do Render](https://render.com/docs/outbound-ip-addresses))
 
@@ -88,7 +88,7 @@ Salvem e façam um novo deploy do Static Site: Vite incorpora essas variáveis d
 ## Antes de publicar
 
 1. Enviem as alterações para o GitHub e confirmem que o repositório está acessível às quatro contas.
-2. Apliquem as migrations no PostgreSQL compartilhado **uma única vez**. As instruções estão em [backend/services/README.md](../backend/services/README.md). Não deixem cada aluno alterar o schema separadamente.
+2. Apliquem as migrations no PostgreSQL compartilhado **uma única vez**. As instruções estão em [backend/services/README.md](../../backend/services/README.md). Não deixem cada aluno alterar o schema separadamente.
 3. Cada aluno precisa ter acesso à `DATABASE_URL` do banco e ao mesmo `AUTH_TOKEN_SECRET`, com pelo menos 32 bytes. Compartilhem esses valores por um meio seguro; não os coloquem em commits ou mensagens públicas.
 4. Definam a URL pública do frontend para configurar `FRONTEND_ORIGIN`. Se ele ainda não estiver publicado, usem temporariamente a origem local para desenvolvimento e atualizem o valor depois.
 

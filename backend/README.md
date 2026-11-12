@@ -1,4 +1,4 @@
-# PostgreSQL e migrations do WellFlix
+# Backend do WellFlix
 
 O backend Express existente foi mantido como referência legada e não é a API usada na entrega FastAPI. As quatro APIs Python estão em `services/`; consulte [services/README.md](services/README.md) para executar localmente e [../render.yaml](../render.yaml) para a configuração de deploy.
 
@@ -11,7 +11,7 @@ npm install
 npm run migrate
 ```
 
-O comando aplica em ordem as migrations de `src/db/migrations/`, incluindo `006_interacoes.sql`, que cria as tabelas de comentários e avaliações. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
+O comando aplica em ordem as migrations de `../database/migrations/`, incluindo `006_interacoes.sql`, que cria as tabelas de comentários e avaliações. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
 
 ## API de referência em Node
 

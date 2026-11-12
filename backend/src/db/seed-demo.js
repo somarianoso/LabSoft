@@ -13,7 +13,7 @@ if (!process.argv.includes("--confirm-demo-database")) {
 }
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
-const seedPath = join(currentDirectory, "seeds", "demo.sql");
+const seedPath = join(currentDirectory, "..", "..", "..", "database", "seeds", "demo.sql");
 const seedSql = await readFile(seedPath, "utf8");
 const pool = createPool();
 
