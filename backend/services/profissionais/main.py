@@ -12,7 +12,7 @@ from backend.services.shared.database import connection_factory
 from backend.services.shared.errors import install_error_handlers
 
 app = FastAPI(title="WellFlix — Profissionais e moderação", version="1.0.0")
-configure_app(app)
+configure_app(app, "profissionais")
 install_error_handlers(app)
 SERVICE = "profissionais"
 connection = connection_factory(SERVICE)
@@ -225,6 +225,9 @@ def review_video(video_id: UUID, body: ReviewDecision, user: Moderator):
     # A revisão é gravada aqui; o vídeo é do catálogo e muda de situação pela
     # API dele. Se o catálogo recusar, a transação local é desfeita.
     with connection() as conn, conn.cursor() as cur:
+        # O papel vem do token (identidade); o perfil de moderador é deste
+        # serviço e é criado na primeira revisão de quem recebeu o papel.
+        cur.execute("INSERT INTO moderadores (usuario_id) VALUES (%s) ON CONFLICT DO NOTHING", (user["id"],))
         cur.execute("INSERT INTO revisoes_video (video_id, moderador_id, situacao, observacao) VALUES (%s, %s, %s, %s) RETURNING id, video_id, moderador_id, situacao, observacao, data_criacao", (video_id, user["id"], body.situacao, body.observacao))
         review = cur.fetchone()
         video = clients.call("catalogo", "POST", f"/internal/videos/{video_id}/moderacao", caller=SERVICE, json={"situacao": next_status}, forward_errors=True)

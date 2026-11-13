@@ -2,13 +2,13 @@
 
 ## Objetivo
 
-Entregar **quatro serviços de backend independentes em FastAPI/Python**, conectados ao PostgreSQL existente, integrados ao frontend React e publicados no Render. Cada aluno ficará responsável por um serviço e entregará a URL pública própria, com `/docs` e `/health` acessíveis. O frontend e o banco podem ser compartilhados pelo grupo.
+Entregar **quatro serviços de backend independentes em FastAPI/Python**, cada um com o próprio banco PostgreSQL, integrados ao frontend React e publicados no Render. Cada aluno ficará responsável por um serviço e entregará a URL pública própria, com `/docs` e `/health` acessíveis. O frontend e o banco podem ser compartilhados pelo grupo.
 
 ## O que já existe no repositório
 
-O critério da atividade pede **backend FastAPI/Python**. Foram criados quatro serviços Python independentes em `backend/services/`, reutilizando o schema PostgreSQL e usando o código Express como referência legada. Os serviços têm rotas iniciais por domínio, autenticação Bearer compartilhada, respostas JSON envelopadas e endpoints `/health` e `/docs`.
+O critério da atividade pede **backend FastAPI/Python**. Foram criados quatro serviços Python independentes em `backend/services/`, cada um dono do próprio banco (schema PostgreSQL exclusivo) e integrado aos outros por eventos Kafka e chamadas REST. Os serviços têm rotas iniciais por domínio, autenticação Bearer compartilhada, respostas JSON envelopadas e endpoints `/health` e `/docs`.
 
-O código Express segue disponível em `backend/`, mas não é o backend a publicar para a atividade. As APIs FastAPI foram separadas por domínio; cadastro e login do atleta já consomem a API de identidade pelo frontend. Checkout, trilhas, conteúdo, publicação e moderação ainda precisam de integração completa com as telas. Pagamento real, armazenamento de mídia e aprovação de papéis dependem de integrações/configuração adicionais.
+As APIs FastAPI foram separadas por domínio; cadastro e login do atleta já consomem a API de identidade pelo frontend. Checkout, trilhas, conteúdo, publicação e moderação ainda precisam de integração completa com as telas. Pagamento real, armazenamento de mídia e aprovação de papéis dependem de integrações/configuração adicionais.
 
 ## Serviços/funcionalidades previstos
 
@@ -59,11 +59,11 @@ Os nomes seguem os quatro integrantes registrados no README. Cada linha represen
 
 Configuração no Blueprint `render.yaml`: cada serviço instala seu `requirements.txt`, inicia o módulo FastAPI em `0.0.0.0:$PORT` e usa `/health` como health check. Os nomes são `wellflix-identidade`, `wellflix-conta`, `wellflix-profissionais` e `wellflix-catalogo`. Todos recebem `DATABASE_URL`, `AUTH_TOKEN_SECRET` e `FRONTEND_ORIGIN`; mantenha valores secretos só no painel do Render. O Static Site do frontend recebe as URLs individuais como variáveis `VITE_AUTH_API_URL`, `VITE_ACCOUNT_API_URL`, `VITE_CREATOR_API_URL` e `VITE_CATALOG_API_URL`.
 
-**Dependências entre as entregas:** definir primeiro contrato comum e migrations compartilhadas. O serviço de identidade é dependência para testar rotas privadas; os serviços Maria, Gabriel e Luís validam o token compartilhado e consultam o mesmo banco. O catálogo só exibe vídeos aprovados. A integração do frontend usa URLs independentes e deve ser configurável sem editar código.
+**Dependências entre as entregas:** definir primeiro o contrato comum (token e eventos); cada serviço mantém as próprias migrations. O serviço de identidade é dependência para testar rotas privadas; os serviços Maria, Gabriel e Luís validam o token e recebem os dados de usuários por evento, cada um no próprio banco. O catálogo só exibe vídeos aprovados. A integração do frontend usa URLs independentes e deve ser configurável sem editar código.
 
 ## Implantação no Render
 
-Arquitetura para cumprir a entrega individual: **React como Static Site**, **quatro FastAPI Web Services** (um por integrante) e **um PostgreSQL compartilhado**. Cada Web Service tem URL Render individual e `/docs`; todos leem as variáveis de ambiente necessárias. Guardar `DATABASE_URL`, segredo de autenticação e credenciais de integrações como variáveis do Render. Cada backend escuta em `0.0.0.0` na porta fornecida por `$PORT`, expõe `/health` e permite CORS apenas para os domínios necessários. Usar URL interna do banco quando serviços e banco estiverem na mesma região.
+Arquitetura para cumprir a entrega individual: **React como Static Site**, **quatro FastAPI Web Services** (um por integrante) e **um banco por serviço** (schemas PostgreSQL separados, que podem estar no mesmo servidor). Cada Web Service tem URL Render individual e `/docs`; todos leem as variáveis de ambiente necessárias. Guardar `DATABASE_URL`, segredo de autenticação e credenciais de integrações como variáveis do Render. Cada backend escuta em `0.0.0.0` na porta fornecida por `$PORT`, expõe `/health` e permite CORS apenas para os domínios necessários. Usar URL interna do banco quando serviços e banco estiverem na mesma região.
 
 Com **Root Directory vazio** (raiz do repositório), use o build `pip install -r backend/services/<servico>/requirements.txt` e o start `uvicorn backend.services.<servico>.main:app --host 0.0.0.0 --port $PORT`, como já configurado em `render.yaml`. Deploys gratuitos podem suspender o serviço web após período sem atividade, então considerar esse comportamento na apresentação. Aplicar migrations de forma controlada antes de iniciar a nova versão e conferir os dados existentes antes de qualquer alteração destrutiva.
 
@@ -81,8 +81,8 @@ O frontend precisa receber URLs públicas separadas por variáveis de build (por
 
 - `docs/backend/Serviços backend.pdf`
 - `docs/produto/Lista de Usuários e de Funcionalidades (1).pdf`
-- `docs/banco_dados/Especificação de Bancos de dados.md`
-- `docs/banco_dados/Guia de implementação do banco de dados.md`
+- `docs/backend/Integração entre microsserviços.md`
+- `docs/banco_dados/diagrama/diagrama_er_microsservicos.png`
 - [Render: Deploy a FastAPI App](https://render.com/docs/deploy-fastapi)
 - [Render: Static Sites](https://render.com/docs/static-sites)
 - [Render: Web Services](https://render.com/docs/web-services)

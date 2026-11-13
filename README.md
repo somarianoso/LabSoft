@@ -4,7 +4,7 @@
 
 O WellFlix é uma plataforma voltada a conectar profissionais qualificados a pessoas que desejam melhorar a própria saúde. A proposta é oferecer acesso a conteúdos e orientações de profissionais em áreas como atividade física, nutrição e bem-estar.
 
-O repositório é dividido em três partes: o frontend React/Vite em `frontend/`, o backend com quatro APIs FastAPI em `backend/services/` e o banco de dados PostgreSQL (migrations e seeds) em `database/`. Cada API cobre um domínio e pode ser publicada individualmente no Render. A API Express em `backend/src/` permanece como referência legada. Veja [como executar e implantar os serviços](./backend/services/README.md), o [plano de implementação](./docs/backend/Plano%20de%20implementa%C3%A7%C3%A3o%20do%20backend.md) e o [guia do banco](./docs/banco_dados/Guia%20de%20implementa%C3%A7%C3%A3o%20do%20banco%20de%20dados.md).
+O repositório é dividido em duas partes: o frontend React/Vite em `frontend/` e o backend com quatro microsserviços FastAPI em `backend/services/`. Cada microsserviço cobre um domínio, é dono do próprio banco (um schema PostgreSQL exclusivo, com migrations e seeds na pasta do serviço) e pode ser publicado individualmente no Render. Os serviços se integram por eventos Kafka e chamadas REST, sem chaves estrangeiras entre bancos. Veja [como executar e implantar os serviços](./backend/services/README.md), a [integração entre microsserviços](./docs/backend/Integra%C3%A7%C3%A3o%20entre%20microsservi%C3%A7os.md) e o [plano de implementação](./docs/backend/Plano%20de%20implementa%C3%A7%C3%A3o%20do%20backend.md).
 
 ## Estrutura
 
@@ -22,23 +22,22 @@ frontend/                           # FRONTEND (Static Site no Render)
       ├── data/                    # conteúdo e planos estáticos
       └── styles/global.css
 backend/                            # BACKEND (Web Services Python no Render)
-  ├── services/
-  │   ├── identidade/               # FastAPI: Sophia
-  │   ├── conta/                    # FastAPI: Maria Eduarda
-  │   ├── profissionais/            # FastAPI: Gabriel
-  │   ├── catalogo/                 # FastAPI: Luís
-  │   └── shared/                   # conexão, autenticação, erros e senhas
-  └── src/                          # API Express legada (referência)
-      └── db/                       # executores: migrate.js, seed-demo.js, pool.js
-database/                           # BANCO DE DADOS (PostgreSQL)
-  ├── migrations/                   # histórico SQL compartilhado pelas quatro APIs
-  └── seeds/demo.sql                # dados fictícios de demonstração
+  └── services/
+      ├── identidade/               # FastAPI: Sophia        (schema identidade)
+      ├── conta/                    # FastAPI: Maria Eduarda (schema conta)
+      ├── profissionais/            # FastAPI: Gabriel       (schema profissionais)
+      ├── catalogo/                 # FastAPI: Luís          (schema catalogo)
+      │   ├── migrations/           # SQL do banco do serviço
+      │   └── seeds/demo.sql        # dados fictícios de demonstração
+      └── shared/                   # conexão, autenticação, eventos Kafka, migrations
 render.yaml                         # blueprint dos quatro serviços e do frontend
+docker-compose.yml                  # PostgreSQL + Kafka para desenvolvimento local
+scripts/                            # rodar_local.sh, parar_local.sh, demo_integracao.py
 selenium/                           # testes automatizados do frontend
 tests/test_moderator.py             # teste Selenium avulso do moderador (fora da suíte)
 docs/                               # documentação
   ├── backend/                      # plano, arquitetura e publicação no Render
-  ├── banco_dados/                  # especificação, guia e diagrama ER
+  ├── banco_dados/                  # diagramas ER e de integração, apresentações do modelo
   ├── produto/                      # especificação do produto e protótipos Figma
   ├── testes/                       # roteiros e checklists de teste
   └── entregas/                     # entregas individuais, roteiros de vídeo e apresentações
@@ -61,9 +60,9 @@ docs/                               # documentação
 | `frontend/src/routes/AppRoutes.jsx` | Seleção da página e passagem de propriedades de navegação. |
 | `frontend/src/data/` | Catálogo demonstrativo de vídeos/profissionais/categorias e planos. |
 | `frontend/src/styles/global.css` | Estilos globais e estilos das telas. |
-| `backend/services/` | Quatro APIs FastAPI separadas por domínio. |
-| `database/migrations/` | Histórico SQL único do PostgreSQL. |
-| `database/seeds/` | Dados fictícios de demonstração. |
+| `backend/services/` | Quatro microsserviços FastAPI separados por domínio. |
+| `backend/services/<servico>/migrations/` | Migrations do banco (schema) de cada serviço. |
+| `backend/services/<servico>/seeds/` | Dados fictícios de demonstração de cada serviço. |
 
 ## Como executar
 
@@ -84,7 +83,15 @@ npm run build
 
 O projeto também oferece `npm run preview` para servir localmente a compilação gerada. Execute esses comandos dentro de `frontend/`.
 
-Para executar localmente as APIs FastAPI e aplicar as migrations, consulte [backend/services/README.md](./backend/services/README.md) e [database/README.md](./database/README.md).
+Para subir o backend inteiro localmente (PostgreSQL e Kafka no Docker, migrations, os quatro serviços com logs em `logs/`) e ver a integração funcionando:
+
+```bash
+pip install -r backend/services/identidade/requirements.txt
+scripts/rodar_local.sh
+python scripts/demo_integracao.py
+```
+
+Detalhes em [backend/services/README.md](./backend/services/README.md) e no [modelo arquitetônico de integração](./docs/entregas/Modelo%20arquitet%C3%B4nico%20de%20integra%C3%A7%C3%A3o.md).
 
 ## Divisão das responsabilidades entre os quatro integrantes
 

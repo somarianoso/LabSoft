@@ -8,6 +8,10 @@ Cada serviço guarda os próprios arquivos SQL em ``backend/services/<servico>/`
 Tudo é criado dentro do schema do serviço; o controle das migrations já
 aplicadas fica em ``<schema>.schema_migrations``.
 
+Cada serviço também aplica as próprias migrations ao iniciar (ver
+``config.configure_app``; desligue com ``MIGRAR_AO_INICIAR=0``). Um *advisory
+lock* por schema impede que duas instâncias migrem ao mesmo tempo.
+
 Uso (na raiz do repositório):
 
     python -m backend.services.shared.migrate identidade
@@ -15,6 +19,7 @@ Uso (na raiz do repositório):
 """
 
 import argparse
+import logging
 import os
 import sys
 from pathlib import Path
@@ -24,12 +29,16 @@ from backend.services.shared.database import connect, resolve_schema
 
 SERVICES_DIR = Path(__file__).resolve().parent.parent
 SERVICES = ["identidade", "catalogo", "profissionais", "conta"]
+log = logging.getLogger("wellflix.migracao")
 
 
-def migrate(service: str, seed_demo: bool) -> None:
+def migrate(service: str, seed_demo: bool, report=print) -> list[str]:
+    """Aplica as migrations pendentes do serviço e devolve os nomes aplicados."""
     schema = resolve_schema(service)
     folder = SERVICES_DIR / service
+    applied_now: list[str] = []
     with connect(schema) as conn:
+        conn.execute("SELECT pg_advisory_lock(hashtext(%s))", (f"wellflix-migracao-{schema}",))
         conn.execute(f'CREATE SCHEMA IF NOT EXISTS "{schema}"')
         conn.execute(
             "CREATE TABLE IF NOT EXISTS schema_migrations ("
@@ -41,17 +50,31 @@ def migrate(service: str, seed_demo: bool) -> None:
         for path in sorted((folder / "migrations").glob("*.sql")):
             if path.name in applied:
                 continue
-            print(f"[{service}] aplicando {path.name}")
+            report(f"[{service}] aplicando {path.name}")
             with conn.transaction():
                 conn.execute(path.read_text(encoding="utf-8"))
                 conn.execute("INSERT INTO schema_migrations (nome) VALUES (%s)", (path.name,))
+            applied_now.append(path.name)
         if seed_demo:
             seed = folder / "seeds" / "demo.sql"
             if seed.exists():
-                print(f"[{service}] aplicando seed {seed.name}")
+                report(f"[{service}] aplicando seed {seed.name}")
                 with conn.transaction():
                     conn.execute(seed.read_text(encoding="utf-8"))
-    print(f"[{service}] schema '{schema}' atualizado.")
+        conn.execute("SELECT pg_advisory_unlock(hashtext(%s))", (f"wellflix-migracao-{schema}",))
+        conn.commit()
+    report(f"[{service}] schema '{schema}' atualizado.")
+    return applied_now
+
+
+def migrate_on_startup(service: str) -> None:
+    """Chamado na subida do serviço: o banco acompanha a versão do código."""
+    if os.getenv("MIGRAR_AO_INICIAR", "1") == "0":
+        return
+    try:
+        migrate(service, seed_demo=False, report=log.info)
+    except Exception:
+        log.exception("Não foi possível aplicar as migrations de %s; o serviço sobe sem elas", service)
 
 
 def main() -> int:

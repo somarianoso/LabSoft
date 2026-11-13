@@ -1,7 +1,6 @@
 """Gera o diagrama entidade-relacionamento do WellFlix (um banco por microsserviço).
 
-Estilo do diagrama original (docs/banco_dados/diagrama_er_plataforma.png): fundo
-claro, entidades com cabeçalho azul-marinho, losangos para relacionamentos e
+Estilo: fundo claro, entidades com cabeçalho azul-marinho, losangos para relacionamentos e
 cardinalidade (mín, máx). Cada microsserviço aparece como uma área com o próprio
 banco; relacionamentos entre serviços são tracejados (referência lógica, sem FK).
 
@@ -52,7 +51,6 @@ E = {
                              ("data_criacao", ""), ("data_atualizacao", "")]),
     "PAPEIS_USUARIO": (2230, 250, [("usuario_id", "PKFK"), ("papel", "PK"), ("data_criacao", "")]),
     "ATLETAS": (1720, 560, [("usuario_id", "PKFK"), ("data_criacao", "")]),
-    "MODERADORES": (2760, 760, [("usuario_id", "PKFK"), ("data_criacao", "")]),
     # catálogo
     "COMENTARIOS": (1740, 1540, [("id", "PK"), ("video_id", "FK"), ("usuario_id", "REF"), ("conteudo", ""), ("data_criacao", "")]),
     "AVALIACOES": (2720, 1540, [("video_id", "PKFK"), ("usuario_id", "PKREF"), ("gostou", ""), ("data_criacao", ""),
@@ -79,7 +77,8 @@ E = {
                                   ("data_atualizacao", "")]),
     "SEGUIMENTOS_PROFISSIONAL": (4180, 660, [("profissional_id", "PKFK"), ("seguidor_id", "PKREF"), ("data_criacao", "")]),
     "CATEGORIAS_PROFISSIONAL": (4180, 2440, [("profissional_id", "PKFK"), ("categoria_id", "PKREF")]),
-    "REVISOES_VIDEO": (3330, 1700, [("id", "PK"), ("video_id", "REF"), ("moderador_id", "REF"), ("situacao", ""),
+    "MODERADORES": (3380, 1100, [("usuario_id", "PKREF"), ("data_criacao", "")]),
+    "REVISOES_VIDEO": (3330, 1700, [("id", "PK"), ("video_id", "REF"), ("moderador_id", "FK"), ("situacao", ""),
                                     ("observacao", ""), ("data_criacao", "")]),
 }
 
@@ -88,7 +87,6 @@ R = [
     # identidade
     ("USUARIOS", "(1,1)", "PAPEIS_USUARIO", "(0,N)", "possui", (2380, 432), False),
     ("USUARIOS", "(1,1)", "ATLETAS", "(0,1)", "perfil", (2100, 605), False),
-    ("USUARIOS", "(1,1)", "MODERADORES", "(0,1)", "perfil", (2620, 805), False),
     # catálogo
     ("VIDEOS", "(1,1)", "COMENTARIOS", "(0,N)", "recebe", (2040, 1770), False),
     ("VIDEOS", "(1,1)", "AVALIACOES", "(0,N)", "recebe", (2720, 1770), False),
@@ -102,6 +100,7 @@ R = [
     # profissionais
     ("PROFISSIONAIS", "(1,1)", "SEGUIMENTOS_PROFISSIONAL", "(0,N)", "seguido", (3900, 560), False),
     ("PROFISSIONAIS", "(1,1)", "CATEGORIAS_PROFISSIONAL", "(0,N)", "atua_em", (3900, 1700), False),
+    ("MODERADORES", "(1,1)", "REVISOES_VIDEO", "(0,N)", "revisa", (3505, 1450), False),
     # entre serviços (referência lógica, sem FK)
     ("ATLETAS", "(1,1)", "ASSINATURAS", "(0,N)", "realiza", (1580, 470), True),
     ("ATLETAS", "(1,1)", "TRILHAS", "(0,N)", "cria", (1580, 900), True),
@@ -109,7 +108,7 @@ R = [
     ("VIDEOS", "(1,1)", "VIDEOS_TRILHA", "(0,N)", "incluido_em", (1580, 1960), True),
     ("USUARIOS", "(1,1)", "PROFISSIONAIS", "(0,1)", "perfil", (3180, 470), True),
     ("USUARIOS", "(1,1)", "SEGUIMENTOS_PROFISSIONAL", "(0,N)", "segue", (3180, 700), True),
-    ("MODERADORES", "(1,1)", "REVISOES_VIDEO", "(0,N)", "revisa", (3180, 1000), True),
+    ("USUARIOS", "(1,1)", "MODERADORES", "(0,1)", "perfil", (3180, 1000), True),
     ("PROFISSIONAIS", "(1,1)", "VIDEOS", "(0,N)", "publica", (3180, 1830), True),
     ("VIDEOS", "(1,1)", "REVISOES_VIDEO", "(0,N)", "recebe", (3180, 2120), True),
     ("CATEGORIAS", "(1,1)", "CATEGORIAS_PROFISSIONAL", "(0,N)", "associada_a", (3180, 2700), True),

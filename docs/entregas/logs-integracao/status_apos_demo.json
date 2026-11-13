@@ -1,0 +1,286 @@
+[
+  {
+    "servico": "identidade",
+    "instancia": "a04bea2b",
+    "no_ar_desde": "2026-11-13T19:12:02.537190+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "identidade",
+      "outbox_pendentes": 0
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "localhost:9092"
+    },
+    "eventos_publicados": {
+      "total": 18,
+      "ultimo": {
+        "tipo": "usuario.atualizado",
+        "topico": "wellflix.identidade.usuarios",
+        "chave": "5956d73d-2ae9-4668-a094-53b0391dbd18",
+        "id_evento": 18,
+        "em": "2026-11-13T19:12:30.023963+00:00"
+      }
+    },
+    "eventos_consumidos": {
+      "total": 0,
+      "ultimo": null,
+      "por_origem": {}
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 7,
+    "heartbeats_recebidos": {
+      "profissionais": {
+        "seq": 6,
+        "instancia": "d05ac353",
+        "outbox_pendentes": 0,
+        "atraso_ms": 5729,
+        "recebido_em": "2026-11-13T19:12:59.782266+00:00",
+        "segundos_desde_ultimo": 10.5
+      },
+      "catalogo": {
+        "seq": 6,
+        "instancia": "a15cda4c",
+        "outbox_pendentes": 0,
+        "atraso_ms": 5724,
+        "recebido_em": "2026-11-13T19:12:59.796049+00:00",
+        "segundos_desde_ultimo": 10.5
+      },
+      "conta": {
+        "seq": 6,
+        "instancia": "15b506d2",
+        "outbox_pendentes": null,
+        "atraso_ms": 5901,
+        "recebido_em": "2026-11-13T19:12:59.957864+00:00",
+        "segundos_desde_ultimo": 10.3
+      }
+    }
+  },
+  {
+    "servico": "conta",
+    "instancia": "15b506d2",
+    "no_ar_desde": "2026-11-13T19:12:02.444747+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "conta",
+      "outbox_pendentes": null
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "localhost:9092"
+    },
+    "eventos_publicados": {
+      "total": 0,
+      "ultimo": null
+    },
+    "eventos_consumidos": {
+      "total": 48,
+      "ultimo": {
+        "tipo": "video.atualizado",
+        "origem": "catalogo",
+        "topico": "wellflix.catalogo.videos",
+        "id_evento": 30,
+        "atraso_ms": -1862,
+        "em": "2026-11-13T19:12:52.820015+00:00"
+      },
+      "por_origem": {
+        "identidade": 18,
+        "catalogo": 30
+      }
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 7,
+    "heartbeats_recebidos": {
+      "profissionais": {
+        "seq": 7,
+        "instancia": "d05ac353",
+        "outbox_pendentes": 0,
+        "atraso_ms": 653,
+        "recebido_em": "2026-11-13T19:13:10.442779+00:00",
+        "segundos_desde_ultimo": 2.2
+      },
+      "identidade": {
+        "seq": 7,
+        "instancia": "a04bea2b",
+        "outbox_pendentes": 0,
+        "atraso_ms": 538,
+        "recebido_em": "2026-11-13T19:13:10.363700+00:00",
+        "segundos_desde_ultimo": 2.3
+      },
+      "catalogo": {
+        "seq": 7,
+        "instancia": "a15cda4c",
+        "outbox_pendentes": 0,
+        "atraso_ms": 636,
+        "recebido_em": "2026-11-13T19:13:10.441325+00:00",
+        "segundos_desde_ultimo": 2.2
+      }
+    }
+  },
+  {
+    "servico": "profissionais",
+    "instancia": "d05ac353",
+    "no_ar_desde": "2026-11-13T19:12:02.685775+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "profissionais",
+      "outbox_pendentes": 0
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "localhost:9092"
+    },
+    "eventos_publicados": {
+      "total": 14,
+      "ultimo": {
+        "tipo": "perfil.atualizado",
+        "topico": "wellflix.profissionais.perfis",
+        "chave": "10000000-0000-4000-8000-000000000002",
+        "id_evento": 14,
+        "em": "2026-11-13T19:12:41.592232+00:00"
+      }
+    },
+    "eventos_consumidos": {
+      "total": 25,
+      "ultimo": {
+        "tipo": "categoria.atualizada",
+        "origem": "catalogo",
+        "topico": "wellflix.catalogo.categorias",
+        "id_evento": 28,
+        "atraso_ms": 44,
+        "em": "2026-11-13T19:12:37.297521+00:00"
+      },
+      "por_origem": {
+        "identidade": 18,
+        "catalogo": 7
+      }
+    },
+    "chamadas_rest": {
+      "total": 3,
+      "erros": 0,
+      "ultimo": {
+        "destino": "catalogo",
+        "metodo": "POST",
+        "caminho": "/internal/videos/3ccf31ed-111e-4a4c-bc31-0c52ec504f85/moderacao",
+        "status": 200,
+        "ms": 2539,
+        "erro": false,
+        "em": "2026-11-13T19:12:54.708196+00:00"
+      }
+    },
+    "heartbeats_enviados": 7,
+    "heartbeats_recebidos": {
+      "identidade": {
+        "seq": 7,
+        "instancia": "a04bea2b",
+        "outbox_pendentes": 0,
+        "atraso_ms": 538,
+        "recebido_em": "2026-11-13T19:13:10.363447+00:00",
+        "segundos_desde_ultimo": 3.6
+      },
+      "catalogo": {
+        "seq": 7,
+        "instancia": "a15cda4c",
+        "outbox_pendentes": 0,
+        "atraso_ms": 561,
+        "recebido_em": "2026-11-13T19:13:10.366179+00:00",
+        "segundos_desde_ultimo": 3.6
+      },
+      "conta": {
+        "seq": 7,
+        "instancia": "15b506d2",
+        "outbox_pendentes": null,
+        "atraso_ms": 476,
+        "recebido_em": "2026-11-13T19:13:10.368155+00:00",
+        "segundos_desde_ultimo": 3.6
+      }
+    }
+  },
+  {
+    "servico": "catalogo",
+    "instancia": "a15cda4c",
+    "no_ar_desde": "2026-11-13T19:12:02.690000+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "catalogo",
+      "outbox_pendentes": 0
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "localhost:9092"
+    },
+    "eventos_publicados": {
+      "total": 30,
+      "ultimo": {
+        "tipo": "video.atualizado",
+        "topico": "wellflix.catalogo.videos",
+        "chave": "3ccf31ed-111e-4a4c-bc31-0c52ec504f85",
+        "id_evento": 30,
+        "em": "2026-11-13T19:12:54.825397+00:00"
+      }
+    },
+    "eventos_consumidos": {
+      "total": 32,
+      "ultimo": {
+        "tipo": "perfil.atualizado",
+        "origem": "profissionais",
+        "topico": "wellflix.profissionais.perfis",
+        "id_evento": 14,
+        "atraso_ms": 89,
+        "em": "2026-11-13T19:12:41.666926+00:00"
+      },
+      "por_origem": {
+        "profissionais": 14,
+        "identidade": 18
+      }
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 7,
+    "heartbeats_recebidos": {
+      "profissionais": {
+        "seq": 7,
+        "instancia": "d05ac353",
+        "outbox_pendentes": 0,
+        "atraso_ms": 585,
+        "recebido_em": "2026-11-13T19:13:10.374558+00:00",
+        "segundos_desde_ultimo": 5.1
+      },
+      "identidade": {
+        "seq": 7,
+        "instancia": "a04bea2b",
+        "outbox_pendentes": 0,
+        "atraso_ms": 540,
+        "recebido_em": "2026-11-13T19:13:10.365911+00:00",
+        "segundos_desde_ultimo": 5.1
+      },
+      "conta": {
+        "seq": 7,
+        "instancia": "15b506d2",
+        "outbox_pendentes": null,
+        "atraso_ms": 480,
+        "recebido_em": "2026-11-13T19:13:10.371905+00:00",
+        "segundos_desde_ultimo": 5.1
+      }
+    }
+  }
+]

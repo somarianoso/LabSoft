@@ -1,5 +1,5 @@
 const serviceUrls = {
-  auth: import.meta.env.VITE_AUTH_API_URL || import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:8001" : ""),
+  auth: import.meta.env.VITE_AUTH_API_URL || (import.meta.env.DEV ? "http://localhost:8001" : ""),
   account: import.meta.env.VITE_ACCOUNT_API_URL || (import.meta.env.DEV ? "http://localhost:8002" : ""),
   creator: import.meta.env.VITE_CREATOR_API_URL || (import.meta.env.DEV ? "http://localhost:8003" : ""),
   catalog: import.meta.env.VITE_CATALOG_API_URL || (import.meta.env.DEV ? "http://localhost:8004" : ""),

@@ -1,5 +1,6 @@
 -- Serviço de identidade (schema "identidade").
--- Dono das contas, dos papéis e dos perfis de atleta e moderador.
+-- Dono das contas, dos papéis e do perfil de atleta. O perfil de moderador
+-- fica no serviço de profissionais e moderação.
 -- Outros serviços guardam o id do usuário como referência lógica (sem FK) e
 -- obtêm nome/papéis pelo token JWT ou pelas rotas da API de identidade.
 
@@ -31,12 +32,6 @@ CREATE TABLE papeis_usuario (
 CREATE INDEX papeis_usuario_papel_idx ON papeis_usuario (papel);
 
 CREATE TABLE atletas (
-    usuario_id UUID PRIMARY KEY
-        REFERENCES usuarios(id) ON DELETE CASCADE,
-    data_criacao TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-CREATE TABLE moderadores (
     usuario_id UUID PRIMARY KEY
         REFERENCES usuarios(id) ON DELETE CASCADE,
     data_criacao TIMESTAMPTZ NOT NULL DEFAULT now()

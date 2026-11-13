@@ -18,7 +18,7 @@ Os perfis **não têm id próprio**: a chave primária deles é o próprio `usua
 | USUARIOS | `id` (UUID) | — | `email` e `cpf` são **únicos** (chaves candidatas) |
 | PAPEIS_USUARIO | `(usuario_id, papel)` **composta** | `usuario_id` → USUARIOS.id | `papel` ∈ {atleta, profissional, moderador} |
 | ATLETAS | `usuario_id` | `usuario_id` → USUARIOS.id | PK e FK ao mesmo tempo |
-| MODERADORES | `usuario_id` | `usuario_id` → USUARIOS.id | PK e FK ao mesmo tempo |
+| MODERADORES | `usuario_id` | referência lógica → USUARIOS.id | fica no serviço de profissionais e moderação |
 | PROFISSIONAIS | `usuario_id` | referência lógica → USUARIOS.id | `especialidade`, `biografia` (fica no serviço de profissionais) |
 
 > **A ligação é sempre pelo `usuarios.id`.** O CPF **não** liga tabelas: ele é único só para impedir cadastro duplicado. Não usamos o CPF como chave porque é um dado sensível e assim ele não se espalha pelas outras tabelas nem vai para o token.
@@ -27,10 +27,10 @@ Os perfis **não têm id próprio**: a chave primária deles é o próprio `usua
 
 1. **USUARIOS — PAPEIS_USUARIO (1 : N, "possui").** "Um usuário possui de 0 a N papéis, e cada papel pertence a exatamente 1 usuário. A partir do `id` do usuário (chave primária), buscamos em PAPEIS_USUARIO as linhas com o mesmo `usuario_id` (chave estrangeira). A chave primária composta `(usuario_id, papel)` impede dar o mesmo papel duas vezes." PAPEIS_USUARIO é uma **entidade fraca**: só existe junto com o usuário.
 2. **USUARIOS — ATLETAS (1 : 0..1, "é").** "Um usuário tem no máximo um perfil de atleta, e todo atleta é exatamente um usuário. `atletas.usuario_id` é chave primária e estrangeira ao mesmo tempo: por ser PK, não se repete."
-3. **USUARIOS — MODERADORES (1 : 0..1, "é").** Mesmo raciocínio do atleta.
+3. **USUARIOS — MODERADORES (1 : 0..1, "é").** Mesmo raciocínio do atleta, mas a tabela fica no serviço de profissionais e a ligação é uma referência lógica.
 4. **USUARIOS — PROFISSIONAIS (1 : 0..1, "é").** "Nome, e-mail e CPF ficam em USUARIOS; em PROFISSIONAIS ficam só especialidade e biografia."
 
-Essa especialização é **sobreposta**, porque a mesma pessoa pode ser atleta *e* profissional, e **parcial**, porque uma conta pode não ter perfil nenhum. Se a conta for apagada, `ON DELETE CASCADE` apaga também os papéis e os perfis.
+Essa especialização é **sobreposta**, porque a mesma pessoa pode ser atleta *e* profissional, e **parcial**, porque uma conta pode não ter perfil nenhum. Se a conta for apagada, `ON DELETE CASCADE` apaga também os papéis e o perfil de atleta; os outros serviços recebem o evento `usuario.removido` pelo Kafka.
 
 ## Como as outras partes dependem desta
 
@@ -43,7 +43,7 @@ Todas as outras partes guardam o `usuarios.id` (ou o id do perfil) para dizer **
 
 ## Onde isso mora agora (banco por serviço)
 
-USUARIOS, PAPEIS_USUARIO, ATLETAS e MODERADORES ficam no schema **identidade**. PROFISSIONAIS fica no schema **profissionais**, porque é o serviço do Gabriel que cuida desse perfil.
+USUARIOS, PAPEIS_USUARIO e ATLETAS ficam no schema **identidade**. PROFISSIONAIS e MODERADORES ficam no schema **profissionais**, porque é o serviço do Gabriel que cuida desses perfis (e das revisões feitas pelos moderadores).
 
 **Entre serviços não existe chave estrangeira.** O `profissionais.usuario_id` é uma referência lógica, e os outros serviços sabem quem é o usuário de três jeitos:
 

@@ -14,9 +14,9 @@ O WellFlix tem quatro microsserviços FastAPI. **Cada um é dono do próprio ban
 
 | Serviço (schema) | Tabelas próprias | Réplicas (via Kafka) |
 |---|---|---|
-| **identidade** | usuarios, papeis_usuario, atletas, moderadores | — |
+| **identidade** | usuarios, papeis_usuario, atletas | — |
 | **catalogo** | categorias, videos, categorias_video, comentarios, avaliacoes | usuarios_replica, profissionais_replica |
-| **profissionais** | profissionais, categorias_profissional, seguimentos_profissional, revisoes_video | usuarios_replica, categorias_replica |
+| **profissionais** | profissionais, categorias_profissional, seguimentos_profissional, moderadores, revisoes_video | usuarios_replica, categorias_replica |
 | **conta** | planos, assinaturas, categorias_assinatura, trilhas, videos_trilha, progresso_trilha | usuarios_replica, categorias_replica, videos_replica |
 
 Os serviços que publicam eventos também têm a tabela `outbox_eventos`.
@@ -59,17 +59,26 @@ As rotas `/internal/...` só aceitam um **token de serviço**. Esse token é ass
 | profissionais | identidade | `GET /api/usuarios/me` (token do usuário) | e-mail no perfil profissional |
 | catalogo | profissionais, conta | `GET /internal/categorias/{id}/uso` | impedir excluir categoria em uso |
 
-## O que mudou em relação ao modelo antigo (e o que estava errado)
+## Observabilidade da integração
 
-- **Banco compartilhado.** Os quatro serviços usavam o mesmo schema `public`, com chaves estrangeiras entre domínios e consultas fazendo `JOIN` em tabelas de outros serviços. Uma mudança no banco de uma pessoa podia quebrar o serviço de outra. Agora cada serviço tem o próprio schema.
-- **Diagrama × código: `videos.profissional_id`.** No diagrama antigo apontava para `PROFISSIONAIS`; na migration, para `usuarios`. Agora é uma referência lógica ao perfil profissional, validada pela réplica `profissionais_replica` ao enviar o vídeo.
-- **Diagrama × código: `revisoes_video.moderador_id`.** No diagrama apontava para `MODERADORES`; na migration, para `usuarios` e podia ser nulo. Agora é obrigatório e fica no serviço de profissionais e moderação, junto com quem modera.
-- **`PROFISSIONAL_VIDEOS` era redundante.** Repetia `videos.profissional_id`, e nenhuma rota lia ou gravava essa tabela. Foi removida do modelo novo.
-- **`CATEGORIAS` era usada por todos.** Agora é do catálogo. Conta e profissionais guardam só o id, a assinatura guarda também uma cópia do nome (`categoria_nome`) para o histórico, e os dois serviços recebem as categorias pela réplica.
+Todos os serviços usam o mesmo módulo operacional (`backend/services/shared/observabilidade.py`), equivalente ao *sidecar* do capítulo 17 de *Fundamentals of Software Architecture*:
+
+- logs no formato `data | serviço | nível | componente | [req=id] mensagem`, com linhas `PUBLICADO`, `CONSUMIDO`, `REST` e `HEARTBEAT`;
+- `X-Request-ID` propagado nas chamadas REST e gravado nos eventos (`outbox_eventos.correlacao`), o que permite seguir uma ação de um serviço a outro;
+- heartbeat de cada serviço no tópico `wellflix.operacional.heartbeat` e `GET /status` com o último heartbeat recebido dos outros.
+
+O modelo completo, as evidências de execução e a verificação do Render estão em [`docs/entregas/Modelo arquitetônico de integração.md`](../entregas/Modelo%20arquitet%C3%B4nico%20de%20integra%C3%A7%C3%A3o.md).
+
+## Decisões do modelo
+
+- **Um banco por serviço.** Cada serviço tem o próprio schema e só acessa ele; não há `JOIN` nem chave estrangeira entre bancos.
+- **`videos.profissional_id`** é uma referência lógica ao perfil profissional, validada pela réplica `profissionais_replica` ao enviar o vídeo.
+- **`revisoes_video.moderador_id`** é obrigatório e referencia `moderadores`, que fica no serviço de profissionais e moderação, junto com quem modera.
+- **`CATEGORIAS` é do catálogo.** Conta e profissionais guardam só o id, a assinatura guarda também uma cópia do nome (`categoria_nome`) para o histórico, e os dois serviços recebem as categorias pela réplica.
 - **Trilhas só aceitam vídeos publicados.** É conferido na réplica `videos_replica`. Como vídeos publicados não podem ser excluídos, nenhuma trilha fica apontando para um vídeo apagado, e não é preciso FK entre os bancos.
 
 ## Como rodar
 
-Veja [`backend/services/README.md`](../../backend/services/README.md): migrations por serviço, Kafka local com Docker e as variáveis de ambiente. Para migrar um banco antigo, use [`database/transicao/copiar_public_para_schemas.sql`](../../database/transicao/copiar_public_para_schemas.sql).
+Veja [`backend/services/README.md`](../../backend/services/README.md): `scripts/rodar_local.sh` sobe PostgreSQL e Kafka (`docker-compose.yml`), migra cada schema e inicia os quatro serviços com logs em `logs/`; `scripts/demo_integracao.py` exercita o fluxo entre eles.
 
 Os diagramas são gerados por script em [`docs/banco_dados/diagrama/`](../banco_dados/diagrama/) e podem ser regenerados com `python docs/banco_dados/diagrama/gerar_diagrama_er.py` e `gerar_diagrama_integracao.py`.

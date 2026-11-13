@@ -12,7 +12,7 @@ from backend.services.shared.database import connection_factory
 from backend.services.shared.errors import install_error_handlers
 
 app = FastAPI(title="WellFlix — Catálogo e conteúdo", version="1.0.0")
-configure_app(app)
+configure_app(app, "catalogo")
 install_error_handlers(app)
 SERVICE = "catalogo"
 connection = connection_factory(SERVICE)

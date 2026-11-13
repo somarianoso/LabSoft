@@ -6,11 +6,23 @@ Há quatro aplicações FastAPI independentes. **Cada uma é dona do próprio ba
 2. **Eventos no Kafka** (tempo real): quando um usuário, categoria, vídeo ou perfil profissional muda, um trigger grava o evento no outbox do serviço dono e o relay publica no Kafka; os serviços interessados mantêm réplicas locais (`*_replica`).
 3. **Chamadas REST** para comandos que precisam de resposta imediata (moderar vídeo, checar uso de categoria) e consultas agregadas (estatísticas e vídeos de um profissional). As rotas `/internal/...` só aceitam token de serviço.
 
-Detalhes e diagramas: [`docs/backend/Integração entre microsserviços.md`](../../docs/backend/Integra%C3%A7%C3%A3o%20entre%20microsservi%C3%A7os.md). Cada aplicação expõe `/health` e a documentação automática em `/docs`.
+Além disso, um módulo operacional comum (`shared/observabilidade.py`) padroniza os logs, propaga o `X-Request-ID` entre serviços e eventos, publica um **heartbeat** no Kafka (`wellflix.operacional.heartbeat`) e expõe `GET /status`, que mostra banco, broker, eventos publicados/consumidos, chamadas REST e o último heartbeat recebido de cada outro serviço.
+
+Detalhes e diagramas: [`docs/backend/Integração entre microsserviços.md`](../../docs/backend/Integra%C3%A7%C3%A3o%20entre%20microsservi%C3%A7os.md) e [`docs/entregas/Modelo arquitetônico de integração.md`](../../docs/entregas/Modelo%20arquitet%C3%B4nico%20de%20integra%C3%A7%C3%A3o.md). Cada aplicação expõe `/health`, `/status` e a documentação automática em `/docs`.
 
 ## Executar localmente
 
-Na raiz do repositório, instale as dependências do serviço desejado e execute Uvicorn:
+O jeito mais rápido sobe tudo (PostgreSQL e Kafka no Docker, migrations e seed, os quatro serviços com logs em `logs/<servico>.log`):
+
+```bash
+pip install -r backend/services/identidade/requirements.txt   # as quatro listas são iguais
+scripts/rodar_local.sh
+python scripts/demo_integracao.py   # fluxo que atravessa os quatro serviços (eventos + REST)
+tail -f logs/*.log                  # PUBLICADO / CONSUMIDO / REST / HEARTBEAT ao vivo
+scripts/parar_local.sh
+```
+
+Para subir um serviço isolado, na raiz do repositório instale as dependências do serviço desejado e execute Uvicorn:
 
 ```bash
 pip install -r backend/services/identidade/requirements.txt
@@ -19,11 +31,7 @@ uvicorn backend.services.identidade.main:app --reload --port 8001
 
 Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 8002, 8003 e 8004, respectivamente. Copie `backend/.env.example` para `backend/.env` e configure `DATABASE_URL`, `AUTH_TOKEN_SECRET` (mínimo de 32 bytes), `FRONTEND_ORIGIN` e `KAFKA_BOOTSTRAP_SERVERS`. Não use credenciais reais no Git.
 
-Para um Kafka local de desenvolvimento (Docker):
-
-```bash
-docker run -d --name wellflix-kafka -p 9092:9092 apache/kafka:3.8.0
-```
+Para só a infraestrutura local (PostgreSQL e Kafka): `docker compose up -d`.
 
 Sem `KAFKA_BOOTSTRAP_SERVERS` os serviços sobem normalmente, mas os eventos ficam acumulados no outbox e as réplicas não são atualizadas (nomes de autores, categorias e vídeos novos não aparecem nos outros serviços) até o Kafka ser configurado; quando ele volta, o relay publica tudo o que ficou pendente.
 
@@ -76,25 +84,25 @@ ON CONFLICT DO NOTHING;
 INSERT INTO identidade.papeis_usuario (usuario_id, papel)
 SELECT id, 'moderador' FROM identidade.usuarios WHERE lower(email) = lower('moderador@example.com')
 ON CONFLICT DO NOTHING;
-INSERT INTO identidade.moderadores (usuario_id)
+INSERT INTO profissionais.moderadores (usuario_id)
 SELECT id FROM identidade.usuarios WHERE lower(email) = lower('moderador@example.com')
 ON CONFLICT DO NOTHING;
 ```
 
-O trigger da identidade publica a mudança de papel no Kafka automaticamente. O token de demonstração deve ser obtido no Swagger de identidade com `papel: "profissional"` ou `papel: "moderador"`, conforme o perfil provisionado.
+O trigger da identidade publica a mudança de papel no Kafka automaticamente. O perfil de moderador (`profissionais.moderadores`) pertence ao serviço de profissionais e moderação; se não for inserido manualmente, ele é criado na primeira decisão de moderação da pessoa. O token de demonstração deve ser obtido no Swagger de identidade com `papel: "profissional"` ou `papel: "moderador"`, conforme o perfil provisionado.
 
 ## Banco e Render
 
-Cada serviço aplica as próprias migrations (`<servico>/migrations/*.sql`) no próprio schema. Na raiz do repositório:
+Cada serviço aplica as próprias migrations (`<servico>/migrations/*.sql`) no próprio schema **automaticamente ao iniciar** (desligue com `MIGRAR_AO_INICIAR=0`). Para aplicar manualmente, na raiz do repositório:
 
 ```bash
 pip install -r backend/services/identidade/requirements.txt
 python -m backend.services.shared.migrate todos          # ou: identidade | catalogo | profissionais | conta
 ```
 
-O controle das migrations aplicadas fica em `<schema>.schema_migrations`. Migrations já aplicadas não devem ser editadas; crie uma nova. As migrations antigas do schema compartilhado continuam em `database/migrations/` só como histórico. **Para um banco que já tem dados no formato antigo**, rode as migrations acima e depois `database/transicao/copiar_public_para_schemas.sql` (veja o cabeçalho do arquivo).
+O controle das migrations aplicadas fica em `<schema>.schema_migrations`. Migrations já aplicadas não devem ser editadas; crie uma nova.
 
-O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Site React. Cada serviço tem a própria `DATABASE_URL`: pode ser o mesmo PostgreSQL (cada um usa só o seu schema) ou bancos diferentes. Para isolamento total, crie um usuário PostgreSQL por serviço com permissão apenas no próprio schema. Todos precisam do mesmo `AUTH_TOKEN_SECRET`, das variáveis `KAFKA_*` (o Render não oferece Kafka: use um Kafka gerenciado, como Confluent Cloud ou Aiven) e das URLs dos serviços que chamam (`*_API_URL`). `FRONTEND_ORIGIN` deve ser a origem real do Static Site, e as variáveis `VITE_*_API_URL` do frontend recebem as quatro URLs públicas. O Blueprint não aplica migrations automaticamente.
+O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Site React. Cada serviço tem a própria `DATABASE_URL`: pode ser o mesmo PostgreSQL (cada um usa só o seu schema) ou bancos diferentes. Para isolamento total, crie um usuário PostgreSQL por serviço com permissão apenas no próprio schema. Todos precisam do mesmo `AUTH_TOKEN_SECRET`, das variáveis `KAFKA_*` (o Render não oferece Kafka: use um Kafka gerenciado, como Confluent Cloud ou Aiven) e das URLs dos serviços que chamam (`*_API_URL`). `FRONTEND_ORIGIN` deve ser a origem real do Static Site, e as variáveis `VITE_*_API_URL` do frontend recebem as quatro URLs públicas. Não é preciso comando de migração no Render: cada serviço migra o próprio schema ao subir.
 
 Os serviços de API estão marcados com o plano gratuito no Blueprint para evitar escolher recursos pagos por padrão. Serviços gratuitos entram em suspensão após inatividade e podem demorar para responder na primeira requisição; isso deve ser considerado na demonstração. Configure os serviços na mesma região do banco sempre que o provedor permitir.
 

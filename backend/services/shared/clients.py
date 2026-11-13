@@ -13,12 +13,17 @@ Endereços configurados por variável de ambiente:
 Sem a variável, usa as portas locais padrão (8001 a 8004).
 """
 
+import logging
 import os
+import time
 
 import httpx
 from fastapi import HTTPException
 
 from backend.services.shared.auth import issue_service_token
+from backend.services.shared.observabilidade import ESTADO, request_id
+
+log = logging.getLogger("wellflix.rest")
 
 DEFAULT_URLS = {
     "identidade": "http://localhost:8001",
@@ -70,16 +75,20 @@ def call(
     - ``forward_errors`` repassa erros 4xx do outro serviço ao cliente.
     """
     token = user_token or issue_service_token(caller)
+    headers = {"Authorization": f"Bearer {token}", "X-Servico-Origem": caller}
+    if request_id.get() != "-":
+        headers["X-Request-ID"] = request_id.get()  # mesma correlação nos dois serviços
+    inicio = time.perf_counter()
     try:
-        response = _http().request(
-            method,
-            base_url(service) + path,
-            params=params,
-            json=json,
-            headers={"Authorization": f"Bearer {token}"},
-        )
-    except httpx.HTTPError:
+        response = _http().request(method, base_url(service) + path, params=params, json=json, headers=headers)
+    except httpx.HTTPError as error:
+        log.warning("REST %s -> %s %s falhou: %s", caller, service, path, type(error).__name__)
+        ESTADO.registrar("rest", destino=service, metodo=method, caminho=path, erro=type(error).__name__)
         raise unavailable(service)
+    ms = (time.perf_counter() - inicio) * 1000
+    log.info("REST %s -> %s %s %s -> %s em %.0f ms", caller, service, method, path, response.status_code, ms)
+    ESTADO.registrar("rest", destino=service, metodo=method, caminho=path, status=response.status_code,
+                     ms=round(ms), erro=response.status_code >= 500)
     if response.status_code == 404 and not_found_ok:
         return None
     if response.is_success:

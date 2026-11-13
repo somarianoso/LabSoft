@@ -27,6 +27,12 @@ services:
         sync: false
       - key: KAFKA_TOPIC_REPLICATION
         sync: false
+      - key: KAFKA_SSL_CA_PEM
+        sync: false
+      - key: KAFKA_SSL_CERT_PEM
+        sync: false
+      - key: KAFKA_SSL_KEY_PEM
+        sync: false
 
   - type: web
     name: wellflix-conta
@@ -54,6 +60,12 @@ services:
         sync: false
       - key: KAFKA_TOPIC_REPLICATION
         sync: false
+      - key: KAFKA_SSL_CA_PEM
+        sync: false
+      - key: KAFKA_SSL_CERT_PEM
+        sync: false
+      - key: KAFKA_SSL_KEY_PEM
+        sync: false
 
   - type: web
     name: wellflix-profissionais
@@ -80,6 +92,12 @@ services:
       - key: KAFKA_SASL_PASSWORD
         sync: false
       - key: KAFKA_TOPIC_REPLICATION
+        sync: false
+      - key: KAFKA_SSL_CA_PEM
+        sync: false
+      - key: KAFKA_SSL_CERT_PEM
+        sync: false
+      - key: KAFKA_SSL_KEY_PEM
         sync: false
       - key: IDENTIDADE_API_URL
         sync: false
@@ -111,6 +129,12 @@ services:
       - key: KAFKA_SASL_PASSWORD
         sync: false
       - key: KAFKA_TOPIC_REPLICATION
+        sync: false
+      - key: KAFKA_SSL_CA_PEM
+        sync: false
+      - key: KAFKA_SSL_CERT_PEM
+        sync: false
+      - key: KAFKA_SSL_KEY_PEM
         sync: false
       - key: PROFISSIONAIS_API_URL
         sync: false

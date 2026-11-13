@@ -1,0 +1,93 @@
+INFO:     Started server process [315782]
+INFO:     Waiting for application startup.
+2026-11-13 16:12:03.049 | conta         | INFO  | migracao  | [req=-] [conta] schema 'conta' atualizado.
+2026-11-13 16:12:03.548 | conta         | INFO  | eventos   | [req=-] Broker Kafka conectado (localhost:9092); 0 tópicos existentes
+2026-11-13 16:12:03.774 | conta         | INFO  | eventos   | [req=-] Consumidor iniciado (grupo wellflix-conta) em: wellflix.catalogo.categorias, wellflix.catalogo.videos, wellflix.identidade.usuarios
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8002 (Press CTRL+C to quit)
+2026-11-13 16:12:05.627 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #1 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:12:05.844 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #1 (atraso 2114 ms, outbox pendentes: 9)
+2026-11-13 16:12:05.857 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #1 (atraso 2149 ms, outbox pendentes: 16)
+2026-11-13 16:12:05.859 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #1 (atraso 2142 ms, outbox pendentes: 27)
+2026-11-13 16:12:15.811 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #2 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:12:15.823 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #2 (atraso 178 ms, outbox pendentes: 0)
+2026-11-13 16:12:15.824 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #2 (atraso 180 ms, outbox pendentes: 0)
+2026-11-13 16:12:15.826 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #2 (atraso 181 ms, outbox pendentes: 0)
+2026-11-13 16:12:18.161 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=1, 13365 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.198 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=2, 13402 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.210 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=3, 13414 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.218 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=4, 13423 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.226 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=5, 13431 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.236 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=6, 13441 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.244 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=7, 13449 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.251 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=8, 13456 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.259 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=9, 13463 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.266 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=10, 13471 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.273 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=11, 13477 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.281 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=12, 13485 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.289 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=13, 13493 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.296 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=14, 13501 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.305 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=15, 13510 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.315 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=16, 13520 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.337 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=7, 13542 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.345 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=8, 13550 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.354 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=9, 13559 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.366 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=10, 13571 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.374 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=11, 13579 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.388 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=12, 13593 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.397 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=13, 13602 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.428 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=14, 13633 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.438 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=15, 13643 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.446 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=16, 13651 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.455 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=17, 13660 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.470 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=18, 13674 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.490 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=19, 13695 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.499 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=20, 13703 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.512 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=21, 13716 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.520 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=22, 13724 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.527 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=23, 13732 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.539 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=24, 13743 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.551 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=25, 13755 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.562 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=26, 13766 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.569 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=27, 13773 ms após a publicação) -> upsert_video
+2026-11-13 16:12:18.583 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=1, 13789 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.596 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=2, 13801 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.613 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=3, 13819 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.624 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=4, 13829 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.639 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=5, 13844 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.648 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=6, 13853 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:24.333 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #3 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:12:24.341 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #3 (atraso 992 ms, outbox pendentes: 0)
+2026-11-13 16:12:24.356 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #3 (atraso 1007 ms, outbox pendentes: 0)
+2026-11-13 16:12:24.360 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #3 (atraso 1011 ms, outbox pendentes: 0)
+2026-11-13 16:12:30.143 | conta         | INFO  | eventos   | [req=demo-1-f10aab] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=17, 826 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:30.899 | conta         | INFO  | eventos   | [req=demo-1-f10aab] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=18, 1575 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:36.003 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #4 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:12:36.038 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #4 (atraso 1605 ms, outbox pendentes: 0)
+2026-11-13 16:12:36.051 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #4 (atraso 1591 ms, outbox pendentes: 0)
+2026-11-13 16:12:36.056 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #4 (atraso 1615 ms, outbox pendentes: 0)
+2026-11-13 16:12:37.308 | conta         | INFO  | eventos   | [req=demo-2-d2b851] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=28, 56 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:46.477 | conta         | INFO  | eventos   | [req=demo-4-cf6119] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=29, 169 ms após a publicação) -> upsert_video
+2026-11-13 16:12:46.510 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #5 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:12:46.529 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #5 (atraso 472 ms, outbox pendentes: 0)
+2026-11-13 16:12:46.531 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #5 (atraso 476 ms, outbox pendentes: 1)
+2026-11-13 16:12:46.543 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #5 (atraso 495 ms, outbox pendentes: 0)
+2026-11-13 16:12:52.787 | conta         | INFO  | eventos   | [req=demo-5-0379b5] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=30, -1862 ms após a publicação) -> upsert_video
+2026-11-13 16:12:59.782 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #6 (atraso 5729 ms, outbox pendentes: 0)
+2026-11-13 16:12:59.806 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #6 (atraso 5734 ms, outbox pendentes: 0)
+2026-11-13 16:12:59.807 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #6 (atraso 5775 ms, outbox pendentes: 0)
+2026-11-13 16:12:59.889 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #6 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:13:04.615 | conta         | INFO  | http      | [req=demo-6-fe5c5e] POST /api/trilhas -> 201 em 11394 ms
+2026-11-13 16:13:05.623 | conta         | INFO  | http      | [req=demo-6-fe5c5e] POST /api/trilhas/7d2fde72-960a-4444-a51e-43bfba430697/videos -> 201 em 928 ms
+2026-11-13 16:13:10.343 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #7 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:13:10.363 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #7 (atraso 538 ms, outbox pendentes: 0)
+2026-11-13 16:13:10.441 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #7 (atraso 636 ms, outbox pendentes: 0)
+2026-11-13 16:13:10.442 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #7 (atraso 653 ms, outbox pendentes: 0)
+2026-11-13 16:13:24.445 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT enviado #8 -> wellflix.operacional.heartbeat (outbox pendentes: None)
+2026-11-13 16:13:24.520 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de profissionais #8 (atraso 4154 ms, outbox pendentes: 0)
+2026-11-13 16:13:24.558 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #8 (atraso 4187 ms, outbox pendentes: 0)
+2026-11-13 16:13:24.560 | conta         | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #8 (atraso 4196 ms, outbox pendentes: 0)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [315782]

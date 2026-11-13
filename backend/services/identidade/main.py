@@ -13,7 +13,7 @@ from backend.services.shared.errors import install_error_handlers
 from backend.services.shared.passwords import hash_password, verify_password
 
 app = FastAPI(title="WellFlix — Identidade e atleta", version="1.0.0")
-configure_app(app)
+configure_app(app, "identidade")
 install_error_handlers(app)
 SERVICE = "identidade"
 connection = connection_factory(SERVICE)

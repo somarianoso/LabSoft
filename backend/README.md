@@ -1,18 +1,16 @@
 # Backend do WellFlix
 
-O backend Express existente foi mantido como referência legada e não é a API usada na entrega FastAPI. As quatro APIs Python estão em `services/`; consulte [services/README.md](services/README.md) para executar localmente e [../render.yaml](../render.yaml) para a configuração de deploy.
+O backend é formado por quatro microsserviços FastAPI independentes em `services/` (`identidade`, `conta`, `profissionais` e `catalogo`). Cada um é dono do próprio banco: um schema PostgreSQL exclusivo, com migrations em `services/<servico>/migrations/` e seed de demonstração em `services/<servico>/seeds/demo.sql`. Os serviços não têm chaves estrangeiras entre si; trocam dados por eventos Kafka (réplicas locais `*_replica`) e chamadas REST.
+
+Consulte [services/README.md](services/README.md) para executar localmente e aplicar as migrations, e [../render.yaml](../render.yaml) para a configuração de deploy.
 
 ## Banco de dados
 
-As quatro APIs usam a mesma base PostgreSQL e o mesmo histórico SQL. Configure `DATABASE_URL` no ambiente antes de executar migrations. Nunca versione credenciais reais.
+Configure `DATABASE_URL` em `backend/.env` (veja `.env.example`) e, na raiz do repositório:
 
 ```bash
-npm install
-npm run migrate
+python -m backend.services.shared.migrate todos          # ou: identidade | conta | profissionais | catalogo
+python -m backend.services.shared.migrate todos --seed-demo --confirm-demo-database   # só em banco de demonstração
 ```
 
-O comando aplica em ordem as migrations de `../database/migrations/`, incluindo `006_interacoes.sql`, que cria as tabelas de comentários e avaliações. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
-
-## API de referência em Node
-
-O código Express em `src/` pode ser executado com `npm start`, mas não atende ao critério de entrega que exige FastAPI/Python. Use os quatro serviços em `services/` para integração e publicação.
+Migrations já aplicadas não devem ser editadas; crie uma migration nova na pasta do serviço. Nunca versione credenciais reais.

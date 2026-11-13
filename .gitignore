@@ -20,3 +20,6 @@ __pycache__/
 
 # Clone de referência usado pelo roteiro Selenium
 selenium/pcs3643_Risco/
+
+# Logs da execução local (scripts/rodar_local.sh)
+logs/

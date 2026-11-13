@@ -1,6 +1,6 @@
 # Modelo de dados — Parte 4: interações e moderação
 
-**Apresentação:** Gabriel · **Tabelas:** PROFISSIONAL_VIDEOS, REVISOES_VIDEO, AVALIACOES, COMENTARIOS, SEGUIMENTOS_PROFISSIONAL
+**Apresentação:** Gabriel · **Tabelas:** MODERADORES, REVISOES_VIDEO, AVALIACOES, COMENTARIOS, SEGUIMENTOS_PROFISSIONAL
 
 ## Ideia central
 
@@ -16,11 +16,11 @@ Quase todas são tabelas que ligam duas entidades (vídeo e usuário, ou profiss
 
 | Tabela | Chave primária | Chave estrangeira / referência | Observações |
 |---|---|---|---|
-| REVISOES_VIDEO | `id` | `video_id` → VIDEOS · `moderador_id` → MODERADORES (referências lógicas) | `situacao` ∈ {aprovado, rejeitado}, `observacao` |
+| MODERADORES | `usuario_id` | referência lógica → USUARIOS.id | perfil de quem modera (fica no serviço de profissionais) |
+| REVISOES_VIDEO | `id` | `video_id` → VIDEOS (referência lógica) · `moderador_id` → MODERADORES (FK) | `situacao` ∈ {aprovado, rejeitado}, `observacao` |
 | AVALIACOES | `(video_id, usuario_id)` **composta** | `video_id` → VIDEOS · `usuario_id` → USUARIOS (referência lógica) | `gostou` (boolean) |
 | COMENTARIOS | `id` | `video_id` → VIDEOS · `usuario_id` → USUARIOS (referência lógica) | `conteudo` |
 | SEGUIMENTOS_PROFISSIONAL | `(profissional_id, seguidor_id)` **composta** | `profissional_id` → PROFISSIONAIS · `seguidor_id` → USUARIOS (referência lógica) | `CHECK (profissional_id <> seguidor_id)` |
-| PROFISSIONAL_VIDEOS | — | — | **removida no modelo novo** (ver abaixo) |
 
 ## Relacionamentos (frases para a apresentação)
 
@@ -32,19 +32,14 @@ Quase todas são tabelas que ligam duas entidades (vídeo e usuário, ou profiss
 
 Quando um vídeo é apagado, as avaliações e os comentários dele também são (`ON DELETE CASCADE`).
 
-## O que estava errado no diagrama antigo
-
-- **PROFISSIONAL_VIDEOS era redundante.** Ela ligava profissional e vídeo, mas essa informação já está em `videos.profissional_id` (um vídeo tem um único autor, relação 1:N). Nenhuma rota do sistema lia ou gravava essa tabela, então ela foi **removida** do modelo novo.
-- **`revisoes_video.moderador_id` não batia com o código.** No diagrama apontava para MODERADORES, mas na migration apontava para USUARIOS e podia ficar vazio. No modelo novo é obrigatório e, conceitualmente, aponta para o moderador.
-
 ## Onde isso mora agora (banco por serviço)
 
 | Tabela | Serviço (schema) |
 |---|---|
 | AVALIACOES, COMENTARIOS | **catalogo** (junto com os vídeos) |
-| REVISOES_VIDEO, SEGUIMENTOS_PROFISSIONAL | **profissionais** (serviço de profissionais e moderação) |
+| MODERADORES, REVISOES_VIDEO, SEGUIMENTOS_PROFISSIONAL | **profissionais** (serviço de profissionais e moderação) |
 
-Nenhuma dessas tabelas tem chave estrangeira para outro serviço. A integração funciona assim:
+Nenhuma dessas tabelas tem chave estrangeira para outro serviço; a FK `revisoes_video.moderador_id → moderadores` fica dentro do banco de profissionais. A integração funciona assim:
 
 - **Moderar um vídeo** é um comando que precisa de resposta imediata, então usa **REST**. O serviço de profissionais grava a revisão e chama o catálogo (`POST /internal/videos/{id}/moderacao`). Se o catálogo recusar (por exemplo, o vídeo já foi revisado), a revisão é desfeita (*rollback*).
 - **A publicação chega aos outros serviços por evento.** Quando o vídeo muda de situação, o catálogo publica no Kafka, e a conta passa a aceitar esse vídeo em trilhas.

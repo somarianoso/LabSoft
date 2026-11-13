@@ -30,7 +30,7 @@ Somente uma pessoa precisa criar o Static Site compartilhado. Se cada aluno tive
 
 ## Conectar ao PostgreSQL do Labsoft
 
-O frontend nunca recebe a conexão do banco. As quatro APIs FastAPI recebem a mesma `DATABASE_URL` como variável secreta no Render e consultam o PostgreSQL. Não coloquem a URL nem a senha em `VITE_*`, no código React, em commits ou neste documento.
+O frontend nunca recebe a conexão do banco. Cada API FastAPI recebe a própria `DATABASE_URL` como variável secreta no Render e só acessa o schema do seu serviço. Não coloquem a URL nem a senha em `VITE_*`, no código React, em commits ou neste documento.
 
 ### Aplicar o schema e carregar dados de demonstração
 
@@ -41,14 +41,13 @@ Antes de apontar as APIs para o banco, confirmem com o grupo que este banco pode
 3. No terminal, execute:
 
    ```bash
-   cd backend
-   npm install
-   npm run migrate
+   pip install -r backend/services/identidade/requirements.txt
+   python -m backend.services.shared.migrate todos
    ```
 
-   Aplique migrations uma única vez no banco compartilhado. Se o comando falhar por tabela já existente, parem e confiram o histórico/schema com o responsável pelo banco; não apaguem tabelas para contornar o erro.
+   O comando cria um schema por serviço (`identidade`, `conta`, `profissionais`, `catalogo`) e aplica só as migrations ainda não registradas em `<schema>.schema_migrations`. Se o comando falhar por tabela já existente, parem e confiram o histórico/schema com o responsável pelo banco; não apaguem tabelas para contornar o erro.
 
-4. Para incluir os registros fictícios de teste descritos no [guia dos serviços](../../backend/services/README.md), execute também `npm run seed:demo -- --confirm-demo-database`. Esse seed é opcional e deve ser usado apenas se o grupo concordar em inserir dados demonstrativos nesse banco.
+4. Para incluir os registros fictícios de teste descritos no [guia dos serviços](../../backend/services/README.md), execute também `python -m backend.services.shared.migrate todos --seed-demo --confirm-demo-database`. Esse seed é opcional e deve ser usado apenas se o grupo concordar em inserir dados demonstrativos nesse banco.
 
 Se a máquina não conseguir conectar ao host e à porta do Labsoft, o backend no Render também pode não conseguir. O administrador da rede/banco precisará confirmar que conexões externas são permitidas e, se houver filtro por IP, liberar as faixas de saída dos Web Services Render. No Render, consulte cada Web Service em **Connect → Outbound** para obter essas faixas; serviços Render usam faixas de saída conforme a região. ([Documentação de IPs de saída do Render](https://render.com/docs/outbound-ip-addresses))
 
@@ -58,7 +57,7 @@ Em **Environment** de cada um dos quatro serviços (`identidade`, `conta`, `prof
 
 | Variável | Valor |
 |---|---|
-| `DATABASE_URL` | Uma única URL PostgreSQL com as credenciais do Labsoft. Use o formato `postgresql://USUARIO:SENHA@HOST:PORTA/NOME_DO_BANCO`; não inclua espaços nem aspas. |
+| `DATABASE_URL` | URL PostgreSQL com as credenciais do Labsoft (pode ser a mesma nos quatro serviços: cada um usa só o próprio schema). Use o formato `postgresql://USUARIO:SENHA@HOST:PORTA/NOME_DO_BANCO`; não inclua espaços nem aspas. |
 | `AUTH_TOKEN_SECRET` | O mesmo segredo aleatório, com pelo menos 32 bytes, nos quatro serviços. |
 | `FRONTEND_ORIGIN` | A URL HTTPS do Static Site React, por exemplo `https://wellflix-frontend.onrender.com`, sem barra ou caminho no final. |
 
@@ -88,7 +87,7 @@ Salvem e façam um novo deploy do Static Site: Vite incorpora essas variáveis d
 ## Antes de publicar
 
 1. Enviem as alterações para o GitHub e confirmem que o repositório está acessível às quatro contas.
-2. Apliquem as migrations no PostgreSQL compartilhado **uma única vez**. As instruções estão em [backend/services/README.md](../../backend/services/README.md). Não deixem cada aluno alterar o schema separadamente.
+2. Apliquem as migrations de cada serviço no seu próprio schema. As instruções estão em [backend/services/README.md](../../backend/services/README.md). Cada aluno altera apenas o banco do próprio serviço, sempre com uma migration nova.
 3. Cada aluno precisa ter acesso à `DATABASE_URL` do banco e ao mesmo `AUTH_TOKEN_SECRET`, com pelo menos 32 bytes. Compartilhem esses valores por um meio seguro; não os coloquem em commits ou mensagens públicas.
 4. Definam a URL pública do frontend para configurar `FRONTEND_ORIGIN`. Se ele ainda não estiver publicado, usem temporariamente a origem local para desenvolvimento e atualizem o valor depois.
 
@@ -111,7 +110,7 @@ Cada aluno deve seguir estes passos no Render:
 
 6. Em **Advanced → Environment Variables**, cadastrar:
 
-   - `DATABASE_URL`: conexão com o PostgreSQL compartilhado.
+   - `DATABASE_URL`: conexão com o PostgreSQL onde fica o schema do serviço.
    - `AUTH_TOKEN_SECRET`: o mesmo segredo nos quatro serviços.
    - `FRONTEND_ORIGIN`: origem HTTPS do site React.
 

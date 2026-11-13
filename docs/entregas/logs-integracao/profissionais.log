@@ -1,0 +1,96 @@
+INFO:     Started server process [315786]
+INFO:     Waiting for application startup.
+2026-11-13 16:12:03.035 | profissionais | INFO  | migracao  | [req=-] [profissionais] schema 'profissionais' atualizado.
+2026-11-13 16:12:03.539 | profissionais | INFO  | eventos   | [req=-] Broker Kafka conectado (localhost:9092); 0 tópicos existentes
+2026-11-13 16:12:03.628 | profissionais | INFO  | eventos   | [req=-] Tópico criado: wellflix.identidade.usuarios
+2026-11-13 16:12:03.630 | profissionais | INFO  | eventos   | [req=-] Tópico criado: wellflix.catalogo.categorias
+2026-11-13 16:12:03.632 | profissionais | INFO  | eventos   | [req=-] Tópico criado: wellflix.catalogo.videos
+2026-11-13 16:12:03.634 | profissionais | INFO  | eventos   | [req=-] Tópico criado: wellflix.profissionais.perfis
+2026-11-13 16:12:03.636 | profissionais | INFO  | eventos   | [req=-] Tópico criado: wellflix.operacional.heartbeat
+2026-11-13 16:12:03.712 | profissionais | INFO  | eventos   | [req=-] Relay do outbox iniciado (LISTEN outbox no schema profissionais)
+%4|1794597123.757|GETPID|rdkafka#producer-3| [thrd:main]: Failed to acquire idempotence PID from broker localhost:9092/1: Broker: Coordinator load in progress: retrying
+2026-11-13 16:12:03.743 | profissionais | INFO  | eventos   | [req=-] Consumidor iniciado (grupo wellflix-profissionais) em: wellflix.catalogo.categorias, wellflix.identidade.usuarios
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
+2026-11-13 16:12:05.627 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #1 -> wellflix.operacional.heartbeat (outbox pendentes: 9)
+2026-11-13 16:12:05.844 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #1 (atraso 2127 ms, outbox pendentes: 16)
+2026-11-13 16:12:05.857 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #1 (atraso 2140 ms, outbox pendentes: 27)
+2026-11-13 16:12:05.860 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #1 (atraso 2161 ms, outbox pendentes: None)
+2026-11-13 16:12:06.377 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=1)
+2026-11-13 16:12:06.385 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000003, id_evento=2)
+2026-11-13 16:12:06.387 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000004, id_evento=3)
+2026-11-13 16:12:06.390 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=4)
+2026-11-13 16:12:06.391 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=5)
+2026-11-13 16:12:06.392 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000003, id_evento=6)
+2026-11-13 16:12:06.394 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000003, id_evento=7)
+2026-11-13 16:12:06.395 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000004, id_evento=8)
+2026-11-13 16:12:06.397 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000004, id_evento=9)
+2026-11-13 16:12:15.811 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #2 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:12:15.815 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #2 (atraso 170 ms, outbox pendentes: None)
+2026-11-13 16:12:15.817 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #2 (atraso 172 ms, outbox pendentes: 0)
+2026-11-13 16:12:15.820 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #2 (atraso 175 ms, outbox pendentes: 0)
+2026-11-13 16:12:18.151 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=1, 13356 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.196 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=2, 13400 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.205 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=3, 13410 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.214 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=4, 13419 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.221 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=5, 13426 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.229 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=6, 13434 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.238 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=7, 13443 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.246 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=8, 13451 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.255 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=9, 13459 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.262 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=10, 13467 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.270 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=11, 13475 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.277 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=12, 13482 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.285 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=13, 13490 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.294 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=14, 13499 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.302 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=15, 13507 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.315 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=16, 13520 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:18.337 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=1, 13543 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.348 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=2, 13553 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.358 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=3, 13563 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.368 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=4, 13574 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.378 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=5, 13583 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:18.394 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=6, 13600 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:24.334 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #3 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:12:24.368 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #3 (atraso 1019 ms, outbox pendentes: None)
+2026-11-13 16:12:24.370 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #3 (atraso 1021 ms, outbox pendentes: 0)
+2026-11-13 16:12:24.372 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #3 (atraso 1023 ms, outbox pendentes: 0)
+2026-11-13 16:12:30.144 | profissionais | INFO  | eventos   | [req=demo-1-f10aab] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=17, 826 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:30.899 | profissionais | INFO  | eventos   | [req=demo-1-f10aab] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=18, 1575 ms após a publicação) -> upsert_usuario
+2026-11-13 16:12:36.003 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #4 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:12:36.039 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #4 (atraso 1607 ms, outbox pendentes: None)
+2026-11-13 16:12:36.051 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #4 (atraso 1591 ms, outbox pendentes: 0)
+2026-11-13 16:12:36.056 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #4 (atraso 1615 ms, outbox pendentes: 0)
+2026-11-13 16:12:37.296 | profissionais | INFO  | eventos   | [req=demo-2-d2b851] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=28, 44 ms após a publicação) -> upsert_categoria
+2026-11-13 16:12:41.244 | profissionais | INFO  | rest      | [req=demo-3-8458da] REST profissionais -> identidade GET /api/usuarios/me -> 200 em 2097 ms
+2026-11-13 16:12:41.249 | profissionais | INFO  | http      | [req=demo-3-8458da] GET /api/profissionais/me -> 200 em 3550 ms
+2026-11-13 16:12:41.559 | profissionais | INFO  | http      | [req=demo-3-8458da] PUT /api/profissionais/me -> 200 em 278 ms
+2026-11-13 16:12:41.585 | profissionais | INFO  | eventos   | [req=demo-3-8458da] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=10)
+2026-11-13 16:12:41.587 | profissionais | INFO  | eventos   | [req=demo-3-8458da] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=11)
+2026-11-13 16:12:41.588 | profissionais | INFO  | eventos   | [req=demo-3-8458da] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=12)
+2026-11-13 16:12:41.590 | profissionais | INFO  | eventos   | [req=demo-3-8458da] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=13)
+2026-11-13 16:12:41.591 | profissionais | INFO  | eventos   | [req=demo-3-8458da] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=14)
+2026-11-13 16:12:46.518 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #5 (atraso 470 ms, outbox pendentes: None)
+2026-11-13 16:12:46.520 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #5 (atraso 464 ms, outbox pendentes: 0)
+2026-11-13 16:12:46.522 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #5 (atraso 467 ms, outbox pendentes: 1)
+2026-11-13 16:12:46.537 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #5 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:12:50.638 | profissionais | INFO  | rest      | [req=demo-5-0379b5] REST profissionais -> catalogo GET /internal/videos -> 200 em 4152 ms
+2026-11-13 16:12:50.647 | profissionais | INFO  | http      | [req=demo-5-0379b5] GET /api/moderacao/videos -> 200 em 4251 ms
+2026-11-13 16:12:54.706 | profissionais | INFO  | rest      | [req=demo-5-0379b5] REST profissionais -> catalogo POST /internal/videos/3ccf31ed-111e-4a4c-bc31-0c52ec504f85/moderacao -> 200 em 2539 ms
+2026-11-13 16:12:52.856 | profissionais | INFO  | http      | [req=demo-5-0379b5] POST /api/moderacao/videos/3ccf31ed-111e-4a4c-bc31-0c52ec504f85/decisao -> 200 em 4612 ms
+2026-11-13 16:12:59.782 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #6 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:12:59.783 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #6 (atraso 5711 ms, outbox pendentes: 0)
+2026-11-13 16:12:59.790 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #6 (atraso 5758 ms, outbox pendentes: 0)
+2026-11-13 16:12:59.901 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #6 (atraso 5875 ms, outbox pendentes: None)
+2026-11-13 16:13:10.335 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #7 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:13:10.363 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #7 (atraso 538 ms, outbox pendentes: 0)
+2026-11-13 16:13:10.366 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #7 (atraso 561 ms, outbox pendentes: 0)
+2026-11-13 16:13:10.368 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #7 (atraso 476 ms, outbox pendentes: None)
+2026-11-13 16:13:24.454 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT enviado #8 -> wellflix.operacional.heartbeat (outbox pendentes: 0)
+2026-11-13 16:13:24.519 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de identidade #8 (atraso 4148 ms, outbox pendentes: 0)
+2026-11-13 16:13:24.558 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de catalogo #8 (atraso 4193 ms, outbox pendentes: 0)
+2026-11-13 16:13:24.560 | profissionais | INFO  | heartbeat | [req=-] HEARTBEAT recebido de conta #8 (atraso 4192 ms, outbox pendentes: None)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [315786]

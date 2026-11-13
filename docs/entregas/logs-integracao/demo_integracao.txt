@@ -1,0 +1,28 @@
+
+[1] Cadastro de atleta na identidade  (X-Request-ID: demo-1-f10aab)
+   identidade respondeu HTTP 201; id = 5956d73d-2ae9-4668-a094-53b0391dbd18
+
+[2] Moderador cria categoria no catálogo  (X-Request-ID: demo-2-d2b851)
+   catálogo respondeu HTTP 201; categoria Integração 26b22c (9e7ff2e7-03fa-4680-b33d-59f9e313f479)
+
+[3] Profissional se autoriza na nova categoria (profissionais usa a réplica de categorias)  (X-Request-ID: demo-3-8458da)
+   ok: profissionais aceitou a categoria criada no catálogo (0.3 s após o evento) -> HTTP 200
+
+[4] Profissional envia vídeo na categoria (catálogo usa a réplica do perfil profissional)  (X-Request-ID: demo-4-cf6119)
+   ok: catálogo aceitou o vídeo na categoria autorizada (4.8 s após o evento) -> HTTP 201
+   vídeo 3ccf31ed-111e-4a4c-bc31-0c52ec504f85 em situação aguardando_revisao
+
+[5] Moderador consulta a fila e aprova (profissionais -> REST -> catálogo)  (X-Request-ID: demo-5-0379b5)
+   fila de moderação (vinda do catálogo): HTTP 200, vídeo na fila: True
+   decisão: HTTP 200; vídeo agora publicado
+
+[6] Atleta coloca o vídeo aprovado numa trilha (conta usa a réplica de vídeos)  (X-Request-ID: demo-6-fe5c5e)
+   ok: conta aceitou o vídeo publicado na trilha (1.0 s após o evento) -> HTTP 201
+
+[7] Estado operacional de cada serviço (/status)  (X-Request-ID: demo-7-a0e143)
+   identidade    broker conectado=True | publicados=18 | consumidos=0 {} | REST=0 | heartbeats: catalogo há 7.0 s, conta há 6.9 s, profissionais há 7.0 s
+   conta         broker conectado=True | publicados=0 | consumidos=48 {'identidade': 18, 'catalogo': 30} | REST=0 | heartbeats: catalogo há 7.1 s, identidade há 7.1 s, profissionais há 7.1 s
+   profissionais broker conectado=True | publicados=14 | consumidos=25 {'identidade': 18, 'catalogo': 7} | REST=3 | heartbeats: catalogo há 7.2 s, conta há 7.1 s, identidade há 7.2 s
+   catalogo      broker conectado=True | publicados=30 | consumidos=32 {'profissionais': 14, 'identidade': 18} | REST=0 | heartbeats: conta há 7.1 s, identidade há 7.2 s, profissionais há 7.3 s
+
+Fluxo concluído: os quatro serviços se comunicaram por eventos e por REST.

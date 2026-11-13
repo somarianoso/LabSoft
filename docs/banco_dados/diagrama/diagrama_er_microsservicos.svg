@@ -30,10 +30,6 @@
 <text x="2206.3" y="598.1" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(1,1)</text>
 <line x1="2020.0" y1="606.0" x2="2037.7" y2="605.8" stroke="#3a3f4b" stroke-width="1.5"/>
 <text x="2044.2" y="624.7" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(0,1)</text>
-<line x1="2516.3" y1="721.0" x2="2596.5" y2="786.0" stroke="#3a3f4b" stroke-width="1.5"/>
-<text x="2526.2" y="752.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(1,1)</text>
-<line x1="2760.0" y1="806.4" x2="2682.6" y2="805.6" stroke="#3a3f4b" stroke-width="1.5"/>
-<text x="2736.1" y="797.2" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(0,1)</text>
 <line x1="2230.0" y1="1875.1" x2="2069.4" y2="1786.2" stroke="#3a3f4b" stroke-width="1.5"/>
 <text x="2215.8" y="1856.2" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(1,1)</text>
 <line x1="1978.8" y1="1711.0" x2="2019.1" y2="1749.8" stroke="#3a3f4b" stroke-width="1.5"/>
@@ -74,6 +70,10 @@
 <text x="3502.4" y="543.2" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(1,1)</text>
 <line x1="4303.8" y1="2440.0" x2="3913.0" y2="1723.9" stroke="#3a3f4b" stroke-width="1.5"/>
 <text x="4304.6" y="2417.2" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(0,N)</text>
+<line x1="3526.0" y1="1196.0" x2="3507.4" y2="1421.1" stroke="#3a3f4b" stroke-width="1.5"/>
+<text x="3510.1" y="1223.8" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(1,1)</text>
+<line x1="3487.0" y1="1700.0" x2="3502.9" y2="1479.0" stroke="#3a3f4b" stroke-width="1.5"/>
+<text x="3502.7" y="1682.1" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#3a3f4b" text-anchor="middle" >(0,N)</text>
 <line x1="1769.1" y1="560.0" x2="1611.8" y2="485.1" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
 <text x="1753.5" y="542.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(1,1)</text>
 <line x1="1380.0" y1="468.9" x2="1516.8" y2="469.6" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
@@ -98,10 +98,10 @@
 <text x="2552.3" y="648.9" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(1,1)</text>
 <line x1="4180.0" y1="717.8" x2="3241.7" y2="701.1" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
 <text x="4156.3" y="708.4" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(0,N)</text>
-<line x1="2977.5" y1="856.0" x2="3154.6" y2="981.9" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
-<text x="2988.9" y="886.3" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(1,1)</text>
-<line x1="3443.2" y1="1700.0" x2="3189.6" y2="1025.5" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
-<text x="3447.8" y="1677.6" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(0,N)</text>
+<line x1="2530.0" y1="683.5" x2="3148.6" y2="984.7" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
+<text x="2545.4" y="711.6" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(1,1)</text>
+<line x1="3416.5" y1="1100.0" x2="3213.6" y2="1014.2" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
+<text x="3399.8" y="1082.8" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(0,1)</text>
 <line x1="3461.7" y1="511.0" x2="3185.8" y2="1802.7" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
 <text x="3443.0" y="536.5" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#d9480f" text-anchor="middle" >(1,1)</text>
 <line x1="2530.0" y1="1934.0" x2="3132.3" y2="1837.6" stroke="#d9480f" stroke-width="1.5" stroke-dasharray="9 6"/>
@@ -126,8 +126,6 @@
 <text x="2380.0" y="437.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >possui</text>
 <polygon points="2100,575.0 2164.0,605 2100,635.0 2036.0,605" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.5"/>
 <text x="2100.0" y="610.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >perfil</text>
-<polygon points="2620,775.0 2684.0,805 2620,835.0 2556.0,805" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.5"/>
-<text x="2620.0" y="810.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >perfil</text>
 <polygon points="2040,1740.0 2104.0,1770 2040,1800.0 1976.0,1770" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.5"/>
 <text x="2040.0" y="1775.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >recebe</text>
 <polygon points="2720,1740.0 2784.0,1770 2720,1800.0 2656.0,1770" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.5"/>
@@ -148,6 +146,8 @@
 <text x="3900.0" y="565.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >seguido</text>
 <polygon points="3900,1670.0 3964.0,1700 3900,1730.0 3836.0,1700" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.5"/>
 <text x="3900.0" y="1705.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >atua_em</text>
+<polygon points="3505,1420.0 3569.0,1450 3505,1480.0 3441.0,1450" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.5"/>
+<text x="3505.0" y="1455.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="middle" >revisa</text>
 <polygon points="1580,440.0 1644.0,470 1580,500.0 1516.0,470" fill="#fff4ec" stroke="#d9480f" stroke-width="1.8" stroke-dasharray="7 4"/>
 <text x="1580.0" y="475.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#d9480f" text-anchor="middle" >realiza</text>
 <polygon points="1580,870.0 1644.0,900 1580,930.0 1516.0,900" fill="#fff4ec" stroke="#d9480f" stroke-width="1.8" stroke-dasharray="7 4"/>
@@ -161,7 +161,7 @@
 <polygon points="3180,670.0 3244.0,700 3180,730.0 3116.0,700" fill="#fff4ec" stroke="#d9480f" stroke-width="1.8" stroke-dasharray="7 4"/>
 <text x="3180.0" y="705.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#d9480f" text-anchor="middle" >segue</text>
 <polygon points="3180,970.0 3244.0,1000 3180,1030.0 3116.0,1000" fill="#fff4ec" stroke="#d9480f" stroke-width="1.8" stroke-dasharray="7 4"/>
-<text x="3180.0" y="1005.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#d9480f" text-anchor="middle" >revisa</text>
+<text x="3180.0" y="1005.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#d9480f" text-anchor="middle" >perfil</text>
 <polygon points="3180,1800.0 3244.0,1830 3180,1860.0 3116.0,1830" fill="#fff4ec" stroke="#d9480f" stroke-width="1.8" stroke-dasharray="7 4"/>
 <text x="3180.0" y="1835.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#d9480f" text-anchor="middle" >publica</text>
 <polygon points="3180,2090.0 3244.0,2120 3180,2150.0 3116.0,2120" fill="#fff4ec" stroke="#d9480f" stroke-width="1.8" stroke-dasharray="7 4"/>
@@ -216,16 +216,6 @@
 <text x="1836.0" y="619.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#263a7a" text-anchor="start" >PK / FK</text>
 <polygon points="1743.2,642.5 1738.0,645.5 1732.8,642.5 1732.8,636.5 1738.0,633.5 1743.2,636.5" fill="none" stroke="#9aa3b5" stroke-width="1.2"/>
 <text x="1754.0" y="644.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >data_criacao</text>
-<rect x="2763" y="763" width="300" height="96" fill="#000" fill-opacity="0.10"/>
-<rect x="2760" y="760" width="300" height="96" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.4"/>
-<rect x="2760" y="760" width="300" height="38" fill="#263a7a"/>
-<text x="2910.0" y="785.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle" >MODERADORES</text>
-<rect x="2761" y="802" width="298" height="25" fill="#eef1fa"/>
-<polygon points="2783.2,817.5 2778.0,820.5 2772.8,817.5 2772.8,811.5 2778.0,808.5 2783.2,811.5" fill="#263a7a"/>
-<text x="2794.0" y="819.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >usuario_id</text>
-<text x="2876.0" y="819.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#263a7a" text-anchor="start" >PK / FK</text>
-<polygon points="2783.2,842.5 2778.0,845.5 2772.8,842.5 2772.8,836.5 2778.0,833.5 2783.2,836.5" fill="none" stroke="#9aa3b5" stroke-width="1.2"/>
-<text x="2794.0" y="844.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >data_criacao</text>
 <rect x="1743" y="1543" width="300" height="171" fill="#000" fill-opacity="0.10"/>
 <rect x="1740" y="1540" width="300" height="171" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.4"/>
 <rect x="1740" y="1540" width="300" height="38" fill="#263a7a"/>
@@ -480,6 +470,17 @@
 <text x="4214.0" y="2524.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >categoria_id</text>
 <text x="4311.2" y="2524.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#263a7a" text-anchor="start" >PK</text>
 <text x="4337.2" y="2524.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#d9480f" text-anchor="start" >REF</text>
+<rect x="3383" y="1103" width="300" height="96" fill="#000" fill-opacity="0.10"/>
+<rect x="3380" y="1100" width="300" height="96" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.4"/>
+<rect x="3380" y="1100" width="300" height="38" fill="#263a7a"/>
+<text x="3530.0" y="1125.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle" >MODERADORES</text>
+<rect x="3381" y="1142" width="298" height="25" fill="#eef1fa"/>
+<polygon points="3403.2,1157.5 3398.0,1160.5 3392.8,1157.5 3392.8,1151.5 3398.0,1148.5 3403.2,1151.5" fill="#263a7a"/>
+<text x="3414.0" y="1159.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >usuario_id</text>
+<text x="3496.0" y="1159.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#263a7a" text-anchor="start" >PK</text>
+<text x="3522.0" y="1159.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#d9480f" text-anchor="start" >REF</text>
+<polygon points="3403.2,1182.5 3398.0,1185.5 3392.8,1182.5 3392.8,1176.5 3398.0,1173.5 3403.2,1176.5" fill="none" stroke="#9aa3b5" stroke-width="1.2"/>
+<text x="3414.0" y="1184.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >data_criacao</text>
 <rect x="3333" y="1703" width="300" height="196" fill="#000" fill-opacity="0.10"/>
 <rect x="3330" y="1700" width="300" height="196" fill="#ffffff" stroke="#3a3f4b" stroke-width="1.4"/>
 <rect x="3330" y="1700" width="300" height="38" fill="#263a7a"/>
@@ -493,7 +494,7 @@
 <text x="3430.8" y="1784.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#d9480f" text-anchor="start" >REF</text>
 <polygon points="3353.2,1807.5 3348.0,1810.5 3342.8,1807.5 3342.8,1801.5 3348.0,1798.5 3353.2,1801.5" fill="none" stroke="#9aa3b5" stroke-width="1.2"/>
 <text x="3364.0" y="1809.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >moderador_id</text>
-<text x="3461.2" y="1809.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#d9480f" text-anchor="start" >REF</text>
+<text x="3461.2" y="1809.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#4a5a9a" text-anchor="start" >FK</text>
 <polygon points="3353.2,1832.5 3348.0,1835.5 3342.8,1832.5 3342.8,1826.5 3348.0,1823.5 3353.2,1826.5" fill="none" stroke="#9aa3b5" stroke-width="1.2"/>
 <text x="3364.0" y="1834.0" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#1f2430" text-anchor="start" >situacao</text>
 <polygon points="3353.2,1857.5 3348.0,1860.5 3342.8,1857.5 3342.8,1851.5 3348.0,1848.5 3353.2,1851.5" fill="none" stroke="#9aa3b5" stroke-width="1.2"/>

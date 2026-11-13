@@ -36,7 +36,7 @@
 
 “As rotas protegidas verificam o token de autenticação e o papel associado à conta. Assim, as operações de profissional exigem o papel profissional, enquanto as ações de moderação exigem o papel de moderador. A API também disponibiliza uma rota de saúde e documentação interativa.
 
-“Quanto aos dados, o projeto usa PostgreSQL compartilhado entre os serviços. Portanto, existem tabelas específicas — como as de perfis profissionais, moderadores e revisões —, mas não um banco de dados separado só para este serviço. As tabelas se relacionam com dados comuns, como usuários e vídeos.”
+“Quanto aos dados, cada microsserviço tem o próprio banco. O banco deste serviço guarda os perfis profissionais, os moderadores, as categorias de cada profissional, os seguidores e as revisões de vídeo. Usuários e vídeos pertencem a outros serviços: aqui guardamos só o id deles, e os dados chegam por eventos Kafka ou pela API do serviço dono.”
 
 ### 1:35–2:25 — Cenário de negócio sem usar o sistema
 
@@ -90,7 +90,7 @@
 
 **Fala:**
 
-“Uma dificuldade que merece análise posterior é o acoplamento de dados: embora a aplicação esteja separada por serviço, o PostgreSQL é compartilhado. Isso facilita as relações entre usuários, profissionais, vídeos e revisões, mas exige cuidado para que alterações no banco não afetem outros serviços. Uma evolução possível seria avaliar limites de propriedade dos dados e estratégias para reduzir esse acoplamento.
+“Uma dificuldade que merece análise posterior é a consistência entre bancos: como não há chave estrangeira entre serviços, o vínculo entre revisões, vídeos e usuários depende dos eventos e das chamadas entre APIs. Isso evita que uma alteração no banco de um serviço quebre os outros, mas exige cuidado com eventos atrasados ou serviços fora do ar.
 
 “Também é importante evoluir testes automatizados para os diferentes papéis e para os estados do vídeo, além de planejar armazenamento externo adequado para os arquivos de mídia. Para esta demonstração, usei contas e conteúdo preparados previamente.
 

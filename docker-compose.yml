@@ -1,0 +1,33 @@
+# Infraestrutura local do WellFlix: PostgreSQL (um schema por microsserviço)
+# e Apache Kafka (broker de eventos, modo KRaft, sem ZooKeeper).
+#
+#   docker compose up -d
+#
+# Os quatro serviços FastAPI rodam fora do Docker (scripts/rodar_local.sh).
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: wellflix-postgres
+    environment:
+      POSTGRES_USER: wellflix
+      POSTGRES_PASSWORD: wellflix
+      POSTGRES_DB: wellflix
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wellflix -d wellflix"]
+      interval: 3s
+      retries: 20
+
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: wellflix-kafka
+    environment:
+      KAFKA_HEAP_OPTS: "-Xmx256m -Xms256m"   # broker de desenvolvimento: pouca memória basta
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 5s
+      retries: 30

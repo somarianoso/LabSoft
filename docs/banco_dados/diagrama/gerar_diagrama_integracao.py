@@ -21,9 +21,10 @@ out: list[str] = []
 
 SVC = {
     "identidade": {"cor": GREEN, "t": "IDENTIDADE", "d": "Sophia · :8001", "x": 120, "y": 430,
-                   "db": ["usuarios", "papeis_usuario", "atletas", "moderadores", "outbox_eventos"]},
+                   "db": ["usuarios", "papeis_usuario", "atletas", "outbox_eventos"]},
     "profissionais": {"cor": "#8b5cf6", "t": "PROFISSIONAIS", "d": "Gabriel · :8003", "x": 2200, "y": 430,
-                      "db": ["profissionais", "categorias_profissional", "seguimentos_profissional", "revisoes_video",
+                      "db": ["profissionais", "categorias_profissional", "seguimentos_profissional", "moderadores",
+                             "revisoes_video",
                              "outbox_eventos", "usuarios_replica", "categorias_replica"]},
     "conta": {"cor": "#e8a33d", "t": "CONTA", "d": "Maria Eduarda · :8002", "x": 120, "y": 1180,
               "db": ["planos", "assinaturas", "categorias_assinatura", "trilhas", "videos_trilha", "progresso_trilha",
@@ -93,7 +94,7 @@ def build():
     arrow_defs()
     text(W / 2, 84, "MODELO DE INTEGRAÇÃO DOS MICROSSERVIÇOS", 40, TEXT, 400, "middle")
     text(W / 2, 132, "WellFlix · cada serviço tem o próprio banco. Mudanças viram eventos no Kafka (tempo real) e alimentam réplicas locais; "
-                  "comandos imediatos usam REST; quem é o usuário vem do token JWT.", 19, MUTED, 400, "middle")
+                  "comandos imediatos usam REST; quem é o usuário vem do token JWT; todos publicam heartbeat e expõem /status.", 19, MUTED, 400, "middle")
 
     # frontend
     fx, fy, fw = 1100, 190, 800
@@ -117,16 +118,17 @@ def build():
     kx, ky, kw, kh = 1060, 500, 880, 800
     out.append(f'<rect x="{kx}" y="{ky}" width="{kw}" height="{kh}" rx="30" fill="{KAFKA}" fill-opacity="0.06" stroke="{KAFKA}" stroke-width="2.5"/>')
     text(kx + kw / 2, ky + 56, "APACHE KAFKA", 32, KAFKA, 700, "middle")
-    text(kx + kw / 2, ky + 88, "tópicos compactados · chave = id da entidade · um consumer group por serviço", 16, MUTED, 400, "middle")
+    text(kx + kw / 2, ky + 88, "tópicos de domínio compactados (chave = id) · um consumer group por serviço · heartbeat operacional", 15, MUTED, 400, "middle")
     topics = [
         ("wellflix.identidade.usuarios", "usuario.atualizado / removido  →  conta, catálogo, profissionais", GREEN),
         ("wellflix.catalogo.categorias", "categoria.atualizada / removida  →  conta, profissionais", "#3b82f6"),
         ("wellflix.catalogo.videos", "video.atualizado / removido  →  conta", "#3b82f6"),
         ("wellflix.profissionais.perfis", "perfil.atualizado / removido  →  catálogo", "#8b5cf6"),
+        ("wellflix.operacional.heartbeat", "heartbeat de todos os serviços (a cada 30 s)  →  todos · /status", MUTED),
     ]
     for i, (name, ev, color) in enumerate(topics):
-        ty = ky + 130 + i * 160
-        out.append(f'<rect x="{kx + 60}" y="{ty}" width="{kw - 120}" height="120" rx="16" fill="{PANEL}" stroke="{color}" stroke-width="1.6"/>')
+        ty = ky + 122 + i * 132
+        out.append(f'<rect x="{kx + 60}" y="{ty}" width="{kw - 120}" height="110" rx="16" fill="{PANEL}" stroke="{color}" stroke-width="1.6"/>')
         for j in range(10):
             out.append(f'<rect x="{kx + 86 + j * 30}" y="{ty + 78}" width="24" height="22" rx="4" fill="{color}" fill-opacity="{0.12 + j * 0.08}"/>')
         text(kx + 400, ty + 96, "→ offset de cada consumidor", 14, MUTED)

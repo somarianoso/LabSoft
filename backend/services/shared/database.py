@@ -13,6 +13,8 @@ from contextlib import contextmanager
 import psycopg
 from psycopg.rows import dict_row
 
+from backend.services.shared.observabilidade import request_id
+
 _SCHEMA_NAME = re.compile(r"^[a-z_][a-z0-9_]{0,62}$")
 
 
@@ -23,16 +25,21 @@ def resolve_schema(default_schema: str) -> str:
     return schema
 
 
+_CORRELACAO = re.compile(r"^[A-Za-z0-9-]{1,36}$")
+
+
 def connect(schema: str, **kwargs) -> psycopg.Connection:
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
         raise RuntimeError("DATABASE_URL não configurada.")
-    return psycopg.connect(
-        database_url,
-        row_factory=dict_row,
-        options=f"-c search_path={schema}",
-        **kwargs,
-    )
+    options = f"-c search_path={schema}"
+    # O id da requisição em andamento vai para a sessão do PostgreSQL; os
+    # eventos gravados no outbox nessa sessão o herdam (coluna "correlacao"),
+    # e assim a mesma ação aparece nos logs de quem publica e de quem consome.
+    rid = request_id.get()
+    if _CORRELACAO.fullmatch(rid):
+        options += f" -c wellflix.correlacao={rid}"
+    return psycopg.connect(database_url, row_factory=dict_row, options=options, **kwargs)
 
 
 def connection_factory(default_schema: str):

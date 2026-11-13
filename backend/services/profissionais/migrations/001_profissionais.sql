@@ -7,7 +7,6 @@
 --   categorias_profissional.categoria_id -> catalogo.categorias.id
 --   seguimentos_profissional.seguidor_id -> identidade.usuarios.id
 --   revisoes_video.video_id              -> catalogo.videos.id
---   revisoes_video.moderador_id          -> identidade.moderadores.usuario_id
 
 CREATE TABLE profissionais (
     usuario_id UUID PRIMARY KEY,

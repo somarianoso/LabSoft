@@ -7,15 +7,15 @@
 <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker>
 </defs>
 <text x="1500.0" y="84" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="40" font-weight="400" fill="#1f2430" text-anchor="middle">MODELO DE INTEGRAÇÃO DOS MICROSSERVIÇOS</text>
-<text x="1500.0" y="132" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#6b7280" text-anchor="middle">WellFlix · cada serviço tem o próprio banco. Mudanças viram eventos no Kafka (tempo real) e alimentam réplicas locais; comandos imediatos usam REST; quem é o usuário vem do token JWT.</text>
+<text x="1500.0" y="132" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#6b7280" text-anchor="middle">WellFlix · cada serviço tem o próprio banco. Mudanças viram eventos no Kafka (tempo real) e alimentam réplicas locais; comandos imediatos usam REST; quem é o usuário vem do token JWT; todos publicam heartbeat e expõem /status.</text>
 <rect x="1100" y="190" width="800" height="110" rx="20" fill="#ffffff" stroke="#1f2430" stroke-opacity="0.6" stroke-width="2"/>
 <text x="1500.0" y="238" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#1f2430" text-anchor="middle">FRONTEND · React (Render Static Site)</text>
 <text x="1500.0" y="272" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#6b7280" text-anchor="middle">chama cada serviço pela própria URL (VITE_*_API_URL) e envia o token</text>
-<rect x="120" y="430" width="680" height="240" rx="22" fill="#ffffff" stroke="#3fa34d" stroke-width="2.2"/>
+<rect x="120" y="430" width="680" height="210" rx="22" fill="#ffffff" stroke="#3fa34d" stroke-width="2.2"/>
 <path d="M120,452 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#3fa34d" fill-opacity="0.18"/>
 <text x="146" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#3fa34d" text-anchor="start">IDENTIDADE</text>
 <text x="776" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="500" fill="#6b7280" text-anchor="end">FastAPI Sophia · :8001</text>
-<rect x="140" y="510" width="640" height="140" rx="14" fill="#f7f8fa" stroke="#d5dae2"/>
+<rect x="140" y="510" width="640" height="110" rx="14" fill="#f7f8fa" stroke="#d5dae2"/>
 <text x="158" y="540" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#6b7280" text-anchor="start">PostgreSQL · schema "identidade"</text>
 <rect x="158" y="560" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
 <text x="180" y="572" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">usuarios</text>
@@ -23,10 +23,8 @@
 <text x="490" y="572" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">papeis_usuario</text>
 <rect x="158" y="590" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
 <text x="180" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">atletas</text>
-<rect x="468" y="590" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
-<text x="490" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">moderadores</text>
-<rect x="158" y="620" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
-<text x="180" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
+<rect x="468" y="590" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
+<text x="490" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
 <rect x="2200" y="430" width="680" height="270" rx="22" fill="#ffffff" stroke="#8b5cf6" stroke-width="2.2"/>
 <path d="M2200,452 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#8b5cf6" fill-opacity="0.18"/>
 <text x="2226" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#8b5cf6" text-anchor="start">PROFISSIONAIS</text>
@@ -40,13 +38,15 @@
 <rect x="2238" y="590" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
 <text x="2260" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">seguimentos_profissional</text>
 <rect x="2548" y="590" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
-<text x="2570" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">revisoes_video</text>
-<rect x="2238" y="620" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
-<text x="2260" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
-<rect x="2548" y="620" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
-<text x="2570" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuarios_replica</text>
+<text x="2570" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">moderadores</text>
+<rect x="2238" y="620" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
+<text x="2260" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">revisoes_video</text>
+<rect x="2548" y="620" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
+<text x="2570" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
 <rect x="2238" y="650" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
-<text x="2260" y="662" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categorias_replica</text>
+<text x="2260" y="662" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuarios_replica</text>
+<rect x="2548" y="650" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="2570" y="662" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categorias_replica</text>
 <rect x="120" y="1180" width="680" height="300" rx="22" fill="#ffffff" stroke="#e8a33d" stroke-width="2.2"/>
 <path d="M120,1202 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#e8a33d" fill-opacity="0.18"/>
 <text x="146" y="1220" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#e8a33d" text-anchor="start">CONTA</text>
@@ -103,63 +103,77 @@
 <text x="460.0" y="400" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#3fa34d" text-anchor="middle">login emite o JWT (sub = usuarios.id + papéis)</text>
 <rect x="1060" y="500" width="880" height="800" rx="30" fill="#d9480f" fill-opacity="0.06" stroke="#d9480f" stroke-width="2.5"/>
 <text x="1500.0" y="556" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#d9480f" text-anchor="middle">APACHE KAFKA</text>
-<text x="1500.0" y="588" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#6b7280" text-anchor="middle">tópicos compactados · chave = id da entidade · um consumer group por serviço</text>
-<rect x="1120" y="630" width="760" height="120" rx="16" fill="#ffffff" stroke="#3fa34d" stroke-width="1.6"/>
-<rect x="1146" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.12"/>
-<rect x="1176" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.2"/>
-<rect x="1206" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.28"/>
-<rect x="1236" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.36"/>
-<rect x="1266" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.44"/>
-<rect x="1296" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.52"/>
-<rect x="1326" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.6"/>
-<rect x="1356" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.68"/>
-<rect x="1386" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.76"/>
-<rect x="1416" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.84"/>
-<text x="1460" y="726" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
-<text x="1146" y="670" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3fa34d" text-anchor="start">wellflix.identidade.usuarios</text>
-<text x="1146" y="696" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuario.atualizado / removido  →  conta, catálogo, profissionais</text>
-<rect x="1120" y="790" width="760" height="120" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
-<rect x="1146" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.12"/>
-<rect x="1176" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.2"/>
-<rect x="1206" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
-<rect x="1236" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.36"/>
-<rect x="1266" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.44"/>
-<rect x="1296" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.52"/>
-<rect x="1326" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.6"/>
-<rect x="1356" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.68"/>
-<rect x="1386" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.76"/>
-<rect x="1416" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.84"/>
-<text x="1460" y="886" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
-<text x="1146" y="830" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3b82f6" text-anchor="start">wellflix.catalogo.categorias</text>
-<text x="1146" y="856" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categoria.atualizada / removida  →  conta, profissionais</text>
-<rect x="1120" y="950" width="760" height="120" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
-<rect x="1146" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.12"/>
-<rect x="1176" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.2"/>
-<rect x="1206" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
-<rect x="1236" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.36"/>
-<rect x="1266" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.44"/>
-<rect x="1296" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.52"/>
-<rect x="1326" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.6"/>
-<rect x="1356" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.68"/>
-<rect x="1386" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.76"/>
-<rect x="1416" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.84"/>
-<text x="1460" y="1046" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
-<text x="1146" y="990" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3b82f6" text-anchor="start">wellflix.catalogo.videos</text>
-<text x="1146" y="1016" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">video.atualizado / removido  →  conta</text>
-<rect x="1120" y="1110" width="760" height="120" rx="16" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.6"/>
-<rect x="1146" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.12"/>
-<rect x="1176" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.2"/>
-<rect x="1206" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.28"/>
-<rect x="1236" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.36"/>
-<rect x="1266" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.44"/>
-<rect x="1296" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.52"/>
-<rect x="1326" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.6"/>
-<rect x="1356" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.68"/>
-<rect x="1386" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.76"/>
-<rect x="1416" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.84"/>
-<text x="1460" y="1206" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
-<text x="1146" y="1150" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#8b5cf6" text-anchor="start">wellflix.profissionais.perfis</text>
-<text x="1146" y="1176" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">perfil.atualizado / removido  →  catálogo</text>
+<text x="1500.0" y="588" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="middle">tópicos de domínio compactados (chave = id) · um consumer group por serviço · heartbeat operacional</text>
+<rect x="1120" y="622" width="760" height="110" rx="16" fill="#ffffff" stroke="#3fa34d" stroke-width="1.6"/>
+<rect x="1146" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.12"/>
+<rect x="1176" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.2"/>
+<rect x="1206" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.28"/>
+<rect x="1236" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.36"/>
+<rect x="1266" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.44"/>
+<rect x="1296" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.52"/>
+<rect x="1326" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.6"/>
+<rect x="1356" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.68"/>
+<rect x="1386" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.76"/>
+<rect x="1416" y="700" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.84"/>
+<text x="1460" y="718" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="662" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3fa34d" text-anchor="start">wellflix.identidade.usuarios</text>
+<text x="1146" y="688" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuario.atualizado / removido  →  conta, catálogo, profissionais</text>
+<rect x="1120" y="754" width="760" height="110" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+<rect x="1146" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.12"/>
+<rect x="1176" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.2"/>
+<rect x="1206" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
+<rect x="1236" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.36"/>
+<rect x="1266" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.44"/>
+<rect x="1296" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.52"/>
+<rect x="1326" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.6"/>
+<rect x="1356" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.68"/>
+<rect x="1386" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.76"/>
+<rect x="1416" y="832" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.84"/>
+<text x="1460" y="850" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="794" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3b82f6" text-anchor="start">wellflix.catalogo.categorias</text>
+<text x="1146" y="820" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categoria.atualizada / removida  →  conta, profissionais</text>
+<rect x="1120" y="886" width="760" height="110" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+<rect x="1146" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.12"/>
+<rect x="1176" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.2"/>
+<rect x="1206" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
+<rect x="1236" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.36"/>
+<rect x="1266" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.44"/>
+<rect x="1296" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.52"/>
+<rect x="1326" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.6"/>
+<rect x="1356" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.68"/>
+<rect x="1386" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.76"/>
+<rect x="1416" y="964" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.84"/>
+<text x="1460" y="982" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="926" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3b82f6" text-anchor="start">wellflix.catalogo.videos</text>
+<text x="1146" y="952" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">video.atualizado / removido  →  conta</text>
+<rect x="1120" y="1018" width="760" height="110" rx="16" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.6"/>
+<rect x="1146" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.12"/>
+<rect x="1176" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.2"/>
+<rect x="1206" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.28"/>
+<rect x="1236" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.36"/>
+<rect x="1266" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.44"/>
+<rect x="1296" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.52"/>
+<rect x="1326" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.6"/>
+<rect x="1356" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.68"/>
+<rect x="1386" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.76"/>
+<rect x="1416" y="1096" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.84"/>
+<text x="1460" y="1114" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="1058" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#8b5cf6" text-anchor="start">wellflix.profissionais.perfis</text>
+<text x="1146" y="1084" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">perfil.atualizado / removido  →  catálogo</text>
+<rect x="1120" y="1150" width="760" height="110" rx="16" fill="#ffffff" stroke="#6b7280" stroke-width="1.6"/>
+<rect x="1146" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.12"/>
+<rect x="1176" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.2"/>
+<rect x="1206" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.28"/>
+<rect x="1236" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.36"/>
+<rect x="1266" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.44"/>
+<rect x="1296" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.52"/>
+<rect x="1326" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.6"/>
+<rect x="1356" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.68"/>
+<rect x="1386" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.76"/>
+<rect x="1416" y="1228" width="24" height="22" rx="4" fill="#6b7280" fill-opacity="0.84"/>
+<text x="1460" y="1246" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="1190" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#6b7280" text-anchor="start">wellflix.operacional.heartbeat</text>
+<text x="1146" y="1216" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">heartbeat de todos os serviços (a cada 30 s)  →  todos · /status</text>
 <path d="M808,560 L1052,560" fill="none" stroke="#3fa34d" stroke-width="3" stroke-linejoin="round" marker-end="url(#ag)"/>
 <rect x="895.34" y="526" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#3fa34d" stroke-width="1.4"/>
 <text x="930.0" y="544" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#3fa34d" text-anchor="middle">publica</text>

@@ -29,7 +29,7 @@
 
 **Fala:**
 
-“A interface do WellFlix foi desenvolvida em React e publicada como Static Site no Render. Minha entrega individual é o serviço de identidade, implementado em Python com FastAPI e publicado como Web Service no Render. O frontend chama esse backend por HTTPS. O serviço de identidade é responsável pelo cadastro e login de atletas e por fornecer dados do perfil autenticado. As informações são persistidas no PostgreSQL compartilhado pelo projeto. O banco é compartilhado entre os microserviços, mas os dados ficam organizados em tabelas relacionadas, como usuários, papéis e atletas. A rota `/health` confirma que o serviço está ativo; a documentação Swagger permite explorar suas operações.”
+“A interface do WellFlix foi desenvolvida em React e publicada como Static Site no Render. Minha entrega individual é o serviço de identidade, implementado em Python com FastAPI e publicado como Web Service no Render. O frontend chama esse backend por HTTPS. O serviço de identidade é responsável pelo cadastro e login de atletas e por fornecer dados do perfil autenticado. As informações são persistidas no banco do próprio serviço, que guarda usuários, papéis e atletas. Os outros microserviços não acessam esse banco: recebem nome e papéis dos usuários por eventos Kafka e o e-mail pela API de identidade. A rota `/health` confirma que o serviço está ativo; a documentação Swagger permite explorar suas operações.”
 
 ### 1:35–2:25 — Cenário de negócio, sem usar o sistema
 

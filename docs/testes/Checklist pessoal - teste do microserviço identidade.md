@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Demonstrar que o frontend React envia cadastro e login para o microserviço de identidade em FastAPI, que valida os dados e persiste as contas no PostgreSQL compartilhado.
+Demonstrar que o frontend React envia cadastro e login para o microserviço de identidade em FastAPI, que valida os dados e persiste as contas no banco do próprio serviço (schema `identidade`).
 
 ## Arquitetura do fluxo
 
@@ -44,21 +44,20 @@ CPFs da tabela são valores sintéticos de demonstração, não pertencem a pess
 
 ## Preparar as contas no banco
 
-As contas da tabela são definidas em `database/seeds/demo.sql`. Para carregá-las no banco de desenvolvimento/demonstração:
+As contas da tabela são definidas em `backend/services/identidade/seeds/demo.sql`. Para carregá-las no banco de desenvolvimento/demonstração:
 
-1. Confirme com o grupo que o banco compartilhado pode receber os dados fictícios e que migrations já foram aplicadas.
+1. Confirme com o grupo que o banco de demonstração pode receber os dados fictícios e que migrations já foram aplicadas.
 2. Em uma máquina autorizada a acessar esse PostgreSQL, configure `DATABASE_URL` no arquivo local `backend/.env`. Não copie essa variável para o frontend, para este documento ou para o GitHub.
 3. Execute:
 
    ```bash
-   cd backend
-   npm install
-   npm run seed:demo -- --confirm-demo-database
+   pip install -r backend/services/identidade/requirements.txt
+   python -m backend.services.shared.migrate identidade --seed-demo --confirm-demo-database
    ```
 
-4. Aguarde a mensagem de sucesso. O comando insere/atualiza as contas e os demais dados de demonstração no banco indicado pela `DATABASE_URL`.
+4. Aguarde a mensagem de sucesso. O comando aplica as migrations pendentes e insere/atualiza as contas de demonstração no schema `identidade` do banco indicado pela `DATABASE_URL`.
 
-As três contas adicionais foram inseridas no PostgreSQL compartilhado do Labsoft e validadas pelo serviço Render: login e consulta autenticada de perfil retornaram `200`. Se o banco de demonstração for recriado ou trocado, execute o seed novamente para carregar essas identidades e o restante dos dados de demonstração.
+As três contas adicionais foram inseridas no PostgreSQL do Labsoft e validadas pelo serviço Render: login e consulta autenticada de perfil retornaram `200`. Se o banco de demonstração for recriado ou trocado, execute o seed novamente (use `todos` no lugar de `identidade` para carregar também os dados de demonstração dos outros serviços).
 
 ## Teste de cadastro pelo frontend
 
