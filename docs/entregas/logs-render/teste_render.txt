@@ -1,0 +1,11 @@
+[1] identidade POST /api/atletas -> 201 (X-Request-ID render-5edc2b)
+[2] eventos usuario.atualizado consumidos em 17.2 s: {'conta': 2, 'catalogo': 2, 'profissionais': 2}
+    conta         último: usuario.atualizado de identidade id_evento=2 atraso=2994 ms
+    catalogo      último: usuario.atualizado de identidade id_evento=2 atraso=3938 ms
+    profissionais último: usuario.atualizado de identidade id_evento=2 atraso=3008 ms
+[3] conta POST /api/trilhas -> 201
+    trilha pública: [('Trilha Render 864719', {'nome': 'Trilha Render 864719'})]
+[4] identidade    broker=True heartbeats de ['catalogo', 'conta', 'profissionais'] publicados=2 consumidos=0
+[4] conta         broker=True heartbeats de ['catalogo', 'identidade', 'profissionais'] publicados=0 consumidos=8
+[4] profissionais broker=True heartbeats de ['catalogo', 'conta', 'identidade'] publicados=0 consumidos=8
+[4] catalogo      broker=True heartbeats de ['conta', 'identidade', 'profissionais'] publicados=6 consumidos=2

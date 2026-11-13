@@ -1,0 +1,23 @@
+/* Estilo dos PDFs de apresentação do modelo de dados (cores WellFlix).
+   Uso: md2pdf -i "arquivo.md" -o "arquivo.pdf" --css estilo-pdf.css */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap");
+
+@page { size: A4; margin: 16mm 14mm; }
+body { font-family: "DM Sans", "DejaVu Sans", sans-serif; font-size: 10pt; line-height: 1.45; color: #11161f; }
+h1 { font-size: 19pt; margin: 0 0 4pt; color: #070a0e; border-bottom: 3px solid #70f04e; padding-bottom: 6pt; }
+h2 { font-size: 13pt; color: #2778d4; margin: 16pt 0 6pt; }
+p, li { margin: 3pt 0; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.3pt; background: #eef1f5; padding: 0 2pt; border-radius: 3px; overflow-wrap: anywhere; }
+table { width: 100%; border-collapse: collapse; margin: 6pt 0 10pt; font-size: 8.6pt; table-layout: auto; }
+th { background: #11161f; color: #ffffff; text-align: left; padding: 4pt 5pt; }
+td { border-bottom: 1px solid #d5dae2; padding: 4pt 5pt; vertical-align: top; overflow-wrap: anywhere; }
+tr:nth-child(even) td { background: #f6f8fa; }
+blockquote { margin: 8pt 0; padding: 6pt 10pt; background: #effbe9; border-left: 4px solid #70f04e; }
+img { max-width: 100%; display: block; margin: 8pt auto; }
+strong { color: #070a0e; }
+
+/* Documento de integração: blocos de log e de código */
+pre { background: #0d1416; color: #e6edf3; padding: 6pt 8pt; border-radius: 4px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 7.2pt; line-height: 1.35; page-break-inside: avoid; }
+pre code { background: none; color: inherit; font-size: inherit; padding: 0; }
+h3 { font-size: 11pt; color: #11161f; margin: 12pt 0 4pt; }
+th strong { color: #ffffff; }

@@ -1,0 +1,44 @@
+2026-11-13 20:07:10.245 | identidade    | INFO  | http      | [req=demo-1-d19420] POST /api/atletas -> 201 em 2459 ms
+2026-11-13 20:07:11.014 | identidade    | INFO  | eventos   | [req=demo-1-d19420] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=b855fc74-d323-4eb0-9e53-0c09478092aa, id_evento=19)
+2026-11-13 20:07:11.014 | identidade    | INFO  | eventos   | [req=demo-1-d19420] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=b855fc74-d323-4eb0-9e53-0c09478092aa, id_evento=20)
+2026-11-13 20:07:11.555 | conta         | INFO  | eventos   | [req=demo-1-d19420] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=19, 941 ms após a publicação) -> upsert_usuario
+2026-11-13 20:07:11.562 | catalogo      | INFO  | eventos   | [req=demo-1-d19420] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=19, 948 ms após a publicação) -> upsert_usuario
+2026-11-13 20:07:11.563 | profissionais | INFO  | eventos   | [req=demo-1-d19420] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=19, 949 ms após a publicação) -> upsert_usuario
+2026-11-13 20:07:12.281 | conta         | INFO  | eventos   | [req=demo-1-d19420] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=20, 1666 ms após a publicação) -> upsert_usuario
+2026-11-13 20:07:12.294 | catalogo      | INFO  | eventos   | [req=demo-1-d19420] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=20, 1680 ms após a publicação) -> upsert_usuario
+2026-11-13 20:07:12.309 | profissionais | INFO  | eventos   | [req=demo-1-d19420] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=20, 1694 ms após a publicação) -> upsert_usuario
+2026-11-13 20:07:12.615 | identidade    | INFO  | http      | [req=demo-1-d19420] POST /api/auth/sessao -> 200 em 2156 ms
+2026-11-13 20:07:15.019 | identidade    | INFO  | http      | [req=demo-2-58e606] POST /api/auth/sessao -> 200 em 2180 ms
+2026-11-13 20:07:16.784 | catalogo      | INFO  | http      | [req=demo-2-58e606] POST /api/categorias -> 201 em 1483 ms
+2026-11-13 20:07:17.554 | catalogo      | INFO  | eventos   | [req=demo-2-58e606] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=01791bc1-338f-4be9-8518-75e66f5ebb5f, id_evento=28)
+2026-11-13 20:07:18.101 | conta         | INFO  | eventos   | [req=demo-2-58e606] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=28, 953 ms após a publicação) -> upsert_categoria
+2026-11-13 20:07:18.106 | profissionais | INFO  | eventos   | [req=demo-2-58e606] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=28, 958 ms após a publicação) -> upsert_categoria
+2026-11-13 20:07:19.516 | identidade    | INFO  | http      | [req=demo-3-b7b86f] POST /api/auth/sessao -> 200 em 2122 ms
+2026-11-13 20:07:23.762 | identidade    | INFO  | http      | [req=demo-3-b7b86f] GET /api/usuarios/me -> 200 em 1488 ms (chamado por profissionais)
+2026-11-13 20:07:23.775 | profissionais | INFO  | http      | [req=demo-3-b7b86f] GET /api/profissionais/me -> 200 em 3962 ms
+2026-11-13 20:07:23.775 | profissionais | INFO  | rest      | [req=demo-3-b7b86f] REST profissionais -> identidade GET /api/usuarios/me -> 200 em 2297 ms
+2026-11-13 20:07:26.079 | profissionais | INFO  | http      | [req=demo-3-b7b86f] PUT /api/profissionais/me -> 200 em 2057 ms
+2026-11-13 20:07:26.800 | profissionais | INFO  | eventos   | [req=demo-3-b7b86f] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=10)
+2026-11-13 20:07:26.800 | profissionais | INFO  | eventos   | [req=demo-3-b7b86f] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=11)
+2026-11-13 20:07:26.800 | profissionais | INFO  | eventos   | [req=demo-3-b7b86f] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=12)
+2026-11-13 20:07:26.800 | profissionais | INFO  | eventos   | [req=demo-3-b7b86f] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=13)
+2026-11-13 20:07:26.800 | profissionais | INFO  | eventos   | [req=demo-3-b7b86f] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=14)
+2026-11-13 20:07:27.352 | catalogo      | INFO  | eventos   | [req=demo-3-b7b86f] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=10, 909 ms após a publicação) -> upsert_profissional
+2026-11-13 20:07:28.083 | catalogo      | INFO  | eventos   | [req=demo-3-b7b86f] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=11, 1639 ms após a publicação) -> upsert_profissional
+2026-11-13 20:07:28.230 | catalogo      | INFO  | http      | [req=demo-4-1ce84a] POST /api/videos -> 403 em 1478 ms
+2026-11-13 20:07:28.813 | catalogo      | INFO  | eventos   | [req=demo-3-b7b86f] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=12, 2369 ms após a publicação) -> upsert_profissional
+2026-11-13 20:07:29.542 | catalogo      | INFO  | eventos   | [req=demo-3-b7b86f] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=13, 3099 ms após a publicação) -> upsert_profissional
+2026-11-13 20:07:30.277 | catalogo      | INFO  | eventos   | [req=demo-3-b7b86f] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=14, 3833 ms após a publicação) -> upsert_profissional
+2026-11-13 20:07:31.895 | catalogo      | INFO  | http      | [req=demo-4-1ce84a] POST /api/videos -> 201 em 3154 ms
+2026-11-13 20:07:32.383 | catalogo      | INFO  | eventos   | [req=demo-4-1ce84a] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=4f996759-4e53-49f0-8e93-15968026a037, id_evento=29)
+2026-11-13 20:07:32.932 | conta         | INFO  | eventos   | [req=demo-4-1ce84a] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=29, 942 ms após a publicação) -> upsert_video
+2026-11-13 20:07:35.269 | catalogo      | INFO  | http      | [req=demo-5-c8891a] GET /internal/videos -> 200 em 2944 ms (chamado por profissionais)
+2026-11-13 20:07:35.280 | profissionais | INFO  | rest      | [req=demo-5-c8891a] REST profissionais -> catalogo GET /internal/videos -> 200 em 3027 ms
+2026-11-13 20:07:35.281 | profissionais | INFO  | http      | [req=demo-5-c8891a] GET /api/moderacao/videos -> 200 em 3030 ms
+2026-11-13 20:07:38.507 | catalogo      | INFO  | http      | [req=demo-5-c8891a] POST /internal/videos/4f996759-4e53-49f0-8e93-15968026a037/moderacao -> 200 em 1501 ms (chamado por profissionais)
+2026-11-13 20:07:38.517 | profissionais | INFO  | rest      | [req=demo-5-c8891a] REST profissionais -> catalogo POST /internal/videos/4f996759-4e53-49f0-8e93-15968026a037/moderacao -> 200 em 1559 ms
+2026-11-13 20:07:38.700 | profissionais | INFO  | http      | [req=demo-5-c8891a] POST /api/moderacao/videos/4f996759-4e53-49f0-8e93-15968026a037/decisao -> 200 em 3212 ms
+2026-11-13 20:07:39.260 | catalogo      | INFO  | eventos   | [req=demo-5-c8891a] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=4f996759-4e53-49f0-8e93-15968026a037, id_evento=30)
+2026-11-13 20:07:39.865 | conta         | INFO  | eventos   | [req=demo-5-c8891a] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=30, 997 ms após a publicação) -> upsert_video
+2026-11-13 20:07:40.549 | conta         | INFO  | http      | [req=demo-6-8b1311] POST /api/trilhas -> 201 em 1479 ms
+2026-11-13 20:07:42.816 | conta         | INFO  | http      | [req=demo-6-8b1311] POST /api/trilhas/c38bb85b-7547-4571-bbc3-d2e47d5419f2/videos -> 201 em 2022 ms

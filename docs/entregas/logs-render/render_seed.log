@@ -1,0 +1,124 @@
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000001, id_evento=11)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000001, id_evento=3)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000002, id_evento=12)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000002, id_evento=4)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000003, id_evento=13)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000003, id_evento=5)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000004, id_evento=14)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000004, id_evento=6)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000005, id_evento=15)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000005, id_evento=7)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000006, id_evento=8)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000007, id_evento=9)
+2026-11-13 20:05:44.407 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000008, id_evento=10)
+2026-11-13 20:05:44.408 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000006, id_evento=16)
+2026-11-13 20:05:44.408 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000007, id_evento=17)
+2026-11-13 20:05:44.408 | identidade    | INFO  | eventos   | [req=-] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=10000000-0000-4000-8000-000000000008, id_evento=18)
+2026-11-13 20:05:44.950 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=3, 907 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:44.956 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=3, 913 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:44.956 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=3, 913 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000001, id_evento=7)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000002, id_evento=8)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000003, id_evento=9)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000004, id_evento=10)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000005, id_evento=11)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000006, id_evento=12)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000007, id_evento=13)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000008, id_evento=14)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000009, id_evento=15)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000010, id_evento=16)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000011, id_evento=17)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000012, id_evento=18)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000013, id_evento=19)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000014, id_evento=20)
+2026-11-13 20:05:45.305 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000015, id_evento=21)
+2026-11-13 20:05:45.306 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000016, id_evento=22)
+2026-11-13 20:05:45.306 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000017, id_evento=23)
+2026-11-13 20:05:45.306 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000018, id_evento=24)
+2026-11-13 20:05:45.306 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000019, id_evento=25)
+2026-11-13 20:05:45.306 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000020, id_evento=26)
+2026-11-13 20:05:45.306 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO video.atualizado -> wellflix.catalogo.videos (chave=20000000-0000-4000-8000-000000000021, id_evento=27)
+2026-11-13 20:05:45.574 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=1)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=4)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000002, id_evento=5)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000003, id_evento=2)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000003, id_evento=6)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000003, id_evento=7)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000004, id_evento=3)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000004, id_evento=8)
+2026-11-13 20:05:45.575 | profissionais | INFO  | eventos   | [req=-] PUBLICADO perfil.atualizado -> wellflix.profissionais.perfis (chave=10000000-0000-4000-8000-000000000004, id_evento=9)
+2026-11-13 20:05:45.676 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=4, 1633 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:45.686 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=4, 1643 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:45.689 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=4, 1646 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:46.401 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=5, 2358 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:46.416 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=5, 2373 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:46.425 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=5, 2381 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:47.331 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=6, 3287 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:47.340 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=6, 3297 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:47.369 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=6, 3325 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:48.061 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=7, 4017 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:48.092 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=7, 4048 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:48.222 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=7, 4178 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:48.794 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=8, 4750 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:48.816 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=8, 4773 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:48.957 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=8, 4913 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:49.525 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=9, 5481 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:49.541 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=9, 5498 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:49.689 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=9, 5646 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:50.261 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=10, 6218 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:50.267 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=10, 6223 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:50.421 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=10, 6377 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:50.991 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=11, 6947 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:50.993 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=11, 6950 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:51.241 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=11, 7197 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:51.716 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=12, 7673 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:51.726 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=12, 7683 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:51.972 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=12, 7928 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:52.441 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=13, 8398 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:52.456 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=13, 8413 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:52.703 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=13, 8659 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:53.186 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=14, 9143 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:53.195 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=14, 9152 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:53.433 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=14, 9390 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:53.917 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=15, 9873 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:53.919 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=15, 9875 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:54.228 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=15, 10184 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:54.643 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=16, 10599 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:54.648 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=16, 10604 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:54.963 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=16, 10920 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:55.368 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=17, 11324 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:55.378 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=17, 11334 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:55.707 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=17, 11664 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:56.114 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=18, 12070 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:56.209 | conta         | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=18, 12165 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:56.446 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=18, 12402 ms após a publicação) -> upsert_usuario
+2026-11-13 20:05:56.850 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=1, 12811 ms após a publicação) -> upsert_profissional
+2026-11-13 20:05:56.938 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=7, 12899 ms após a publicação) -> upsert_video
+2026-11-13 20:05:57.585 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=2, 13545 ms após a publicação) -> upsert_profissional
+2026-11-13 20:05:57.662 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=8, 13624 ms após a publicação) -> upsert_video
+2026-11-13 20:05:58.319 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=3, 14279 ms após a publicação) -> upsert_profissional
+2026-11-13 20:05:58.388 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=9, 14349 ms após a publicação) -> upsert_video
+2026-11-13 20:05:59.054 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=4, 15014 ms após a publicação) -> upsert_profissional
+2026-11-13 20:05:59.204 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=10, 15165 ms após a publicação) -> upsert_video
+2026-11-13 20:05:59.792 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=5, 15752 ms após a publicação) -> upsert_profissional
+2026-11-13 20:05:59.929 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=11, 15890 ms após a publicação) -> upsert_video
+2026-11-13 20:06:00.707 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=6, 16667 ms após a publicação) -> upsert_profissional
+2026-11-13 20:06:00.836 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=12, 16797 ms após a publicação) -> upsert_video
+2026-11-13 20:06:01.437 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=7, 17397 ms após a publicação) -> upsert_profissional
+2026-11-13 20:06:01.561 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=13, 17523 ms após a publicação) -> upsert_video
+2026-11-13 20:06:02.171 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=8, 18131 ms após a publicação) -> upsert_profissional
+2026-11-13 20:06:02.286 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=14, 18247 ms após a publicação) -> upsert_video
+2026-11-13 20:06:02.903 | catalogo      | INFO  | eventos   | [req=-] CONSUMIDO perfil.atualizado de profissionais (wellflix.profissionais.perfis, id_evento=9, 18863 ms após a publicação) -> upsert_profissional
+2026-11-13 20:06:03.011 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=15, 18972 ms após a publicação) -> upsert_video
+2026-11-13 20:06:03.735 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=16, 19696 ms após a publicação) -> upsert_video
+2026-11-13 20:06:04.468 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=17, 20429 ms após a publicação) -> upsert_video
+2026-11-13 20:06:05.208 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=18, 21169 ms após a publicação) -> upsert_video
+2026-11-13 20:06:05.932 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=19, 21894 ms após a publicação) -> upsert_video
+2026-11-13 20:06:06.660 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=20, 22621 ms após a publicação) -> upsert_video
+2026-11-13 20:06:07.387 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=21, 23348 ms após a publicação) -> upsert_video
+2026-11-13 20:06:08.210 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=22, 24171 ms após a publicação) -> upsert_video
+2026-11-13 20:06:08.936 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=23, 24897 ms após a publicação) -> upsert_video
+2026-11-13 20:06:09.659 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=24, 25620 ms após a publicação) -> upsert_video
+2026-11-13 20:06:10.383 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=25, 26344 ms após a publicação) -> upsert_video
+2026-11-13 20:06:11.211 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=26, 27172 ms após a publicação) -> upsert_video
+2026-11-13 20:06:11.936 | conta         | INFO  | eventos   | [req=-] CONSUMIDO video.atualizado de catalogo (wellflix.catalogo.videos, id_evento=27, 27897 ms após a publicação) -> upsert_video

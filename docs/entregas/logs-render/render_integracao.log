@@ -1,0 +1,33 @@
+2026-11-13 19:51:38.531 | identidade    | INFO  | eventos   | [req=-] Broker Kafka conectado (kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896); 6 tópicos existentes
+2026-11-13 19:53:27.388 | identidade    | INFO  | eventos   | [req=-] Broker Kafka conectado (kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896); 6 tópicos existentes
+2026-11-13 19:53:28.014 | conta         | INFO  | eventos   | [req=-] Broker Kafka conectado (kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896); 6 tópicos existentes
+2026-11-13 19:53:35.185 | profissionais | INFO  | eventos   | [req=-] Broker Kafka conectado (kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896); 6 tópicos existentes
+2026-11-13 19:55:27.650 | catalogo      | INFO  | eventos   | [req=-] Broker Kafka conectado (kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896); 6 tópicos existentes
+2026-11-13 19:55:31.964 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=60000000-0000-4000-8000-000000000001, id_evento=1)
+2026-11-13 19:55:31.964 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=60000000-0000-4000-8000-000000000002, id_evento=2)
+2026-11-13 19:55:31.964 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=60000000-0000-4000-8000-000000000003, id_evento=3)
+2026-11-13 19:55:31.964 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=60000000-0000-4000-8000-000000000004, id_evento=4)
+2026-11-13 19:55:31.964 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=60000000-0000-4000-8000-000000000005, id_evento=5)
+2026-11-13 19:55:31.964 | catalogo      | INFO  | eventos   | [req=-] PUBLICADO categoria.atualizada -> wellflix.catalogo.categorias (chave=60000000-0000-4000-8000-000000000006, id_evento=6)
+2026-11-13 19:55:33.449 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=1, 3108 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:33.457 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=1, 3116 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:34.195 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=2, 3854 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:34.239 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=2, 3898 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:34.922 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=3, 4581 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:34.971 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=3, 4630 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:35.646 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=4, 5306 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:35.704 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=4, 5364 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:36.376 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=5, 6035 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:36.436 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=5, 6095 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:37.281 | conta         | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=6, 6941 ms após a publicação) -> upsert_categoria
+2026-11-13 19:55:37.358 | profissionais | INFO  | eventos   | [req=-] CONSUMIDO categoria.atualizada de catalogo (wellflix.catalogo.categorias, id_evento=6, 7017 ms após a publicação) -> upsert_categoria
+2026-11-13 19:57:06.644 | identidade    | INFO  | http      | [req=render-5edc2b] POST /api/atletas -> 201 em 2480 ms
+2026-11-13 19:57:08.737 | identidade    | INFO  | eventos   | [req=render-5edc2b] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=8bc565db-29c1-4f66-b990-7aa501837faf, id_evento=1)
+2026-11-13 19:57:08.737 | identidade    | INFO  | eventos   | [req=render-5edc2b] PUBLICADO usuario.atualizado -> wellflix.identidade.usuarios (chave=8bc565db-29c1-4f66-b990-7aa501837faf, id_evento=2)
+2026-11-13 19:57:09.280 | conta         | INFO  | eventos   | [req=render-5edc2b] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=1, 2269 ms após a publicação) -> upsert_usuario
+2026-11-13 19:57:09.285 | profissionais | INFO  | eventos   | [req=render-5edc2b] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=1, 2273 ms após a publicação) -> upsert_usuario
+2026-11-13 19:57:10.006 | conta         | INFO  | eventos   | [req=render-5edc2b] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=2, 2994 ms após a publicação) -> upsert_usuario
+2026-11-13 19:57:10.020 | profissionais | INFO  | eventos   | [req=render-5edc2b] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=2, 3008 ms após a publicação) -> upsert_usuario
+2026-11-13 19:57:10.217 | catalogo      | INFO  | eventos   | [req=render-5edc2b] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=1, 3206 ms após a publicação) -> upsert_usuario
+2026-11-13 19:57:10.950 | catalogo      | INFO  | eventos   | [req=render-5edc2b] CONSUMIDO usuario.atualizado de identidade (wellflix.identidade.usuarios, id_evento=2, 3938 ms após a publicação) -> upsert_usuario
+2026-11-13 19:57:26.577 | conta         | INFO  | http      | [req=render-5edc2b] POST /api/trilhas -> 201 em 1466 ms

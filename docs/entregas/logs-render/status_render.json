@@ -1,0 +1,275 @@
+[
+  {
+    "servico": "identidade",
+    "instancia": "srv-dbdq2f8n74is73eh3ckg-hibernate-85cf9bc9bc-77jxf",
+    "no_ar_desde": "2026-11-13T19:53:23.124264+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "identidade",
+      "outbox_pendentes": 0
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896"
+    },
+    "eventos_publicados": {
+      "total": 2,
+      "ultimo": {
+        "tipo": "usuario.atualizado",
+        "topico": "wellflix.identidade.usuarios",
+        "chave": "8bc565db-29c1-4f66-b990-7aa501837faf",
+        "id_evento": 2,
+        "em": "2026-11-13T19:57:08.737322+00:00"
+      }
+    },
+    "eventos_consumidos": {
+      "total": 0,
+      "ultimo": null,
+      "por_origem": {}
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 12,
+    "heartbeats_recebidos": {
+      "conta": {
+        "seq": 12,
+        "instancia": "srv-dbdqfmoae00c73alpel0-hibernate-5d846cd78-7f9pb",
+        "outbox_pendentes": null,
+        "atraso_ms": 1867,
+        "recebido_em": "2026-11-13T19:59:21.823117+00:00",
+        "segundos_desde_ultimo": 23.2
+      },
+      "profissionais": {
+        "seq": 12,
+        "instancia": "srv-dbdqis0ae00c73am4nl0-hibernate-58f6fd4ff5-5k9wl",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1866,
+        "recebido_em": "2026-11-13T19:59:29.049750+00:00",
+        "segundos_desde_ultimo": 15.9
+      },
+      "catalogo": {
+        "seq": 8,
+        "instancia": "srv-dbdqc28n74is73ei1s00-hibernate-6d7c8c69b5-z4vxl",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1851,
+        "recebido_em": "2026-11-13T19:59:15.034547+00:00",
+        "segundos_desde_ultimo": 30.0
+      }
+    },
+    "url": "https://wellflix-identidade-sophia.onrender.com"
+  },
+  {
+    "servico": "conta",
+    "instancia": "srv-dbdqfmoae00c73alpel0-hibernate-5d846cd78-7f9pb",
+    "no_ar_desde": "2026-11-13T19:53:23.503346+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "conta",
+      "outbox_pendentes": null
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896"
+    },
+    "eventos_publicados": {
+      "total": 0,
+      "ultimo": null
+    },
+    "eventos_consumidos": {
+      "total": 8,
+      "ultimo": {
+        "tipo": "usuario.atualizado",
+        "origem": "identidade",
+        "topico": "wellflix.identidade.usuarios",
+        "id_evento": 2,
+        "atraso_ms": 2994,
+        "em": "2026-11-13T19:57:10.006305+00:00"
+      },
+      "por_origem": {
+        "catalogo": 6,
+        "identidade": 2
+      }
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 12,
+    "heartbeats_recebidos": {
+      "identidade": {
+        "seq": 12,
+        "instancia": "srv-dbdq2f8n74is73eh3ckg-hibernate-85cf9bc9bc-77jxf",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1912,
+        "recebido_em": "2026-11-13T19:59:21.264803+00:00",
+        "segundos_desde_ultimo": 26.1
+      },
+      "profissionais": {
+        "seq": 12,
+        "instancia": "srv-dbdqis0ae00c73am4nl0-hibernate-58f6fd4ff5-5k9wl",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1864,
+        "recebido_em": "2026-11-13T19:59:29.047590+00:00",
+        "segundos_desde_ultimo": 18.4
+      },
+      "catalogo": {
+        "seq": 9,
+        "instancia": "srv-dbdqc28n74is73ei1s00-hibernate-6d7c8c69b5-z4vxl",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1865,
+        "recebido_em": "2026-11-13T19:59:46.898723+00:00",
+        "segundos_desde_ultimo": 0.5
+      }
+    },
+    "url": "https://wellflix-conta-maria.onrender.com"
+  },
+  {
+    "servico": "profissionais",
+    "instancia": "srv-dbdqis0ae00c73am4nl0-hibernate-58f6fd4ff5-5k9wl",
+    "no_ar_desde": "2026-11-13T19:53:31.297241+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "profissionais",
+      "outbox_pendentes": 0
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896"
+    },
+    "eventos_publicados": {
+      "total": 0,
+      "ultimo": null
+    },
+    "eventos_consumidos": {
+      "total": 8,
+      "ultimo": {
+        "tipo": "usuario.atualizado",
+        "origem": "identidade",
+        "topico": "wellflix.identidade.usuarios",
+        "id_evento": 2,
+        "atraso_ms": 3008,
+        "em": "2026-11-13T19:57:10.020406+00:00"
+      },
+      "por_origem": {
+        "catalogo": 6,
+        "identidade": 2
+      }
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 12,
+    "heartbeats_recebidos": {
+      "identidade": {
+        "seq": 12,
+        "instancia": "srv-dbdq2f8n74is73eh3ckg-hibernate-85cf9bc9bc-77jxf",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1923,
+        "recebido_em": "2026-11-13T19:59:21.276118+00:00",
+        "segundos_desde_ultimo": 28.8
+      },
+      "conta": {
+        "seq": 12,
+        "instancia": "srv-dbdqfmoae00c73alpel0-hibernate-5d846cd78-7f9pb",
+        "outbox_pendentes": null,
+        "atraso_ms": 1866,
+        "recebido_em": "2026-11-13T19:59:21.821642+00:00",
+        "segundos_desde_ultimo": 28.2
+      },
+      "catalogo": {
+        "seq": 9,
+        "instancia": "srv-dbdqc28n74is73ei1s00-hibernate-6d7c8c69b5-z4vxl",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1866,
+        "recebido_em": "2026-11-13T19:59:46.900290+00:00",
+        "segundos_desde_ultimo": 3.1
+      }
+    },
+    "url": "https://wellflix-profissionais-moderadores.onrender.com"
+  },
+  {
+    "servico": "catalogo",
+    "instancia": "srv-dbdqc28n74is73ei1s00-hibernate-6d7c8c69b5-z4vxl",
+    "no_ar_desde": "2026-11-13T19:55:23.643587+00:00",
+    "banco": {
+      "ok": true,
+      "schema": "catalogo",
+      "outbox_pendentes": 0
+    },
+    "broker": {
+      "configurado": true,
+      "conectado": true,
+      "erro": null,
+      "servidores": "kafka-1825cd41-sophiasoaresmar-afaa.b.aivencloud.com:12896"
+    },
+    "eventos_publicados": {
+      "total": 6,
+      "ultimo": {
+        "tipo": "categoria.atualizada",
+        "topico": "wellflix.catalogo.categorias",
+        "chave": "60000000-0000-4000-8000-000000000006",
+        "id_evento": 6,
+        "em": "2026-11-13T19:55:31.964742+00:00"
+      }
+    },
+    "eventos_consumidos": {
+      "total": 2,
+      "ultimo": {
+        "tipo": "usuario.atualizado",
+        "origem": "identidade",
+        "topico": "wellflix.identidade.usuarios",
+        "id_evento": 2,
+        "atraso_ms": 3938,
+        "em": "2026-11-13T19:57:10.950318+00:00"
+      },
+      "por_origem": {
+        "identidade": 2
+      }
+    },
+    "chamadas_rest": {
+      "total": 0,
+      "erros": 0,
+      "ultimo": null
+    },
+    "heartbeats_enviados": 9,
+    "heartbeats_recebidos": {
+      "identidade": {
+        "seq": 12,
+        "instancia": "srv-dbdq2f8n74is73eh3ckg-hibernate-85cf9bc9bc-77jxf",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1923,
+        "recebido_em": "2026-11-13T19:59:21.276202+00:00",
+        "segundos_desde_ultimo": 31.0
+      },
+      "conta": {
+        "seq": 12,
+        "instancia": "srv-dbdqfmoae00c73alpel0-hibernate-5d846cd78-7f9pb",
+        "outbox_pendentes": null,
+        "atraso_ms": 1865,
+        "recebido_em": "2026-11-13T19:59:21.821149+00:00",
+        "segundos_desde_ultimo": 30.4
+      },
+      "profissionais": {
+        "seq": 12,
+        "instancia": "srv-dbdqis0ae00c73am4nl0-hibernate-58f6fd4ff5-5k9wl",
+        "outbox_pendentes": 0,
+        "atraso_ms": 1865,
+        "recebido_em": "2026-11-13T19:59:29.048724+00:00",
+        "segundos_desde_ultimo": 23.2
+      }
+    },
+    "url": "https://wellflix-catalogo-luis.onrender.com"
+  }
+]
