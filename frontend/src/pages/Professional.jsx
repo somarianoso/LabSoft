@@ -27,7 +27,7 @@ export default function Professional({ isOwnProfile = false, user, go }) {
       let summary;
       if (isOwnProfile && user?.accessToken) summary = await getMyProfessional(user.accessToken);
       else summary = (await getProfessionals())[0];
-      if (!summary?.id) throw new Error("Não há profissionais cadastrados no backend.");
+      if (!summary?.id) throw new Error("Ainda não há profissionais cadastrados.");
       const detailedProfile = await getProfessional(summary.id);
       if (canFollow) {
         try {
@@ -79,7 +79,7 @@ export default function Professional({ isOwnProfile = false, user, go }) {
     }
   };
 
-  if (loading) return <main className="wrap page"><p role="status">Carregando perfil do backend…</p></main>;
+  if (loading) return <main className="wrap page"><p role="status">Carregando perfil…</p></main>;
   if (!profile) return <main className="wrap page"><p role="alert">{error}</p></main>;
 
   return (

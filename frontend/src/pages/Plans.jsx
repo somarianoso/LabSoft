@@ -44,7 +44,7 @@ export default function Plans({ go }) {
           </article>
         ))}
       </div>
-      {error && <p role="alert">Não foi possível carregar os planos do backend: {error}</p>}
+      {error && <p role="alert">Não foi possível carregar os planos. {error}</p>}
       {plans.length === 0 && !error && <p role="status">Carregando planos…</p>}
       <div className="payment">
         <h3>

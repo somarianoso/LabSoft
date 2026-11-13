@@ -113,7 +113,7 @@ export default function Detail({
     } catch (error) { setActionError(error.message); }
   };
 
-  if (loading) return <main className="wrap page"><p role="status">Carregando vídeo do backend…</p></main>;
+  if (loading) return <main className="wrap page"><p role="status">Carregando vídeo…</p></main>;
   if (!selectedVideo) return <main className="wrap page"><p role="alert">{loadError || "Vídeo indisponível."}</p></main>;
 
   return (
@@ -146,7 +146,7 @@ export default function Detail({
           >
             <div>
               <h2 id="video-rating-title">Avalie este vídeo</h2>
-              <p>Marque se gostou deste conteúdo. Sua escolha será salva no banco.</p>
+              <p>Marque se gostou deste conteúdo. Sua avaliação fica salva na sua conta.</p>
             </div>
             <div
               className="video-rating-stars"

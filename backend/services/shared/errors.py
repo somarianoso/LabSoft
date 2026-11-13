@@ -14,7 +14,10 @@ def install_error_handlers(app: FastAPI) -> None:
         if isinstance(detail, dict) and "code" in detail and "message" in detail:
             error = detail
         else:
-            error = {"code": "HTTP_ERROR", "message": str(detail)}
+            # Erros do próprio framework (rota inexistente, método errado) vêm em
+            # inglês: o usuário recebe uma mensagem em português.
+            message = "Não encontrado." if exc.status_code == 404 else "Não foi possível concluir a solicitação."
+            error = {"code": "HTTP_ERROR", "message": message}
         return JSONResponse(status_code=exc.status_code, content={"error": error}, headers=exc.headers)
 
     @app.exception_handler(RequestValidationError)
@@ -36,6 +39,6 @@ def install_error_handlers(app: FastAPI) -> None:
             headers["Vary"] = "Origin"
         return JSONResponse(
             status_code=500,
-            content={"error": {"code": "INTERNAL_ERROR", "message": "Erro interno do servidor."}},
+            content={"error": {"code": "INTERNAL_ERROR", "message": "Algo deu errado. Tente novamente em instantes."}},
             headers=headers,
         )

@@ -3,10 +3,24 @@ import { apiRequest } from "./api.js";
 
 export const demoSessionKey = "wellflix-session";
 
+function tokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return !payload.exp || payload.exp * 1000 <= Date.now();
+  } catch {
+    return true;
+  }
+}
+
 export function readSession() {
   try {
     const value = JSON.parse(window.localStorage.getItem(demoSessionKey) || "null");
-    return value?.accessToken && value?.user ? value : null;
+    if (!value?.accessToken || !value?.user) return null;
+    if (tokenExpired(value.accessToken)) {
+      window.localStorage.removeItem(demoSessionKey);
+      return null;
+    }
+    return value;
   } catch {
     return null;
   }

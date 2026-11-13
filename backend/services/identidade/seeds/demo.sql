@@ -39,3 +39,42 @@ VALUES
     ('10000000-0000-4000-8000-000000000007'),
     ('10000000-0000-4000-8000-000000000008')
 ON CONFLICT DO NOTHING;
+
+-- Mais dados de demonstração: profissionais e atletas adicionais (senha WellflixDemo123!).
+INSERT INTO usuarios (id, nome_completo, email, cpf, hash_senha)
+VALUES
+    ('10000000-0000-4000-8000-000000000009', 'Renata Prado', 'renata.demo@wellflix.test', '00000000009', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000010', 'Diego Martins', 'diego.demo@wellflix.test', '00000000010', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000011', 'Juliana Costa', 'juliana.demo@wellflix.test', '00000000011', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000012', 'Pedro Almeida', 'pedro.demo@wellflix.test', '00000000012', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000013', 'Bruno Ferreira', 'bruno.demo@wellflix.test', '00000000013', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000014', 'Larissa Gomes', 'larissa.demo@wellflix.test', '00000000014', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000015', 'Thiago Ribeiro', 'thiago.demo@wellflix.test', '00000000015', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000016', 'Fernanda Lima', 'fernanda.demo@wellflix.test', '00000000016', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000017', 'Gustavo Rocha', 'gustavo.demo@wellflix.test', '00000000017', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg=='),
+    ('10000000-0000-4000-8000-000000000018', 'Mariana Duarte', 'mariana.demo@wellflix.test', '00000000018', 'scrypt$32768$8$1$W20T-ULWd-iEZoQ7U_zGew==$U5DYsiuSY9KufDE9LgoGq1Hq_okgRoHTH-I6edCJJ6dNH-otUXzKhFqw3CmL4G6-qQTj9ki8Ddz47N5BSpRbsg==')
+ON CONFLICT (id) DO UPDATE SET nome_completo = EXCLUDED.nome_completo, email = EXCLUDED.email, data_atualizacao = now();
+
+INSERT INTO papeis_usuario (usuario_id, papel)
+VALUES
+    ('10000000-0000-4000-8000-000000000009', 'profissional'),
+    ('10000000-0000-4000-8000-000000000010', 'profissional'),
+    ('10000000-0000-4000-8000-000000000011', 'profissional'),
+    ('10000000-0000-4000-8000-000000000012', 'profissional'),
+    ('10000000-0000-4000-8000-000000000013', 'atleta'),
+    ('10000000-0000-4000-8000-000000000014', 'atleta'),
+    ('10000000-0000-4000-8000-000000000015', 'atleta'),
+    ('10000000-0000-4000-8000-000000000016', 'atleta'),
+    ('10000000-0000-4000-8000-000000000017', 'atleta'),
+    ('10000000-0000-4000-8000-000000000018', 'atleta')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO atletas (usuario_id)
+VALUES
+    ('10000000-0000-4000-8000-000000000013'),
+    ('10000000-0000-4000-8000-000000000014'),
+    ('10000000-0000-4000-8000-000000000015'),
+    ('10000000-0000-4000-8000-000000000016'),
+    ('10000000-0000-4000-8000-000000000017'),
+    ('10000000-0000-4000-8000-000000000018')
+ON CONFLICT DO NOTHING;

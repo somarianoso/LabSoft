@@ -99,7 +99,7 @@ export default function Home({ go }) {
               <strong>{name}</strong>
             </button>
           );})}
-          {!loading && content.categories.length === 0 && <p role="status">Nenhuma categoria disponível no backend.</p>}
+          {!loading && content.categories.length === 0 && <p role="status">Nenhuma categoria disponível no momento.</p>}
         </div>
       </section>
       <section className="section wrap">
@@ -147,7 +147,7 @@ export default function Home({ go }) {
           {!loading && content.professionals.length === 0 && <p role="status">Nenhum profissional cadastrado.</p>}
         </div>
       </section>
-      {error && <p className="wrap" role="alert">Não foi possível carregar o conteúdo do backend: {error}</p>}
+      {error && <p className="wrap" role="alert">{error}</p>}
     </main>
   );
 }

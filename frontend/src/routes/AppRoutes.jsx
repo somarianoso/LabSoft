@@ -76,7 +76,7 @@ export default function AppRoutes({
   return (
     <Page
       {...(routesWithNavigation.has(page) ? { go } : {})}
-      {...(page === "trilhas" ? { customTrails, trailsLoading, trailsError, deleteCustomTrail, removeVideoFromCustomTrail } : {})}
+      {...(page === "trilhas" ? { user, customTrails, trailsLoading, trailsError, deleteCustomTrail, removeVideoFromCustomTrail } : {})}
       {...(page === "profissionais"
         ? { isOwnProfile: role === "profissional", user }
         : {})}

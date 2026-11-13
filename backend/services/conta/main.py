@@ -232,7 +232,7 @@ def list_trails(user: Athlete):
 @app.post("/api/trilhas", status_code=status.HTTP_201_CREATED)
 def create_trail(body: TrailRequest, user: Athlete):
     if body.privacidade not in {"privada", "publica"}:
-        raise HTTPException(422, detail={"code": "INVALID_PRIVACY", "message": "Privacidade deve ser privada ou publica."})
+        raise HTTPException(422, detail={"code": "INVALID_PRIVACY", "message": "Escolha se a trilha é privada ou pública."})
     with connection() as conn, conn.cursor() as cur:
         cur.execute("INSERT INTO trilhas (atleta_id, nome, privacidade) VALUES (%s, %s, %s) RETURNING id, nome, privacidade, data_criacao, data_atualizacao", (user["id"], body.nome.strip(), body.privacidade))
         row = cur.fetchone()
@@ -256,7 +256,7 @@ def get_trail(trail_id: UUID, user: Athlete):
 @app.patch("/api/trilhas/{trail_id}", include_in_schema=False)
 def update_trail(trail_id: UUID, body: TrailUpdate, user: Athlete):
     if body.privacidade is not None and body.privacidade not in {"privada", "publica"}:
-        raise HTTPException(422, detail={"code": "INVALID_PRIVACY", "message": "Privacidade deve ser privada ou publica."})
+        raise HTTPException(422, detail={"code": "INVALID_PRIVACY", "message": "Escolha se a trilha é privada ou pública."})
     if body.nome is None and body.privacidade is None:
         raise HTTPException(422, detail={"code": "EMPTY_UPDATE", "message": "Informe nome ou privacidade para atualizar."})
     with connection() as conn, conn.cursor() as cur:
@@ -285,7 +285,7 @@ def add_trail_video(trail_id: UUID, body: dict, user: Athlete):
     try:
         video_id = UUID(str(body.get("video_id")))
     except (ValueError, TypeError, AttributeError):
-        raise HTTPException(422, detail={"code": "INVALID_VIDEO_ID", "message": "video_id deve ser um UUID."})
+        raise HTTPException(422, detail={"code": "INVALID_VIDEO_ID", "message": "Vídeo inválido."})
     with connection() as conn, conn.cursor() as cur:
         cur.execute("SELECT id FROM trilhas WHERE id = %s AND atleta_id = %s FOR UPDATE", (trail_id, user["id"]))
         if not cur.fetchone():

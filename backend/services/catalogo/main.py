@@ -407,7 +407,7 @@ def my_video_rating(video_id: UUID, user: Athlete):
 @app.post("/api/videos", status_code=status.HTTP_201_CREATED)
 def submit_video(body: VideoSubmission, user: Professional):
     if not body.url_conteudo.startswith(("https://", "http://")):
-        raise HTTPException(422, detail={"code": "INVALID_MEDIA_URL", "message": "Use uma URL HTTPS/HTTP de mídia armazenada fora do PostgreSQL."})
+        raise HTTPException(422, detail={"code": "INVALID_MEDIA_URL", "message": "Informe um link para o vídeo começando com https:// ou http://."})
     categories = list(dict.fromkeys(body.categorias))
     authorized = authorized_categories(user["id"])
     if authorized is None:
@@ -425,7 +425,7 @@ def submit_video(body: VideoSubmission, user: Professional):
 @app.put("/api/videos/{video_id}", summary="Atualizar meu vídeo ainda não publicado")
 def update_video(video_id: UUID, body: VideoSubmission, user: Professional):
     if not body.url_conteudo.startswith(("https://", "http://")):
-        raise HTTPException(422, detail={"code": "INVALID_MEDIA_URL", "message": "Use uma URL HTTPS/HTTP de mídia."})
+        raise HTTPException(422, detail={"code": "INVALID_MEDIA_URL", "message": "Informe um link para o vídeo começando com https:// ou http://."})
     categories = list(dict.fromkeys(body.categorias))
     if categories:
         authorized = authorized_categories(user["id"]) or set()

@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
 
 let server, PaymentFields, Trails, services;
+const athlete = { name: "Atleta", roles: ["atleta"] };
 const originalFetch = globalThis.fetch;
 const originalWindow = globalThis.window;
 before(async () => {
@@ -35,24 +36,31 @@ test("campos obrigatórios correspondem a cada método de pagamento", () => {
 
 test("trilha própria oferece exclusão e remoção individual sem aninhar botões", () => {
   const video = Object.assign(["Mobilidade", "Yoga", "5 min", "/image.jpg"], { id: "video-1" });
-  const html = renderToStaticMarkup(React.createElement(Trails, { customTrails: [{ id: "trail-1", name: "Semana", videos: [video] }] }));
+  const html = renderToStaticMarkup(React.createElement(Trails, { user: athlete, customTrails: [{ id: "trail-1", name: "Semana", videos: [video] }] }));
   assert.match(html, /aria-label="Excluir trilha Semana"/);
   assert.match(html, /aria-label="Remover Mobilidade da trilha Semana"/);
   assert.doesNotMatch(html, /<button[^>]*>(?:(?!<\/button>)[\s\S])*<button/);
 });
 
 test("trilha vazia permite exclusão e desabilita compartilhamento", () => {
-  const html = renderToStaticMarkup(React.createElement(Trails, { customTrails: [{ id: "trail-1", name: "Semana", videos: [] }] }));
+  const html = renderToStaticMarkup(React.createElement(Trails, { user: athlete, customTrails: [{ id: "trail-1", name: "Semana", videos: [] }] }));
   assert.match(html, /Esta trilha está vazia/);
   assert.match(html, /disabled=""[^>]*>[\s\S]*?Compartilhar/);
   assert.match(html, /aria-label="Excluir trilha Semana"/);
 });
 
 test("falha de carregamento não é apresentada como lista vazia", () => {
-  const html = renderToStaticMarkup(React.createElement(Trails, { trailsError: "API indisponível" }));
+  const html = renderToStaticMarkup(React.createElement(Trails, { user: athlete, trailsError: "API indisponível" }));
   assert.match(html, /role="alert"/);
   assert.match(html, /API indisponível/);
   assert.doesNotMatch(html, /Você ainda não criou trilhas/);
+});
+
+test("trilhas pedem login de atleta antes de carregar", () => {
+  const anonymous = renderToStaticMarkup(React.createElement(Trails, { go: () => {} }));
+  assert.match(anonymous, /Entre na sua conta de atleta/);
+  const professional = renderToStaticMarkup(React.createElement(Trails, { user: { roles: ["profissional"] } }));
+  assert.match(professional, /As trilhas são para contas de atleta/);
 });
 
 test("remoções usam DELETE autenticado e propagam falhas da API", async () => {

@@ -14,7 +14,7 @@ function readSharedIds() {
   }
 }
 
-export default function Trails({ go, customTrails = [], trailsLoading, trailsError, deleteCustomTrail, removeVideoFromCustomTrail }) {
+export default function Trails({ go, user, customTrails = [], trailsLoading, trailsError, deleteCustomTrail, removeVideoFromCustomTrail }) {
   const [shareNotice, setShareNotice] = useState("");
   const [shareLink, setShareLink] = useState("");
   const [sharedPlaylist, setSharedPlaylist] = useState(readSharedIds);
@@ -82,7 +82,7 @@ export default function Trails({ go, customTrails = [], trailsLoading, trailsErr
       <header className="trails-intro">
         <span className="eyebrow">SUA JORNADA CONTINUA</span>
         <h1>{sharedPlaylist ? sharedPlaylist.name || "Trilha compartilhada" : "Minhas trilhas"}</h1>
-        <p>{sharedPlaylist ? "Vídeos desta trilha carregados do catálogo WellFlix." : "Suas trilhas ficam salvas na sua conta e sincronizadas com o backend."}</p>
+        <p>{sharedPlaylist ? "Uma seleção de vídeos do WellFlix para você assistir em sequência." : "Monte sequências de vídeos e acompanhe seu progresso."}</p>
       </header>
 
       {sharedPlaylist ? (
@@ -98,7 +98,11 @@ export default function Trails({ go, customTrails = [], trailsLoading, trailsErr
             {shareNotice && <span role="status">{shareNotice}</span>}
           </div>
           {shareLink && <div className="custom-trail-share"><label htmlFor="custom-trail-share-link">Link compartilhável</label><div><input id="custom-trail-share-link" value={shareLink} readOnly onFocus={(event) => event.target.select()} /><button className="dark-button" onClick={() => navigator.clipboard?.writeText(shareLink)}>Copiar link</button></div></div>}
-          {trailsLoading ? <p role="status">Carregando suas trilhas…</p> : trailsError ? <p role="alert">Não foi possível carregar suas trilhas: {trailsError}</p> : customTrails.length ? (
+          {!user ? (
+            <div className="custom-trails-empty"><p>Entre na sua conta de atleta para ver e criar suas trilhas.</p><button className="green" type="button" onClick={() => go("login")}>Entrar</button></div>
+          ) : !user.roles?.includes("atleta") ? (
+            <p className="custom-trails-empty">As trilhas são para contas de atleta. Entre com uma conta de atleta para montar as suas.</p>
+          ) : trailsLoading ? <p role="status">Carregando suas trilhas…</p> : trailsError ? <p role="alert" className="custom-trails-empty">{trailsError}</p> : customTrails.length ? (
             <div className="custom-trail-list">
               {customTrails.map((trail) => <article className="custom-trail-card" key={trail.id}>
                 <div className="custom-trail-heading">
@@ -115,7 +119,7 @@ export default function Trails({ go, customTrails = [], trailsLoading, trailsErr
               </article>)}
             </div>
           ) : <p className="custom-trails-empty">Você ainda não criou trilhas. Abra um vídeo publicado e escolha <strong>Adicionar à minha trilha</strong>.</p>}
-          <button className="green" type="button" onClick={() => go("explorar")}>Explorar vídeos <Play size={15} /></button>
+          <button className="green custom-trails-explore" type="button" onClick={() => go("explorar")}>Explorar vídeos <Play size={15} /></button>
         </section>
       )}
       {pendingDeletion && <div className="trail-dialog-backdrop">

@@ -52,7 +52,7 @@ def base_url(service: str) -> str:
 
 
 def unavailable(service: str) -> HTTPException:
-    return HTTPException(503, detail={"code": "SERVICE_UNAVAILABLE", "message": f"O serviço de {service} está indisponível no momento. Tente novamente."})
+    return HTTPException(503, detail={"code": "SERVICE_UNAVAILABLE", "message": "Este recurso está temporariamente indisponível. Tente novamente em instantes."})
 
 
 def call(
@@ -97,9 +97,9 @@ def call(
         try:
             error = response.json()["error"]
         except (ValueError, KeyError, TypeError):
-            error = {"code": "UPSTREAM_ERROR", "message": "Erro ao consultar outro serviço."}
+            error = {"code": "UPSTREAM_ERROR", "message": "Não foi possível concluir a solicitação. Tente novamente."}
         raise HTTPException(response.status_code, detail=error)
     if response.status_code >= 500:
         raise unavailable(service)
-    raise HTTPException(502, detail={"code": "UPSTREAM_ERROR", "message": f"Resposta inesperada do serviço de {service}."})
+    raise HTTPException(502, detail={"code": "UPSTREAM_ERROR", "message": "Não foi possível concluir a solicitação. Tente novamente."})
 

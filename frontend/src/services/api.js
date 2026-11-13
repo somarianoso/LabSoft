@@ -5,10 +5,15 @@ const serviceUrls = {
   catalog: import.meta.env.VITE_CATALOG_API_URL || (import.meta.env.DEV ? "http://localhost:8004" : ""),
 };
 
+export const sessionExpiredEvent = "wellflix:sessao-expirada";
+const unavailableMessage = "Não foi possível carregar agora. Tente novamente em instantes.";
+
 export async function apiRequest(service, path, { method = "GET", body, token } = {}) {
   const baseUrl = serviceUrls[service];
-  if (!Object.hasOwn(serviceUrls, service)) throw new Error(`Serviço de API desconhecido: ${service}`);
-  if (!baseUrl) throw new Error(`Configure a variável VITE_${service.toUpperCase()}_API_URL no Render.`);
+  if (!baseUrl) {
+    console.error(`Endereço não configurado: VITE_${String(service).toUpperCase()}_API_URL`);
+    throw new Error(unavailableMessage);
+  }
 
   let response;
   try {
@@ -21,21 +26,30 @@ export async function apiRequest(service, path, { method = "GET", body, token } 
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
   } catch {
-    throw new Error("Não foi possível conectar à API do WellFlix.");
+    throw new Error("Não foi possível conectar ao WellFlix. Verifique sua internet e tente novamente.");
   }
 
   let result;
   try {
     result = await response.json();
   } catch {
-    throw new Error("A API do WellFlix retornou uma resposta inválida.");
+    throw new Error(unavailableMessage);
   }
 
   if (!response.ok) {
+    const code = result?.error?.code;
+    if (token && response.status === 401) {
+      // Sessão vencida: o App encerra a sessão e pede um novo login.
+      window.dispatchEvent(new Event(sessionExpiredEvent));
+      throw new Error("Sua sessão expirou. Entre novamente.");
+    }
+    if (response.status >= 500 || code === "SERVICE_UNAVAILABLE" || code === "UPSTREAM_ERROR") {
+      throw new Error(unavailableMessage);
+    }
     throw new Error(result?.error?.message || "Não foi possível concluir a solicitação.");
   }
   if (!result || !Object.hasOwn(result, "data")) {
-    throw new Error("A API do WellFlix retornou uma resposta inválida.");
+    throw new Error(unavailableMessage);
   }
   return result.data;
 }

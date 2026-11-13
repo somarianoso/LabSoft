@@ -14,7 +14,7 @@ SERVICE_AUDIENCE = "wellflix-internal"
 def _secret() -> str:
     secret = os.getenv("AUTH_TOKEN_SECRET", "")
     if len(secret.encode("utf-8")) < 32:
-        raise HTTPException(503, detail={"code": "AUTHENTICATION_NOT_CONFIGURED", "message": "A autenticação ainda não foi configurada."})
+        raise HTTPException(503, detail={"code": "AUTHENTICATION_NOT_CONFIGURED", "message": "O login está indisponível no momento. Tente novamente em instantes."})
     return secret
 
 
@@ -60,7 +60,7 @@ def issue_service_token(service_name: str) -> str:
 
 def current_user(authorization: str | None = Header(default=None)) -> dict:
     if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(401, detail={"code": "UNAUTHENTICATED", "message": "Autenticação necessária."})
+        raise HTTPException(401, detail={"code": "UNAUTHENTICATED", "message": "Entre na sua conta para continuar."})
     secret = _secret()
     try:
         claims = jwt.decode(
@@ -73,7 +73,7 @@ def current_user(authorization: str | None = Header(default=None)) -> dict:
             raise ValueError("roles inválido")
         return {"id": user_id, "roles": roles, "papel": claims.get("papel"), "token": authorization[7:]}
     except (InvalidTokenError, KeyError, ValueError, TypeError):
-        raise HTTPException(401, detail={"code": "INVALID_TOKEN", "message": "Token inválido ou expirado."})
+        raise HTTPException(401, detail={"code": "INVALID_TOKEN", "message": "Sua sessão expirou. Entre novamente."})
 
 
 def require_role(*roles: str):

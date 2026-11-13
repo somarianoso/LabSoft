@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
+import { sessionExpiredEvent } from "./services/api.js";
 import { defaultPlan } from "./data/plans.js";
 import {
   addTrailVideo,
@@ -107,8 +108,19 @@ export default function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
+  const isAthlete = Boolean(user?.roles?.includes("atleta"));
+
   useEffect(() => {
-    if (!user?.accessToken) {
+    const expire = () => {
+      clearSession();
+      setAuthSession(null);
+    };
+    window.addEventListener(sessionExpiredEvent, expire);
+    return () => window.removeEventListener(sessionExpiredEvent, expire);
+  }, []);
+
+  useEffect(() => {
+    if (!user?.accessToken || !isAthlete) {
       setCustomTrails([]);
       setTrailsLoading(false);
       setTrailsError("");
@@ -123,7 +135,7 @@ export default function App() {
       .catch((error) => active && setTrailsError(error.message))
       .finally(() => active && setTrailsLoading(false));
     return () => { active = false; };
-  }, [user?.accessToken]);
+  }, [user?.accessToken, isAthlete]);
 
   const go = (next, payload, nextRole = role) => {
     const navigationState = {

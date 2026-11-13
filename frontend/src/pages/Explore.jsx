@@ -152,7 +152,7 @@ export default function Explore({
               </span>
             </label>
           </div>
-          {loading && <p role="status">Carregando conteúdo do backend…</p>}
+          {loading && <p role="status">Carregando vídeos…</p>}
           {error && <p role="alert">Não foi possível carregar os dados: {error}</p>}
           {isVideoSearch ? (
             <div className="video-grid" data-testid="video-results">

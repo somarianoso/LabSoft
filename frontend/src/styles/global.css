@@ -3122,3 +3122,10 @@ footer span {
       grid-template-columns: 1fr;
     }
   }
+
+.custom-trails-explore {
+  margin-top: 18px;
+}
+.custom-trails-empty .green {
+  margin-top: 12px;
+}
