@@ -1,3 +1,5 @@
+# Cada serviço tem DATABASE_URL própria (pode ser o mesmo PostgreSQL: cada um usa
+# só o próprio schema) e se integra aos outros por eventos Kafka e chamadas REST.
 services:
   - type: web
     name: wellflix-identidade
@@ -12,6 +14,18 @@ services:
       - key: AUTH_TOKEN_SECRET
         sync: false
       - key: FRONTEND_ORIGIN
+        sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: KAFKA_SECURITY_PROTOCOL
+        sync: false
+      - key: KAFKA_SASL_MECHANISM
+        sync: false
+      - key: KAFKA_SASL_USERNAME
+        sync: false
+      - key: KAFKA_SASL_PASSWORD
+        sync: false
+      - key: KAFKA_TOPIC_REPLICATION
         sync: false
 
   - type: web
@@ -28,6 +42,18 @@ services:
         sync: false
       - key: FRONTEND_ORIGIN
         sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: KAFKA_SECURITY_PROTOCOL
+        sync: false
+      - key: KAFKA_SASL_MECHANISM
+        sync: false
+      - key: KAFKA_SASL_USERNAME
+        sync: false
+      - key: KAFKA_SASL_PASSWORD
+        sync: false
+      - key: KAFKA_TOPIC_REPLICATION
+        sync: false
 
   - type: web
     name: wellflix-profissionais
@@ -43,6 +69,22 @@ services:
         sync: false
       - key: FRONTEND_ORIGIN
         sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: KAFKA_SECURITY_PROTOCOL
+        sync: false
+      - key: KAFKA_SASL_MECHANISM
+        sync: false
+      - key: KAFKA_SASL_USERNAME
+        sync: false
+      - key: KAFKA_SASL_PASSWORD
+        sync: false
+      - key: KAFKA_TOPIC_REPLICATION
+        sync: false
+      - key: IDENTIDADE_API_URL
+        sync: false
+      - key: CATALOGO_API_URL
+        sync: false
 
   - type: web
     name: wellflix-catalogo
@@ -57,6 +99,22 @@ services:
       - key: AUTH_TOKEN_SECRET
         sync: false
       - key: FRONTEND_ORIGIN
+        sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: KAFKA_SECURITY_PROTOCOL
+        sync: false
+      - key: KAFKA_SASL_MECHANISM
+        sync: false
+      - key: KAFKA_SASL_USERNAME
+        sync: false
+      - key: KAFKA_SASL_PASSWORD
+        sync: false
+      - key: KAFKA_TOPIC_REPLICATION
+        sync: false
+      - key: PROFISSIONAIS_API_URL
+        sync: false
+      - key: CONTA_API_URL
         sync: false
 
   - type: web

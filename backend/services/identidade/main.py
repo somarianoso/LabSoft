@@ -5,15 +5,21 @@ from fastapi import Depends, FastAPI, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator, model_validator
 from psycopg.errors import UniqueViolation
 
+from backend.services.shared import eventos
 from backend.services.shared.auth import current_user, issue_token, require_role
 from backend.services.shared.config import configure_app, success
-from backend.services.shared.database import connection
+from backend.services.shared.database import connection_factory
 from backend.services.shared.errors import install_error_handlers
 from backend.services.shared.passwords import hash_password, verify_password
 
 app = FastAPI(title="WellFlix — Identidade e atleta", version="1.0.0")
 configure_app(app)
 install_error_handlers(app)
+SERVICE = "identidade"
+connection = connection_factory(SERVICE)
+
+# Identidade só publica eventos (outbox + triggers em migrations/002_eventos.sql).
+eventos.start_event_workers(app, SERVICE, produces=True)
 
 
 class AthleteRegistration(BaseModel):

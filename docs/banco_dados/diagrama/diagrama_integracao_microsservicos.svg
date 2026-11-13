@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="1760" viewBox="0 0 3000 1760">
+<rect width="3000" height="1760" fill="#ffffff"/>
+<defs>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3fa34d"/></marker>
+<marker id="ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9480f"/></marker>
+<marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#263a7a"/></marker>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker>
+</defs>
+<text x="1500.0" y="84" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="40" font-weight="400" fill="#1f2430" text-anchor="middle">MODELO DE INTEGRAÇÃO DOS MICROSSERVIÇOS</text>
+<text x="1500.0" y="132" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#6b7280" text-anchor="middle">WellFlix · cada serviço tem o próprio banco. Mudanças viram eventos no Kafka (tempo real) e alimentam réplicas locais; comandos imediatos usam REST; quem é o usuário vem do token JWT.</text>
+<rect x="1100" y="190" width="800" height="110" rx="20" fill="#ffffff" stroke="#1f2430" stroke-opacity="0.6" stroke-width="2"/>
+<text x="1500.0" y="238" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#1f2430" text-anchor="middle">FRONTEND · React (Render Static Site)</text>
+<text x="1500.0" y="272" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#6b7280" text-anchor="middle">chama cada serviço pela própria URL (VITE_*_API_URL) e envia o token</text>
+<rect x="120" y="430" width="680" height="240" rx="22" fill="#ffffff" stroke="#3fa34d" stroke-width="2.2"/>
+<path d="M120,452 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#3fa34d" fill-opacity="0.18"/>
+<text x="146" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#3fa34d" text-anchor="start">IDENTIDADE</text>
+<text x="776" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="500" fill="#6b7280" text-anchor="end">FastAPI Sophia · :8001</text>
+<rect x="140" y="510" width="640" height="140" rx="14" fill="#f7f8fa" stroke="#d5dae2"/>
+<text x="158" y="540" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#6b7280" text-anchor="start">PostgreSQL · schema "identidade"</text>
+<rect x="158" y="560" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
+<text x="180" y="572" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">usuarios</text>
+<rect x="468" y="560" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
+<text x="490" y="572" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">papeis_usuario</text>
+<rect x="158" y="590" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
+<text x="180" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">atletas</text>
+<rect x="468" y="590" width="13" height="13" rx="3" fill="#3fa34d" fill-opacity="0.85"/>
+<text x="490" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">moderadores</text>
+<rect x="158" y="620" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
+<text x="180" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
+<rect x="2200" y="430" width="680" height="270" rx="22" fill="#ffffff" stroke="#8b5cf6" stroke-width="2.2"/>
+<path d="M2200,452 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#8b5cf6" fill-opacity="0.18"/>
+<text x="2226" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#8b5cf6" text-anchor="start">PROFISSIONAIS</text>
+<text x="2856" y="470" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="500" fill="#6b7280" text-anchor="end">FastAPI Gabriel · :8003</text>
+<rect x="2220" y="510" width="640" height="170" rx="14" fill="#f7f8fa" stroke="#d5dae2"/>
+<text x="2238" y="540" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#6b7280" text-anchor="start">PostgreSQL · schema "profissionais"</text>
+<rect x="2238" y="560" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
+<text x="2260" y="572" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">profissionais</text>
+<rect x="2548" y="560" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
+<text x="2570" y="572" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">categorias_profissional</text>
+<rect x="2238" y="590" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
+<text x="2260" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">seguimentos_profissional</text>
+<rect x="2548" y="590" width="13" height="13" rx="3" fill="#8b5cf6" fill-opacity="0.85"/>
+<text x="2570" y="602" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">revisoes_video</text>
+<rect x="2238" y="620" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
+<text x="2260" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
+<rect x="2548" y="620" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="2570" y="632" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuarios_replica</text>
+<rect x="2238" y="650" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="2260" y="662" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categorias_replica</text>
+<rect x="120" y="1180" width="680" height="300" rx="22" fill="#ffffff" stroke="#e8a33d" stroke-width="2.2"/>
+<path d="M120,1202 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#e8a33d" fill-opacity="0.18"/>
+<text x="146" y="1220" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#e8a33d" text-anchor="start">CONTA</text>
+<text x="776" y="1220" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="500" fill="#6b7280" text-anchor="end">FastAPI Maria Eduarda · :8002</text>
+<rect x="140" y="1260" width="640" height="200" rx="14" fill="#f7f8fa" stroke="#d5dae2"/>
+<text x="158" y="1290" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#6b7280" text-anchor="start">PostgreSQL · schema "conta"</text>
+<rect x="158" y="1310" width="13" height="13" rx="3" fill="#e8a33d" fill-opacity="0.85"/>
+<text x="180" y="1322" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">planos</text>
+<rect x="468" y="1310" width="13" height="13" rx="3" fill="#e8a33d" fill-opacity="0.85"/>
+<text x="490" y="1322" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">assinaturas</text>
+<rect x="158" y="1340" width="13" height="13" rx="3" fill="#e8a33d" fill-opacity="0.85"/>
+<text x="180" y="1352" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">categorias_assinatura</text>
+<rect x="468" y="1340" width="13" height="13" rx="3" fill="#e8a33d" fill-opacity="0.85"/>
+<text x="490" y="1352" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">trilhas</text>
+<rect x="158" y="1370" width="13" height="13" rx="3" fill="#e8a33d" fill-opacity="0.85"/>
+<text x="180" y="1382" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">videos_trilha</text>
+<rect x="468" y="1370" width="13" height="13" rx="3" fill="#e8a33d" fill-opacity="0.85"/>
+<text x="490" y="1382" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">progresso_trilha</text>
+<rect x="158" y="1400" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="180" y="1412" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuarios_replica</text>
+<rect x="468" y="1400" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="490" y="1412" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categorias_replica</text>
+<rect x="158" y="1430" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="180" y="1442" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">videos_replica</text>
+<rect x="2200" y="1180" width="680" height="270" rx="22" fill="#ffffff" stroke="#3b82f6" stroke-width="2.2"/>
+<path d="M2200,1202 a22,22 0 0 1 22,-22 h636 a22,22 0 0 1 22,22 v38 h-680 z" fill="#3b82f6" fill-opacity="0.18"/>
+<text x="2226" y="1220" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#3b82f6" text-anchor="start">CATÁLOGO</text>
+<text x="2856" y="1220" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="500" fill="#6b7280" text-anchor="end">FastAPI Luís · :8004</text>
+<rect x="2220" y="1260" width="640" height="170" rx="14" fill="#f7f8fa" stroke="#d5dae2"/>
+<text x="2238" y="1290" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#6b7280" text-anchor="start">PostgreSQL · schema "catalogo"</text>
+<rect x="2238" y="1310" width="13" height="13" rx="3" fill="#3b82f6" fill-opacity="0.85"/>
+<text x="2260" y="1322" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">categorias</text>
+<rect x="2548" y="1310" width="13" height="13" rx="3" fill="#3b82f6" fill-opacity="0.85"/>
+<text x="2570" y="1322" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">videos</text>
+<rect x="2238" y="1340" width="13" height="13" rx="3" fill="#3b82f6" fill-opacity="0.85"/>
+<text x="2260" y="1352" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">categorias_video</text>
+<rect x="2548" y="1340" width="13" height="13" rx="3" fill="#3b82f6" fill-opacity="0.85"/>
+<text x="2570" y="1352" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">comentarios</text>
+<rect x="2238" y="1370" width="13" height="13" rx="3" fill="#3b82f6" fill-opacity="0.85"/>
+<text x="2260" y="1382" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#1f2430" text-anchor="start">avaliacoes</text>
+<rect x="2548" y="1370" width="13" height="13" rx="3" fill="#d9480f" fill-opacity="0.85"/>
+<text x="2570" y="1382" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="600" fill="#d9480f" text-anchor="start">outbox_eventos</text>
+<rect x="2238" y="1400" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="2260" y="1412" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuarios_replica</text>
+<rect x="2548" y="1400" width="13" height="13" rx="3" fill="none" stroke="#6b7280" stroke-dasharray="3 2"/>
+<text x="2570" y="1412" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">profissionais_replica</text>
+<path d="M1180,300 L1180,360 L460,360 L460,422" fill="none" stroke="#1f2430" stroke-width="2" stroke-linejoin="round" marker-end="url(#am)"/>
+<path d="M1820,300 L1820,360 L2540,360 L2540,422" fill="none" stroke="#1f2430" stroke-width="2" stroke-linejoin="round" marker-end="url(#am)"/>
+<path d="M1130,300 L1130,330 L60,330 L60,1330 L112,1330" fill="none" stroke="#1f2430" stroke-width="2" stroke-linejoin="round" marker-end="url(#am)"/>
+<path d="M1870,300 L1870,330 L2940,330 L2940,1330 L2888,1330" fill="none" stroke="#1f2430" stroke-width="2" stroke-linejoin="round" marker-end="url(#am)"/>
+<rect x="1321.56" y="306" width="356.88" height="26" rx="13" fill="#ffffff" stroke="#1f2430" stroke-width="1.4"/>
+<text x="1500.0" y="324" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#1f2430" text-anchor="middle">HTTPS + Authorization: Bearer &lt;JWT do usuário&gt;</text>
+<rect x="281.56" y="382" width="356.88" height="26" rx="13" fill="#ffffff" stroke="#3fa34d" stroke-width="1.4"/>
+<text x="460.0" y="400" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#3fa34d" text-anchor="middle">login emite o JWT (sub = usuarios.id + papéis)</text>
+<rect x="1060" y="500" width="880" height="800" rx="30" fill="#d9480f" fill-opacity="0.06" stroke="#d9480f" stroke-width="2.5"/>
+<text x="1500.0" y="556" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="32" font-weight="700" fill="#d9480f" text-anchor="middle">APACHE KAFKA</text>
+<text x="1500.0" y="588" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#6b7280" text-anchor="middle">tópicos compactados · chave = id da entidade · um consumer group por serviço</text>
+<rect x="1120" y="630" width="760" height="120" rx="16" fill="#ffffff" stroke="#3fa34d" stroke-width="1.6"/>
+<rect x="1146" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.12"/>
+<rect x="1176" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.2"/>
+<rect x="1206" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.28"/>
+<rect x="1236" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.36"/>
+<rect x="1266" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.44"/>
+<rect x="1296" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.52"/>
+<rect x="1326" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.6"/>
+<rect x="1356" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.68"/>
+<rect x="1386" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.76"/>
+<rect x="1416" y="708" width="24" height="22" rx="4" fill="#3fa34d" fill-opacity="0.84"/>
+<text x="1460" y="726" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="670" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3fa34d" text-anchor="start">wellflix.identidade.usuarios</text>
+<text x="1146" y="696" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">usuario.atualizado / removido  →  conta, catálogo, profissionais</text>
+<rect x="1120" y="790" width="760" height="120" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+<rect x="1146" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.12"/>
+<rect x="1176" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.2"/>
+<rect x="1206" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
+<rect x="1236" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.36"/>
+<rect x="1266" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.44"/>
+<rect x="1296" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.52"/>
+<rect x="1326" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.6"/>
+<rect x="1356" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.68"/>
+<rect x="1386" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.76"/>
+<rect x="1416" y="868" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.84"/>
+<text x="1460" y="886" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="830" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3b82f6" text-anchor="start">wellflix.catalogo.categorias</text>
+<text x="1146" y="856" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">categoria.atualizada / removida  →  conta, profissionais</text>
+<rect x="1120" y="950" width="760" height="120" rx="16" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+<rect x="1146" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.12"/>
+<rect x="1176" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.2"/>
+<rect x="1206" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
+<rect x="1236" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.36"/>
+<rect x="1266" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.44"/>
+<rect x="1296" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.52"/>
+<rect x="1326" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.6"/>
+<rect x="1356" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.68"/>
+<rect x="1386" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.76"/>
+<rect x="1416" y="1028" width="24" height="22" rx="4" fill="#3b82f6" fill-opacity="0.84"/>
+<text x="1460" y="1046" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="990" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#3b82f6" text-anchor="start">wellflix.catalogo.videos</text>
+<text x="1146" y="1016" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">video.atualizado / removido  →  conta</text>
+<rect x="1120" y="1110" width="760" height="120" rx="16" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.6"/>
+<rect x="1146" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.12"/>
+<rect x="1176" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.2"/>
+<rect x="1206" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.28"/>
+<rect x="1236" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.36"/>
+<rect x="1266" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.44"/>
+<rect x="1296" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.52"/>
+<rect x="1326" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.6"/>
+<rect x="1356" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.68"/>
+<rect x="1386" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.76"/>
+<rect x="1416" y="1188" width="24" height="22" rx="4" fill="#8b5cf6" fill-opacity="0.84"/>
+<text x="1460" y="1206" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#6b7280" text-anchor="start">→ offset de cada consumidor</text>
+<text x="1146" y="1150" font-family="DejaVu Sans Mono, monospace" font-size="21" font-weight="700" fill="#8b5cf6" text-anchor="start">wellflix.profissionais.perfis</text>
+<text x="1146" y="1176" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="15" font-weight="400" fill="#6b7280" text-anchor="start">perfil.atualizado / removido  →  catálogo</text>
+<path d="M808,560 L1052,560" fill="none" stroke="#3fa34d" stroke-width="3" stroke-linejoin="round" marker-end="url(#ag)"/>
+<rect x="895.34" y="526" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#3fa34d" stroke-width="1.4"/>
+<text x="930.0" y="544" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#3fa34d" text-anchor="middle">publica</text>
+<path d="M2200,560 L1948,560" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linejoin="round" marker-end="url(#ab)"/>
+<rect x="2039.34" y="526" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.4"/>
+<text x="2074.0" y="544" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#8b5cf6" text-anchor="middle">publica</text>
+<path d="M1940,640 L2192,640" fill="none" stroke="#d9480f" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 8" marker-end="url(#ak)"/>
+<rect x="2031.34" y="606" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#d9480f" stroke-width="1.4"/>
+<text x="2066.0" y="624" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#d9480f" text-anchor="middle">consome</text>
+<path d="M1060,1230 L808,1230" fill="none" stroke="#d9480f" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 8" marker-end="url(#ak)"/>
+<rect x="899.34" y="1196" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#d9480f" stroke-width="1.4"/>
+<text x="934.0" y="1214" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#d9480f" text-anchor="middle">consome</text>
+<path d="M2200,1220 L1948,1220" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round" marker-end="url(#ab)"/>
+<rect x="2039.34" y="1186" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#3b82f6" stroke-width="1.4"/>
+<text x="2074.0" y="1204" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#3b82f6" text-anchor="middle">publica</text>
+<path d="M1940,1280 L2192,1280" fill="none" stroke="#d9480f" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 8" marker-end="url(#ak)"/>
+<rect x="2031.34" y="1282" width="69.32" height="26" rx="13" fill="#ffffff" stroke="#d9480f" stroke-width="1.4"/>
+<text x="2066.0" y="1300" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#d9480f" text-anchor="middle">consome</text>
+<path d="M2200,470 L808,470" fill="none" stroke="#263a7a" stroke-width="3" stroke-linejoin="round" marker-end="url(#ab)"/>
+<rect x="1194.94" y="458" width="610.12" height="26" rx="13" fill="#ffffff" stroke="#263a7a" stroke-width="1.4"/>
+<text x="1500.0" y="476" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#263a7a" text-anchor="middle">REST  GET /api/usuarios/me  (repassa o token do usuário: e-mail do perfil profissional)</text>
+<path d="M2330,700 L2330,1172" fill="none" stroke="#263a7a" stroke-width="3" stroke-linejoin="round" marker-end="url(#ab)"/>
+<rect x="1976.28" y="912" width="339.71999999999997" height="26" rx="13" fill="#ffffff" stroke="#263a7a" stroke-width="1.4"/>
+<text x="2146.14" y="930" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#263a7a" text-anchor="middle">REST /internal: moderação, vídeos, estatísticas</text>
+<path d="M2700,1180 L2700,708" fill="none" stroke="#263a7a" stroke-width="3" stroke-linejoin="round" marker-end="url(#ab)"/>
+<rect x="2714" y="942" width="245.07999999999998" height="26" rx="13" fill="#ffffff" stroke="#263a7a" stroke-width="1.4"/>
+<text x="2836.54" y="960" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#263a7a" text-anchor="middle">REST /internal: categoria em uso?</text>
+<path d="M2200,1420 L808,1420" fill="none" stroke="#263a7a" stroke-width="3" stroke-linejoin="round" marker-end="url(#ab)"/>
+<rect x="1306.48" y="1408" width="387.03999999999996" height="26" rx="13" fill="#ffffff" stroke="#263a7a" stroke-width="1.4"/>
+<text x="1500.0" y="1426" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="13" font-weight="600" fill="#263a7a" text-anchor="middle">REST /internal: categoria em uso em alguma assinatura?</text>
+<rect x="40" y="1640" width="2920" height="100" rx="18" fill="#ffffff" stroke="#d5dae2"/>
+<line x1="80" y1="1688" x2="150" y2="1688" stroke="#3fa34d" stroke-width="3"/>
+<text x="164" y="1694" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#1f2430" text-anchor="start">evento publicado (trigger → outbox → relay)</text>
+<line x1="589.8" y1="1688" x2="659.8" y2="1688" stroke="#d9480f" stroke-width="3" stroke-dasharray="12 8"/>
+<text x="673.8" y="1694" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#1f2430" text-anchor="start">evento consumido → atualiza réplica local</text>
+<line x1="1082.3999999999999" y1="1688" x2="1152.3999999999999" y2="1688" stroke="#263a7a" stroke-width="3"/>
+<text x="1166.3999999999999" y="1694" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#1f2430" text-anchor="start">chamada REST síncrona (token de serviço)</text>
+<line x1="1566.3999999999999" y1="1688" x2="1636.3999999999999" y2="1688" stroke="#1f2430" stroke-width="3"/>
+<text x="1650.3999999999999" y="1694" font-family="Liberation Sans, Arial, DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#1f2430" text-anchor="start">frontend → serviço (token do usuário)</text>
+</svg>

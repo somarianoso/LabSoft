@@ -1,6 +1,12 @@
 # Serviços FastAPI do WellFlix
 
-Há quatro aplicações FastAPI independentes. Todas usam o PostgreSQL existente, as migrations em `../../database/migrations/` e o token HS256 compartilhado. Cada aplicação expõe `/health` e a documentação automática em `/docs`.
+Há quatro aplicações FastAPI independentes. **Cada uma é dona do próprio banco** (um schema PostgreSQL só dela, com migrations e seeds na própria pasta) e nenhuma lê tabelas de outra. A integração acontece por três meios:
+
+1. **Token JWT** emitido pela identidade: os outros serviços sabem quem é o usuário sem consultar o banco dela.
+2. **Eventos no Kafka** (tempo real): quando um usuário, categoria, vídeo ou perfil profissional muda, um trigger grava o evento no outbox do serviço dono e o relay publica no Kafka; os serviços interessados mantêm réplicas locais (`*_replica`).
+3. **Chamadas REST** para comandos que precisam de resposta imediata (moderar vídeo, checar uso de categoria) e consultas agregadas (estatísticas e vídeos de um profissional). As rotas `/internal/...` só aceitam token de serviço.
+
+Detalhes e diagramas: [`docs/backend/Integração entre microsserviços.md`](../../docs/backend/Integra%C3%A7%C3%A3o%20entre%20microsservi%C3%A7os.md). Cada aplicação expõe `/health` e a documentação automática em `/docs`.
 
 ## Executar localmente
 
@@ -11,7 +17,15 @@ pip install -r backend/services/identidade/requirements.txt
 uvicorn backend.services.identidade.main:app --reload --port 8001
 ```
 
-Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 8002, 8003 e 8004, respectivamente. Copie `backend/.env.example` para `backend/.env` e configure `DATABASE_URL`, `AUTH_TOKEN_SECRET` (mínimo de 32 bytes) e `FRONTEND_ORIGIN`. Não use credenciais reais no Git.
+Troque `identidade` por `conta`, `profissionais` ou `catalogo`; use as portas 8002, 8003 e 8004, respectivamente. Copie `backend/.env.example` para `backend/.env` e configure `DATABASE_URL`, `AUTH_TOKEN_SECRET` (mínimo de 32 bytes), `FRONTEND_ORIGIN` e `KAFKA_BOOTSTRAP_SERVERS`. Não use credenciais reais no Git.
+
+Para um Kafka local de desenvolvimento (Docker):
+
+```bash
+docker run -d --name wellflix-kafka -p 9092:9092 apache/kafka:3.8.0
+```
+
+Sem `KAFKA_BOOTSTRAP_SERVERS` os serviços sobem normalmente, mas os eventos ficam acumulados no outbox e as réplicas não são atualizadas (nomes de autores, categorias e vídeos novos não aparecem nos outros serviços) até o Kafka ser configurado; quando ele volta, o relay publica tudo o que ficou pendente.
 
 ## Responsabilidades e rotas
 
@@ -55,35 +69,32 @@ Rotas privadas esperam `Authorization: Bearer <access_token>`. Login emite token
 Para ambiente de demonstração, primeiro crie a conta pela rota pública de cadastro de atleta. Um administrador concede os papéis pelo console SQL do banco, substituindo os e-mails pelos da equipe. Depois de receber o papel profissional, a pessoa cria o próprio perfil com `POST /api/profissionais/me`; o papel de moderador continua sendo concedido somente por processo administrativo confiável:
 
 ```sql
-INSERT INTO papeis_usuario (usuario_id, papel)
-SELECT id, 'profissional' FROM usuarios WHERE lower(email) = lower('profissional@example.com')
+INSERT INTO identidade.papeis_usuario (usuario_id, papel)
+SELECT id, 'profissional' FROM identidade.usuarios WHERE lower(email) = lower('profissional@example.com')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO papeis_usuario (usuario_id, papel)
-SELECT id, 'moderador' FROM usuarios WHERE lower(email) = lower('moderador@example.com')
+INSERT INTO identidade.papeis_usuario (usuario_id, papel)
+SELECT id, 'moderador' FROM identidade.usuarios WHERE lower(email) = lower('moderador@example.com')
 ON CONFLICT DO NOTHING;
-INSERT INTO moderadores (usuario_id)
-SELECT id FROM usuarios WHERE lower(email) = lower('moderador@example.com')
+INSERT INTO identidade.moderadores (usuario_id)
+SELECT id FROM identidade.usuarios WHERE lower(email) = lower('moderador@example.com')
 ON CONFLICT DO NOTHING;
 ```
 
-O token de demonstração deve ser obtido no Swagger de identidade com `papel: "profissional"` ou `papel: "moderador"`, conforme o perfil provisionado.
+O trigger da identidade publica a mudança de papel no Kafka automaticamente. O token de demonstração deve ser obtido no Swagger de identidade com `papel: "profissional"` ou `papel: "moderador"`, conforme o perfil provisionado.
 
 ## Banco e Render
 
-Antes do primeiro deploy, aplique uma vez todas as migrations existentes e as novas `006_interacoes.sql` e `007_categorias_iniciais.sql` no mesmo PostgreSQL:
+Cada serviço aplica as próprias migrations (`<servico>/migrations/*.sql`) no próprio schema. Na raiz do repositório:
 
 ```bash
-cd backend
-cp .env.example .env
-# Edite .env e configure DATABASE_URL antes de continuar.
-npm install
-npm run migrate
+pip install -r backend/services/identidade/requirements.txt
+python -m backend.services.shared.migrate todos          # ou: identidade | catalogo | profissionais | conta
 ```
 
-O comando aplica em ordem as migrations de `database/migrations/` (na raiz do repositório); `006_interacoes.sql` cria as tabelas de comentários e avaliações e `007_categorias_iniciais.sql` adiciona as categorias usadas pela interface sem duplicá-las. Execute uma vez por banco, antes de iniciar os serviços. Migrations já aplicadas não devem ser editadas; faça uma migration nova para correções.
+O controle das migrations aplicadas fica em `<schema>.schema_migrations`. Migrations já aplicadas não devem ser editadas; crie uma nova. As migrations antigas do schema compartilhado continuam em `database/migrations/` só como histórico. **Para um banco que já tem dados no formato antigo**, rode as migrations acima e depois `database/transicao/copiar_public_para_schemas.sql` (veja o cabeçalho do arquivo).
 
-O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Site React. Revise as variáveis secretas durante a criação dos recursos no Render: todos os backends precisam do mesmo `DATABASE_URL` e `AUTH_TOKEN_SECRET`; `FRONTEND_ORIGIN` deve ser a origem real do Static Site. As variáveis `VITE_*_API_URL` do frontend devem receber as quatro URLs públicas Render. A configuração de um Blueprint cria recursos, mas não aplica migrations automaticamente.
+O Blueprint `../../render.yaml` define quatro Web Services Python e um Static Site React. Cada serviço tem a própria `DATABASE_URL`: pode ser o mesmo PostgreSQL (cada um usa só o seu schema) ou bancos diferentes. Para isolamento total, crie um usuário PostgreSQL por serviço com permissão apenas no próprio schema. Todos precisam do mesmo `AUTH_TOKEN_SECRET`, das variáveis `KAFKA_*` (o Render não oferece Kafka: use um Kafka gerenciado, como Confluent Cloud ou Aiven) e das URLs dos serviços que chamam (`*_API_URL`). `FRONTEND_ORIGIN` deve ser a origem real do Static Site, e as variáveis `VITE_*_API_URL` do frontend recebem as quatro URLs públicas. O Blueprint não aplica migrations automaticamente.
 
 Os serviços de API estão marcados com o plano gratuito no Blueprint para evitar escolher recursos pagos por padrão. Serviços gratuitos entram em suspensão após inatividade e podem demorar para responder na primeira requisição; isso deve ser considerado na demonstração. Configure os serviços na mesma região do banco sempre que o provedor permitir.
 
@@ -91,11 +102,10 @@ O banco guarda somente a URL de mídia; o arquivo de vídeo deve ser enviado par
 
 ## Dados fictícios para demonstração
 
-Para povoar um banco de desenvolvimento/demonstração com um atleta, três profissionais, um moderador, vídeos publicados e pendentes, comentários, avaliações, uma assinatura e uma trilha, aplique primeiro todas as migrations e depois execute:
+Para povoar um banco de desenvolvimento/demonstração com um atleta, três profissionais, um moderador, vídeos publicados e pendentes, comentários, avaliações, uma assinatura e uma trilha (cada serviço tem o próprio `seeds/demo.sql`), execute na raiz:
 
 ```bash
-cd backend
-npm run seed:demo -- --confirm-demo-database
+python -m backend.services.shared.migrate todos --seed-demo --confirm-demo-database
 ```
 
 O comando usa o `DATABASE_URL` de `backend/.env` e requer a confirmação explícita porque grava registros no banco selecionado. Não rode contra um banco com dados reais. O seed é repetível: executar novamente atualiza os mesmos registros de demonstração, sem duplicá-los.

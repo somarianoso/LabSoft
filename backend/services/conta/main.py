@@ -3,17 +3,47 @@ from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
-from psycopg.errors import ForeignKeyViolation, UniqueViolation
+from psycopg.errors import UniqueViolation
 
-from backend.services.shared.auth import require_role
+from backend.services.shared import eventos
+from backend.services.shared.auth import require_role, require_service
 from backend.services.shared.config import configure_app, success
-from backend.services.shared.database import connection
+from backend.services.shared.database import connection_factory
 from backend.services.shared.errors import install_error_handlers
 
 app = FastAPI(title="WellFlix — Planos, assinaturas e trilhas", version="1.0.0")
 configure_app(app)
 install_error_handlers(app)
+SERVICE = "conta"
+connection = connection_factory(SERVICE)
 Athlete = Annotated[dict, Depends(require_role("atleta"))]
+Service = Annotated[str, Depends(require_service)]
+INTERNAL = ["interno (serviço a serviço)"]
+
+
+def upsert_video(cur, dados: dict) -> None:
+    cur.execute(
+        "INSERT INTO videos_replica (id, profissional_id, titulo, situacao, atualizado_em) VALUES (%s, %s, %s, %s, now())"
+        " ON CONFLICT (id) DO UPDATE SET profissional_id = EXCLUDED.profissional_id, titulo = EXCLUDED.titulo,"
+        " situacao = EXCLUDED.situacao, atualizado_em = now()",
+        (dados["id"], dados["profissional_id"], dados["titulo"], dados["situacao"]),
+    )
+
+
+def delete_video(cur, dados: dict) -> None:
+    cur.execute("DELETE FROM videos_replica WHERE id = %s", (dados["id"],))
+
+
+# Conta não publica eventos; só mantém réplicas de usuários, categorias e vídeos.
+eventos.start_event_workers(
+    app, SERVICE, produces=False,
+    handlers={
+        **eventos.USUARIO_HANDLERS,
+        **eventos.CATEGORIA_HANDLERS,
+        "video.atualizado": upsert_video,
+        "video.removido": delete_video,
+    },
+)
 
 
 class SubscriptionRequest(BaseModel):
@@ -83,14 +113,14 @@ def create_subscription(body: SubscriptionRequest, user: Athlete):
         limit = plan["limite_categorias"]
         if limit is not None and len(names) != limit:
             raise HTTPException(422, detail={"code": "INVALID_CATEGORY_SELECTION", "message": f"Este plano exige exatamente {limit} categorias."})
-        cur.execute("SELECT id, nome FROM categorias WHERE nome = ANY(%s)", (names,))
+        cur.execute("SELECT id, nome FROM categorias_replica WHERE nome = ANY(%s)", (names,))
         categories = cur.fetchall() if names else []
         if len(categories) != len(names):
             raise HTTPException(422, detail={"code": "UNKNOWN_CATEGORY", "message": "Uma ou mais categorias não existem."})
         cur.execute("INSERT INTO assinaturas (atleta_id, plano_id, metodo_pagamento) VALUES (%s, %s, %s) RETURNING id, atleta_id, plano_id, metodo_pagamento, situacao, data_criacao", (user["id"], plan["id"], body.metodo_pagamento))
         subscription = cur.fetchone()
         if categories:
-            cur.executemany("INSERT INTO categorias_assinatura (assinatura_id, categoria_id) VALUES (%s, %s)", [(subscription["id"], c["id"]) for c in categories])
+            cur.executemany("INSERT INTO categorias_assinatura (assinatura_id, categoria_id, categoria_nome) VALUES (%s, %s, %s)", [(subscription["id"], c["id"], c["nome"]) for c in categories])
     subscription["plano"] = {key: plan[key] for key in ("codigo", "nome", "preco_mensal_centavos")}
     subscription["categorias"] = categories
     return success(subscription)
@@ -125,11 +155,10 @@ def subscription_history(user: Athlete):
         for row in rows:
             cur.execute(
                 """
-                SELECT c.id, c.nome
-                FROM categorias c
-                JOIN categorias_assinatura ca ON ca.categoria_id = c.id
-                WHERE ca.assinatura_id = %s
-                ORDER BY c.nome
+                SELECT categoria_id AS id, categoria_nome AS nome
+                FROM categorias_assinatura
+                WHERE assinatura_id = %s
+                ORDER BY categoria_nome
                 """,
                 (row["id"],),
             )
@@ -179,7 +208,7 @@ def list_public_trails(
                    u.nome_completo AS criador,
                    count(vt.video_id)::int AS quantidade_videos
             FROM trilhas t
-            JOIN usuarios u ON u.id = t.atleta_id
+            LEFT JOIN usuarios_replica u ON u.id = t.atleta_id
             LEFT JOIN videos_trilha vt ON vt.trilha_id = t.id
             WHERE {' AND '.join(clauses)}
             GROUP BY t.id, u.nome_completo
@@ -261,12 +290,16 @@ def add_trail_video(trail_id: UUID, body: dict, user: Athlete):
         cur.execute("SELECT id FROM trilhas WHERE id = %s AND atleta_id = %s FOR UPDATE", (trail_id, user["id"]))
         if not cur.fetchone():
             raise HTTPException(404, detail={"code": "TRAIL_NOT_FOUND", "message": "Trilha não encontrada."})
+        # Só vídeos publicados entram em trilhas (réplica do tópico wellflix.catalogo.videos).
+        cur.execute("SELECT 1 FROM videos_replica WHERE id = %s AND situacao = 'publicado'", (video_id,))
+        if not cur.fetchone():
+            raise HTTPException(409, detail={"code": "VIDEO_NOT_AVAILABLE", "message": "Vídeo inexistente, não publicado ou já presente na trilha."})
         cur.execute("SELECT COALESCE(max(ordem), 0) + 1 AS next_order FROM videos_trilha WHERE trilha_id = %s", (trail_id,))
         order = cur.fetchone()["next_order"]
         try:
             cur.execute("INSERT INTO videos_trilha (trilha_id, video_id, ordem) VALUES (%s, %s, %s) RETURNING trilha_id, video_id, ordem", (trail_id, video_id, order))
             row = cur.fetchone()
-        except (ForeignKeyViolation, UniqueViolation):
+        except UniqueViolation:
             raise HTTPException(409, detail={"code": "VIDEO_NOT_AVAILABLE", "message": "Vídeo inexistente ou já presente na trilha."})
     return success(row)
 
@@ -292,4 +325,15 @@ def update_progress(trail_id: UUID, video_id: UUID, body: ProgressRequest, user:
             cur.execute("UPDATE trilhas SET data_atualizacao = now() WHERE id = %s", (trail_id,))
     if not row:
         raise HTTPException(404, detail={"code": "TRAIL_VIDEO_NOT_FOUND", "message": "Vídeo não encontrado na trilha."})
+    return success(row)
+
+
+# --- Rotas internas (chamadas por outros serviços com token de serviço) -----
+
+
+@app.get("/internal/categorias/{category_id}/uso", tags=INTERNAL, summary="A categoria está em alguma assinatura?")
+def internal_category_usage(category_id: UUID, _service: Service):
+    with connection() as conn, conn.cursor() as cur:
+        cur.execute("SELECT EXISTS (SELECT 1 FROM categorias_assinatura WHERE categoria_id = %s) AS em_uso", (category_id,))
+        row = cur.fetchone()
     return success(row)

@@ -1,24 +1,29 @@
 # Banco de dados PostgreSQL do WellFlix
 
-Esta pasta concentra o schema compartilhado pelas quatro APIs FastAPI em `../backend/services/`.
+Cada microsserviço é dono do próprio banco: um schema PostgreSQL exclusivo (`identidade`, `catalogo`, `profissionais`, `conta`), com migrations e seeds na pasta do serviço:
+
+```text
+backend/services/<servico>/
+  ├── migrations/   # SQL do schema do serviço, aplicado em ordem alfabética
+  └── seeds/demo.sql
+```
+
+Para aplicar (na raiz do repositório):
+
+```bash
+python -m backend.services.shared.migrate todos
+python -m backend.services.shared.migrate todos --seed-demo --confirm-demo-database   # só em banco de demonstração
+```
+
+Nenhum serviço tem chave estrangeira para tabela de outro. Referências entre serviços são UUIDs "lógicos", validados pela aplicação; os dados de outro serviço chegam por eventos Kafka (tabelas `*_replica`) ou pela API dele. Veja [`../docs/backend/Integração entre microsserviços.md`](../docs/backend/Integra%C3%A7%C3%A3o%20entre%20microsservi%C3%A7os.md) e o diagrama ER em [`../docs/banco_dados/`](../docs/banco_dados/).
+
+## Conteúdo desta pasta
 
 ```text
 database/
-  ├── migrations/   # histórico SQL único, aplicado em ordem alfabética
-  └── seeds/        # dados fictícios de demonstração (demo.sql)
+  ├── migrations/   # HISTÓRICO: schema compartilhado antigo (antes da separação por serviço)
+  ├── seeds/        # HISTÓRICO: seed do schema compartilhado antigo
+  └── transicao/    # script único que copia os dados de public.* para os schemas novos
 ```
 
-Os executores ficam em `../backend/src/db/` (`migrate.js`, `seed-demo.js`) porque usam as dependências Node do backend (`pg`, `dotenv`). Os comandos continuam sendo executados a partir de `backend/`:
-
-```bash
-cd backend
-cp .env.example .env
-# Edite .env e configure DATABASE_URL antes de continuar.
-npm install
-npm run migrate
-npm run seed:demo -- --confirm-demo-database   # opcional, apenas em banco de demonstração
-```
-
-O controle de migrations já aplicadas usa o nome do arquivo (tabela `wellflix_schema_migrations`), então mover a pasta não reaplica nada. Migrations já aplicadas não devem ser editadas; crie uma migration nova para correções. O Render não aplica migrations automaticamente.
-
-A documentação do modelo (diagrama ER, especificação e guia) está em [`../docs/banco_dados/`](../docs/banco_dados/).
+`migrations/` e `seeds/` não são mais aplicados nos bancos novos; ficam para consulta e para quem ainda tem um banco no formato antigo. Para migrar um banco antigo, siga o cabeçalho de `transicao/copiar_public_para_schemas.sql`.
